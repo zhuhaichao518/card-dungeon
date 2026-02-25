@@ -1,25 +1,25 @@
 /**
  * data.js - 静态游戏数据
- * 包含地图定义、卡牌数据、怪物数据
+ * 行动值系统：每回合行动值=min(回合数, 最大行动值)，初始最大值为3
+ * 英雄和怪物都有行动值+牌组，完全对等
  */
 
-// 瓷砖类型常量
+// ─── 瓷砖类型 ──────────────────────────────────────────────────────────────
 export const TILE = {
-  FLOOR: 0,
-  WALL: 1,
-  DOOR_YELLOW: 2,
-  DOOR_BLUE: 3,
-  DOOR_RED: 4,
-  KEY_YELLOW: 5,
-  KEY_BLUE: 6,
-  KEY_RED: 7,
-  STAIRS: 10,
-  HEALTH_POTION: 12,
-  SPIKE_TRAP: 15,
+  FLOOR:        0,
+  WALL:         1,
+  DOOR_YELLOW:  2,
+  DOOR_BLUE:    3,
+  DOOR_RED:     4,
+  KEY_YELLOW:   5,
+  KEY_BLUE:     6,
+  KEY_RED:      7,
+  STAIRS:       10,
+  HEALTH_POTION:12,
+  SPIKE_TRAP:   15,
 };
 
-// 第一层地图数据 (11x11)
-// 行索引=y，列索引=x
+// ─── 第一层地图 ────────────────────────────────────────────────────────────
 export const FLOOR1_TILES = [
   [1,1,1,1,1,1,1,1,1,1,1],
   [1,0,0,0,0,0,1,0,0,0,1],
@@ -34,58 +34,73 @@ export const FLOOR1_TILES = [
   [1,1,1,1,1,1,1,1,1,1,1],
 ];
 
-// 玩家起始位置 [x, y]
 export const PLAYER_START = { x: 1, y: 1 };
 
-// 初始怪物列表
-export const INITIAL_MONSTERS = [
-  {
-    id: 'slime_green',
-    name: '绿史莱姆',
-    emoji: '🟢',
-    x: 5,
-    y: 5,
-    hp: 25,
-    maxHp: 25,
-    atk: 8,
-    // 行动模式：循环执行
-    actionPattern: [
-      { type: 'attack', value: 8,  label: '攻击 8伤害' },
-      { type: 'attack', value: 8,  label: '攻击 8伤害' },
-      { type: 'power',  value: 12, label: '强化攻击 12伤害', chargeMsg: '正在积蓄力量！' },
-    ],
-    actionIndex: 0,
-  },
-];
-
-// 初始牌组（10张）
-export const STARTER_DECK = [
-  { id: 'strike', name: '打击', cost: 1, type: 'attack', value: 6,  desc: '造成6点伤害' },
-  { id: 'strike', name: '打击', cost: 1, type: 'attack', value: 6,  desc: '造成6点伤害' },
-  { id: 'strike', name: '打击', cost: 1, type: 'attack', value: 6,  desc: '造成6点伤害' },
-  { id: 'defend', name: '防御', cost: 1, type: 'skill',  value: 5,  desc: '获得5点护盾' },
-  { id: 'defend', name: '防御', cost: 1, type: 'skill',  value: 5,  desc: '获得5点护盾' },
-  { id: 'defend', name: '防御', cost: 1, type: 'skill',  value: 5,  desc: '获得5点护盾' },
-  { id: 'quick',  name: '速击', cost: 1, type: 'attack', value: 4,  hits: 2, desc: '造成4伤害×2次' },
-  { id: 'heavy',  name: '重击', cost: 2, type: 'attack', value: 12, desc: '造成12点伤害' },
-  { id: 'parry',  name: '招架', cost: 2, type: 'skill',  value: 8,  desc: '获得8点护盾' },
-  { id: 'heal',   name: '包扎', cost: 2, type: 'skill',  value: 8,  isHeal: true, desc: '恢复8点生命' },
-];
-
-// 战斗胜利后可获得的奖励卡池
-export const REWARD_CARD_POOL = [
-  { id: 'heavy',  name: '重击', cost: 2, type: 'attack', value: 12, desc: '造成12点伤害' },
-  { id: 'parry',  name: '招架', cost: 2, type: 'skill',  value: 8,  desc: '获得8点护盾' },
-  { id: 'heal',   name: '包扎', cost: 2, type: 'skill',  value: 8,  isHeal: true, desc: '恢复8点生命' },
-  { id: 'quick',  name: '速击', cost: 1, type: 'attack', value: 4,  hits: 2, desc: '造成4伤害×2次' },
-];
-
-// 玩家初始属性
+// ─── 玩家初始属性 ──────────────────────────────────────────────────────────
 export const PLAYER_INIT = {
-  hp: 50,
-  maxHp: 80,
-  shield: 0,
-  energy: 3,
-  maxEnergy: 3,
-  handSize: 5,
+  hp:       70,
+  maxHp:    70,
+  shield:   0,
+  maxAp:    3,   // 行动值上限（可被事件修改）
+  handSize: 4,   // 每回合摸牌数
 };
+
+// ─── 英雄初始牌组（10张）──────────────────────────────────────────────────
+// 费用设计：1费=基础，2费=中期，3费=爆发
+export const STARTER_DECK = [
+  { id:'strike',  name:'打击',   cost:1, type:'attack', value:6,             desc:'造成 6 点伤害' },
+  { id:'strike',  name:'打击',   cost:1, type:'attack', value:6,             desc:'造成 6 点伤害' },
+  { id:'strike',  name:'打击',   cost:1, type:'attack', value:6,             desc:'造成 6 点伤害' },
+  { id:'defend',  name:'防御',   cost:1, type:'skill',  value:5,             desc:'获得 5 点护盾' },
+  { id:'defend',  name:'防御',   cost:1, type:'skill',  value:5,             desc:'获得 5 点护盾' },
+  { id:'power',   name:'强击',   cost:2, type:'attack', value:11,            desc:'造成 11 点伤害' },
+  { id:'power',   name:'强击',   cost:2, type:'attack', value:11,            desc:'造成 11 点伤害' },
+  { id:'ironwall',name:'铁壁',   cost:2, type:'skill',  value:8,             desc:'获得 8 点护盾' },
+  { id:'heavy',   name:'重斩',   cost:3, type:'attack', value:18,            desc:'造成 18 点伤害' },
+  { id:'heal',    name:'包扎',   cost:2, type:'skill',  value:8, isHeal:true, desc:'恢复 8 点生命' },
+];
+
+// ─── 英雄奖励卡池 ─────────────────────────────────────────────────────────
+export const REWARD_CARD_POOL = [
+  { id:'heavy',    name:'重斩',   cost:3, type:'attack', value:18,             desc:'造成 18 点伤害' },
+  { id:'ironwall', name:'铁壁',   cost:2, type:'skill',  value:8,              desc:'获得 8 点护盾' },
+  { id:'heal',     name:'包扎',   cost:2, type:'skill',  value:8, isHeal:true,  desc:'恢复 8 点生命' },
+  { id:'fury',     name:'狂怒',   cost:2, type:'attack', value:7, hits:2,       desc:'造成 7 伤害×2' },
+  { id:'counter',  name:'反击',   cost:1, type:'skill',  value:3, counterDmg:4, desc:'获得3护盾并反弹4伤害' },
+  { id:'fortify',  name:'坚守',   cost:3, type:'skill',  value:12, draw:1,      desc:'获得12护盾，摸1张牌' },
+  { id:'quick',    name:'速击',   cost:1, type:'attack', value:3, hits:2,       desc:'造成 3 伤害×2' },
+];
+
+// ─── 怪物定义 ─────────────────────────────────────────────────────────────
+// 每只怪物都有：基础属性 + 独立牌组 + 行动值参数
+// 怪物牌组与英雄等价：费用/攻击/护盾完全对称
+
+export const MONSTER_DEFS = {
+
+  slime_green: {
+    id:    'slime_green',
+    name:  '绿史莱姆',
+    emoji: '🟢',
+    hp:    30,
+    maxHp: 30,
+    maxAp: 3,         // 行动值上限
+    handSize: 3,      // 每回合摸牌数（怪物摸3张，行动力有限）
+    // 怪物牌组（出怪的感觉：早期只能用1费，后期解锁2/3费）
+    deck: [
+      { id:'slime_punch', name:'黏液拳',  cost:1, type:'attack', value:5,  desc:'造成 5 点伤害' },
+      { id:'slime_punch', name:'黏液拳',  cost:1, type:'attack', value:5,  desc:'造成 5 点伤害' },
+      { id:'slime_punch', name:'黏液拳',  cost:1, type:'attack', value:5,  desc:'造成 5 点伤害' },
+      { id:'slime_wall',  name:'黏液壁',  cost:1, type:'skill',  value:4,  desc:'获得 4 点护盾' },
+      { id:'slime_wall',  name:'黏液壁',  cost:1, type:'skill',  value:4,  desc:'获得 4 点护盾' },
+      { id:'acid_spit',   name:'强酸喷吐',cost:2, type:'attack', value:9,  desc:'造成 9 点伤害' },
+      { id:'acid_spit',   name:'强酸喷吐',cost:2, type:'attack', value:9,  desc:'造成 9 点伤害' },
+      { id:'engulf',      name:'吞噬',    cost:3, type:'attack', value:16, desc:'造成 16 点伤害' },
+    ],
+  },
+
+};
+
+// ─── 地图初始怪物列表 ─────────────────────────────────────────────────────
+export const INITIAL_MONSTERS = [
+  { defId: 'slime_green', x: 5, y: 5 },
+];

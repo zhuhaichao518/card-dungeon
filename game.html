@@ -14,47 +14,32 @@
     <h1>⚔️ CARD DUNGEON</h1>
     <div class="hp-bar-container">
       <label>HP</label>
-      <div class="hp-bar">
-        <div class="hp-bar-fill" id="hp-bar-fill" style="width:62.5%"></div>
-      </div>
-      <span class="hp-text" id="hp-text">50 / 80</span>
+      <div class="hp-bar"><div class="hp-bar-fill" id="hp-bar-fill"></div></div>
+      <span class="hp-text" id="hp-text">70 / 70</span>
     </div>
     <span id="floor-label">第 1 层</span>
     <button id="btn-pause" class="btn-icon" title="暂停 (Esc)">⏸</button>
   </header>
 
-  <!-- ───── 主体 ───── -->
+  <!-- ═══ 主体 ═══ -->
   <div id="game-container">
 
-    <!-- ══ 探索界面 ══ -->
+    <!-- ▶ 探索界面 -->
     <div id="explore-screen">
       <div id="map-area">
-        <!-- Canvas 地图 -->
         <canvas id="map-canvas"></canvas>
       </div>
-
       <aside id="side-panel">
         <div class="panel-section">
           <h3>📦 背包</h3>
-          <div class="inventory-item">
-            <span style="color:#ffd700">⚷</span> 黄钥匙
-            <span class="key-count" id="key-yellow-count">0</span>
-          </div>
-          <div class="inventory-item">
-            <span style="color:#4fc3f7">⚷</span> 蓝钥匙
-            <span class="key-count" id="key-blue-count">0</span>
-          </div>
-          <div class="inventory-item">
-            <span style="color:#ef5350">⚷</span> 红钥匙
-            <span class="key-count" id="key-red-count">0</span>
-          </div>
+          <div class="inventory-item"><span style="color:#ffd700">⚷</span> 黄钥匙 <span class="key-count" id="key-yellow-count">0</span></div>
+          <div class="inventory-item"><span style="color:#4fc3f7">⚷</span> 蓝钥匙 <span class="key-count" id="key-blue-count">0</span></div>
+          <div class="inventory-item"><span style="color:#ef5350">⚷</span> 红钥匙 <span class="key-count" id="key-red-count">0</span></div>
         </div>
-
         <div class="panel-section">
           <h3>📜 日志</h3>
           <div id="message-log"></div>
         </div>
-
         <div class="panel-section">
           <h3>🎮 操作</h3>
           <div class="tips">
@@ -66,83 +51,95 @@
       </aside>
     </div>
 
-    <!-- ══ 战斗界面 ══ -->
+    <!-- ▶ 战斗界面 -->
     <div id="battle-screen" class="hidden">
-      <div id="battle-title">⚔️ BATTLE!</div>
 
+      <div id="battle-title">⚔️ BATTLE</div>
+
+      <!-- 双方面板 -->
       <div class="battle-combatants">
-        <div class="combatant-card" id="battle-hero-card">
-          <h3>🧙 英雄</h3>
-          <div class="combatant-hp">
-            <label>HP</label>
-            <div class="hp-bar" style="flex:1">
-              <div class="hp-bar-fill" id="battle-hero-hp-bar" style="width:62.5%"></div>
-            </div>
-            <span class="hp-text" id="battle-hero-hp-text">50 / 80</span>
+
+        <!-- 英雄 -->
+        <div class="combatant-card hero-card">
+          <div class="combatant-header">
+            <span class="combatant-name">🧙 英雄</span>
+            <span class="combatant-shield-badge">🛡 <span id="battle-hero-shield">0</span></span>
           </div>
-          <div class="combatant-shield">🛡 护盾: <span id="battle-hero-shield">0</span></div>
+          <div class="combatant-hp">
+            <div class="hp-bar flex1"><div class="hp-bar-fill hero-hp" id="battle-hero-hp-bar"></div></div>
+            <span class="hp-text" id="battle-hero-hp-text">70 / 70</span>
+          </div>
+          <!-- 英雄行动值 -->
+          <div class="ap-row">
+            <span class="ap-label">⚡ 行动值</span>
+            <div id="ap-display" class="ap-gems"></div>
+            <span id="ap-text" class="ap-num">0/0</span>
+          </div>
         </div>
 
-        <div class="combatant-card" id="battle-monster-card">
-          <h3 id="battle-monster-name">🟢 怪物</h3>
-          <div class="combatant-hp">
-            <label>HP</label>
-            <div class="hp-bar" style="flex:1">
-              <div class="hp-bar-fill" id="battle-monster-hp-bar"
-                   style="width:100%;background:linear-gradient(90deg,#2e7d32,#4caf50)"></div>
-            </div>
-            <span class="hp-text" id="battle-monster-hp-text">25 / 25</span>
+        <!-- 怪物 -->
+        <div class="combatant-card enemy-card">
+          <div class="combatant-header">
+            <span class="combatant-name" id="battle-monster-name">🟢 怪物</span>
+            <span class="combatant-shield-badge">🛡 <span id="battle-monster-shield">0</span></span>
           </div>
-          <div class="combatant-intent" id="battle-monster-intent">💭 …</div>
+          <div class="combatant-hp">
+            <div class="hp-bar flex1"><div class="hp-bar-fill enemy-hp" id="battle-monster-hp-bar"></div></div>
+            <span class="hp-text" id="battle-monster-hp-text">30 / 30</span>
+          </div>
+          <!-- 怪物行动值 -->
+          <div class="ap-row">
+            <span class="ap-label">⚡ 行动值</span>
+            <div id="monster-ap-display" class="ap-gems"></div>
+          </div>
+          <!-- 怪物意图（本回合将打出的牌） -->
+          <div class="monster-intent-section">
+            <div id="battle-monster-intent" class="monster-intent-cards"></div>
+          </div>
         </div>
+
       </div>
 
-      <div class="battle-energy-row">
-        <label>能量</label>
-        <div id="energy-display"></div>
-        <span id="energy-text" style="font-size:0.8rem;color:var(--text-dim)">3 / 3</span>
-        <button id="end-turn-btn">结束回合</button>
+      <!-- 英雄操作行：回合数 + 结束回合 -->
+      <div class="battle-action-row">
+        <span id="battle-turn-label" class="turn-label">回合 1</span>
+        <button id="end-turn-btn">结束回合 →</button>
       </div>
 
-      <div class="battle-hand-label">手牌</div>
-      <div id="battle-hand"></div>
+      <!-- 手牌区 -->
+      <div class="battle-hand-area">
+        <div class="hand-label">手牌</div>
+        <div id="battle-hand"></div>
+      </div>
+
+      <!-- 战斗日志 -->
       <div id="battle-log"></div>
-    </div>
+
+    </div><!-- /battle-screen -->
 
   </div><!-- /game-container -->
 
-  <!-- ══ 暂停菜单 ══ -->
+  <!-- ═══ 暂停菜单 ═══ -->
   <div id="pause-menu" class="hidden">
     <div id="pause-box">
       <button class="pause-close-btn" id="pause-close">✕</button>
       <h2>⏸ 暂停</h2>
-
       <div class="pause-section">
         <h3>💾 保存存档</h3>
         <div class="pause-slots">
-          <div class="pause-save-slot" data-slot="0">
-            <span class="slot-label">存档 1</span>
-            <span class="slot-info">（空）</span>
-          </div>
-          <div class="pause-save-slot" data-slot="1">
-            <span class="slot-label">存档 2</span>
-            <span class="slot-info">（空）</span>
-          </div>
-          <div class="pause-save-slot" data-slot="2">
-            <span class="slot-label">存档 3</span>
-            <span class="slot-info">（空）</span>
-          </div>
+          <div class="pause-save-slot" data-slot="0"><span class="slot-label">存档 1</span><span class="slot-info">（空）</span></div>
+          <div class="pause-save-slot" data-slot="1"><span class="slot-label">存档 2</span><span class="slot-info">（空）</span></div>
+          <div class="pause-save-slot" data-slot="2"><span class="slot-label">存档 3</span><span class="slot-info">（空）</span></div>
         </div>
       </div>
-
       <div class="pause-actions">
-        <button class="pause-btn" id="pause-resume">继续游戏</button>
+        <button class="pause-btn" id="pause-resume">▶ 继续游戏</button>
         <button class="pause-btn danger" id="pause-back-menu">🏠 返回主菜单</button>
       </div>
     </div>
   </div>
 
-  <!-- ══ 通用弹窗 ══ -->
+  <!-- ═══ 通用弹窗 ═══ -->
   <div id="overlay" class="hidden">
     <div id="overlay-box">
       <div id="overlay-title"></div>
@@ -151,7 +148,7 @@
     </div>
   </div>
 
-  <!-- ══ Toast 提示 ══ -->
+  <!-- ═══ Toast ═══ -->
   <div id="toast" class="hidden"></div>
 
   <script type="module" src="js/main.js"></script>

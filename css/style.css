@@ -1101,3 +1101,321 @@ body.menu-body {
   font-size: 0.72rem;
   color: var(--text);
 }
+
+/* ══════════════════════════════════════════
+   行动值水晶系统 & 战斗 UI 重构
+   ════════════════════════════════════════ */
+
+/* ── 战斗大标题 ── */
+#battle-title {
+  text-align: center;
+  font-size: 1.3rem;
+  letter-spacing: 4px;
+  color: #ef9a9a;
+  text-shadow: 0 0 10px #b71c1c;
+  padding: 6px 0 2px;
+  flex-shrink: 0;
+}
+
+/* ── 面板布局 ── */
+.battle-combatants {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.combatant-card {
+  flex: 1;
+  min-width: 220px;
+  max-width: 320px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.combatant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.combatant-name {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+.hero-card  .combatant-name { color: var(--player-color); }
+.enemy-card .combatant-name { color: var(--monster-green); }
+
+.combatant-shield-badge {
+  font-size: 0.8rem;
+  background: #1a2a3a;
+  border: 1px solid #3a5a7a;
+  border-radius: 12px;
+  padding: 2px 10px;
+  color: #90caf9;
+}
+
+.combatant-hp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.flex1 { flex: 1; }
+
+.hero-hp  { background: linear-gradient(90deg, #b71c1c, #e53935) !important; }
+.enemy-hp { background: linear-gradient(90deg, #1b5e20, #43a047) !important; }
+
+/* ── 行动值水晶 ── */
+.ap-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+}
+.ap-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.ap-num {
+  font-size: 0.75rem;
+  color: var(--energy-blue);
+  white-space: nowrap;
+}
+.ap-gems {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+/* 水晶本体 */
+.ap-gem {
+  width:  18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+/* 可用：亮蓝绿 */
+.ap-gem.ap-available {
+  background: var(--energy-blue);
+  border-color: #00e5ff;
+  box-shadow: 0 0 6px var(--energy-blue);
+}
+/* 已花费：暗蓝，边框保留 */
+.ap-gem.ap-spent {
+  background: #0a2a3a;
+  border-color: #1a4a5a;
+}
+/* 锁定（本回合达不到）：极暗 */
+.ap-gem.ap-locked {
+  background: #0d0d18;
+  border-color: #1a1a2a;
+  opacity: 0.4;
+}
+
+/* ── 怪物意图区 ── */
+.monster-intent-section {
+  border-top: 1px solid var(--panel-border);
+  padding-top: 8px;
+  margin-top: 2px;
+}
+
+.monster-intent-cards {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.intent-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* 意图小卡片 */
+.intent-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  border: 1px solid;
+  cursor: default;
+  user-select: none;
+}
+.intent-card-attack {
+  background: rgba(123,26,26,0.6);
+  border-color: #c0392b;
+  color: #ff8a80;
+}
+.intent-card-skill {
+  background: rgba(26,58,123,0.6);
+  border-color: #2980b9;
+  color: #82b1ff;
+}
+.intent-card-name { font-weight: bold; }
+.intent-card-cost { font-size: 0.68rem; color: var(--energy-blue); }
+
+/* ── 操作行（回合数 + 结束回合按钮）── */
+.battle-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.turn-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+#end-turn-btn {
+  padding: 8px 22px;
+  background: transparent;
+  border: 1px solid var(--energy-blue);
+  color: var(--energy-blue);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+#end-turn-btn:hover {
+  background: rgba(0,188,212,0.12);
+  box-shadow: 0 0 8px var(--energy-blue);
+}
+
+/* ── 手牌区 ── */
+.battle-hand-area {
+  flex-shrink: 0;
+}
+.hand-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+#battle-hand {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── 卡牌重设计 ── */
+.card {
+  width: 86px;
+  min-height: 108px;
+  border-radius: 8px;
+  padding: 8px 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  user-select: none;
+  position: relative;
+}
+
+.card:hover:not(.card-disabled) {
+  transform: translateY(-10px) scale(1.04);
+}
+.card:active:not(.card-disabled) {
+  transform: translateY(-3px) scale(0.97);
+}
+.card-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+}
+
+.card-attack {
+  background: linear-gradient(160deg, #2d0a0a, #3d1010);
+  border: 1px solid #7b2020;
+}
+.card-attack:hover:not(.card-disabled) {
+  box-shadow: 0 8px 20px rgba(183,28,28,0.45);
+  border-color: #e53935;
+}
+.card-skill {
+  background: linear-gradient(160deg, #0a1a2d, #101e3d);
+  border: 1px solid #1a3a7b;
+}
+.card-skill:hover:not(.card-disabled) {
+  box-shadow: 0 8px 20px rgba(21,101,192,0.45);
+  border-color: #2196f3;
+}
+
+/* 费用角标 */
+.card-cost-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 0.68rem;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+.ap-badge-attack { background: #b71c1c; color: #ffcdd2; }
+.ap-badge-skill  { background: #0d47a1; color: #bbdefb; }
+
+.card-name {
+  font-size: 0.82rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0.5px;
+  padding-top: 6px;
+}
+.card-desc {
+  font-size: 0.68rem;
+  color: #ccc;
+  text-align: center;
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ── 战斗日志 ── */
+#battle-log {
+  max-height: 80px;
+  overflow-y: auto;
+  background: #07070f;
+  border: 1px solid #1a1a2e;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  flex-shrink: 0;
+}
+#battle-log p:last-child { color: #e8e8e8; }
+#battle-log::-webkit-scrollbar { width: 3px; }
+#battle-log::-webkit-scrollbar-thumb { background: #2a2a3a; }
+
+/* ── 战斗界面整体布局 ── */
+#battle-screen {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}

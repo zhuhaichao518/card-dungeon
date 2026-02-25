@@ -1,82 +1,164 @@
 /**
  * battle.js - 卡牌战斗系统
- * 管理战斗流程：开始战斗、出牌、结束回合、怪物行动、战斗结束
+ *
+ * 行动值规则（英雄与怪物对等）：
+ *   本回合行动值 = min(回合数, 自身最大行动值)
+ *   回合1 → 1点, 回合2 → 2点, 回合3+ → 最大值
+ *
+ * 回合流程：
+ *   startNewTurn()
+ *     ├─ 怪物摸牌 + 计算意图（本回合贪心选牌）
+ *     ├─ 英雄摸牌 + 恢复行动值 + 清空护盾
+ *     └─ 更新UI
+ *   玩家出牌（可多次）
+ *   endPlayerTurn()
+ *     ├─ 怪物执行意图（打出预告的牌）
+ *     ├─ 怪物护盾清空
+ *     └─ startNewTurn()
  */
 
 import {
-  state,
-  addMessage,
-  damagePlayer,
-  damageMonster,
-  healPlayer,
-  drawCards,
-  discardHand,
-  shuffle,
+  state, addMessage,
+  damagePlayer, damageMonster, healPlayer,
+  drawCards, discardHand, shuffle,
 } from './state.js';
 import { REWARD_CARD_POOL } from './data.js';
 import { renderMap } from './renderer.js';
-import { updateBattleUI, updateExploreUI, showBattleScreen, hideBattleScreen } from './ui.js';
+import {
+  updateBattleUI, updateExploreUI,
+  showBattleScreen, hideBattleScreen,
+} from './ui.js';
 
-/**
- * 开始与某个怪物的战斗
- * @param {object} monster
- */
+// ─────────────────────────────────────────────────────────────────────────────
+// 开始战斗
+// ─────────────────────────────────────────────────────────────────────────────
+
 export function startBattle(monster) {
   state.phase = 'battle';
-  state.battle.monster = monster;
-  state.battle.turn = 1;
-  state.battle.log = [];
 
-  // 重置玩家护盾和能量
+  const { battle } = state;
+  battle.monster = monster;
+  battle.turn    = 0;
+  battle.log     = [];
+
+  // ── 英雄战斗状态重置 ──
   state.player.shield = 0;
-  state.player.energy = state.player.maxEnergy;
+  battle.hero.ap        = 0;
+  battle.hero.turnApMax = 0;
 
-  // 重置牌堆：把全部卡牌洗入待抽堆
+  // ── 怪物战斗状态重置 ──
+  const en = battle.enemy;
+  en.ap          = 0;
+  en.turnApMax   = 0;
+  en.hand        = [];
+  en.discardPile = [];
+  en.intent      = [];
+  en.drawPile    = shuffle([...monster.deck]);
+
+  // ── 英雄牌组重置 ──
   const { deck } = state;
-  deck.drawPile = shuffle([...deck.allCards]);
-  deck.hand = [];
+  deck.drawPile    = shuffle([...deck.allCards]);
+  deck.hand        = [];
   deck.discardPile = [];
 
-  // 抽初始手牌
-  drawCards(state.player.handSize || 5);
-
-  // 计算怪物第一个意图
-  updateMonsterIntent();
-
-  // 切换到战斗界面
   showBattleScreen();
-  updateBattleUI();
+  battleLog(`⚔️ 遭遇 ${monster.name}！战斗开始！`);
 
-  battleLog(`战斗开始！对战 ${monster.name}`);
+  // 第一回合
+  startNewTurn();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 开启新回合
+// ─────────────────────────────────────────────────────────────────────────────
+
+function startNewTurn() {
+  const { battle, player } = state;
+  battle.turn++;
+
+  const turn = battle.turn;
+
+  // ── 1. 怪物摸牌 & 决定意图 ──────────────────────────────────────────
+  const en = battle.enemy;
+  const monster = battle.monster;
+
+  // 怪物本回合行动值
+  en.turnApMax = Math.min(turn, monster.maxAp);
+  en.ap        = en.turnApMax;
+
+  // 怪物弃掉上回合剩余手牌
+  en.discardPile.push(...en.hand);
+  en.hand = [];
+
+  // 怪物摸牌
+  for (let i = 0; i < monster.handSize; i++) {
+    if (en.drawPile.length === 0) {
+      if (en.discardPile.length === 0) break;
+      en.drawPile    = shuffle(en.discardPile);
+      en.discardPile = [];
+    }
+    en.hand.push(en.drawPile.pop());
+  }
+
+  // 怪物贪心决定意图（本回合最优出牌序列）
+  en.intent = calcMonsterIntent(en.hand, en.ap);
+
+  // ── 2. 英雄状态更新 ───────────────────────────────────────────────────
+  player.shield = 0;   // 护盾每回合清零
+
+  const hero = battle.hero;
+  hero.turnApMax = Math.min(turn, player.maxAp);
+  hero.ap        = hero.turnApMax;
+
+  // 弃掉旧手牌，重新摸牌
+  discardHand();
+  drawCards(player.handSize);
+
+  battleLog(`── 第 ${turn} 回合 ── 行动值 ${hero.ap}/${hero.turnApMax}`);
+  updateBattleUI();
 }
 
 /**
- * 玩家打出一张手牌
- * @param {number} handIndex - 手牌索引
+ * 贪心计算怪物意图：从高费到低费，尽量花完行动值
+ * @returns {Array} 将打出的牌序列
  */
+function calcMonsterIntent(hand, availableAp) {
+  const sorted = [...hand].sort((a, b) => b.cost - a.cost);
+  const intent = [];
+  let ap = availableAp;
+  for (const card of sorted) {
+    if (card.cost <= ap) {
+      intent.push(card);
+      ap -= card.cost;
+    }
+  }
+  return intent;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 英雄出牌
+// ─────────────────────────────────────────────────────────────────────────────
+
 export function playCard(handIndex) {
   if (state.phase !== 'battle') return;
 
   const card = state.deck.hand[handIndex];
   if (!card) return;
 
-  // 检查能量
-  if (state.player.energy < card.cost) {
-    battleLog('能量不足，无法打出此牌！');
+  if (state.battle.hero.ap < card.cost) {
+    battleLog('⚡ 行动值不足！');
     return;
   }
 
-  // 消耗能量
-  state.player.energy -= card.cost;
+  // 消耗行动值
+  state.battle.hero.ap -= card.cost;
 
-  // 从手牌中移除
+  // 移出手牌 → 弃牌
   state.deck.hand.splice(handIndex, 1);
-
-  // 放入弃牌堆
   state.deck.discardPile.push(card);
 
-  // 执行卡牌效果
-  executeCardEffect(card);
+  // 执行效果
+  executeHeroCard(card);
 
   // 检查怪物是否死亡
   if (state.battle.monster.hp <= 0) {
@@ -87,197 +169,151 @@ export function playCard(handIndex) {
   updateBattleUI();
 }
 
-/**
- * 执行卡牌效果
- * @param {object} card
- */
-function executeCardEffect(card) {
+function executeHeroCard(card) {
   const monster = state.battle.monster;
+  if (card.type === 'attack') {
+    const hits = card.hits || 1;
+    for (let i = 0; i < hits; i++) damageMonster(monster, card.value);
+    const total = card.value * hits;
+    battleLog(`🗡 打出【${card.name}】→ 对 ${monster.name} 造成 ${total} 点伤害`
+      + (hits > 1 ? `（${card.value}×${hits}）` : ''));
+  } else if (card.type === 'skill') {
+    if (card.isHeal) {
+      healPlayer(card.value);
+      battleLog(`💊 打出【${card.name}】→ 恢复 ${card.value} 点生命`);
+    } else if (card.counterDmg) {
+      state.player.shield += card.value;
+      damageMonster(monster, card.counterDmg);
+      battleLog(`🛡 打出【${card.name}】→ 获得 ${card.value} 护盾，反弹 ${card.counterDmg} 伤害`);
+    } else if (card.draw) {
+      state.player.shield += card.value;
+      drawCards(card.draw);
+      battleLog(`🛡 打出【${card.name}】→ 获得 ${card.value} 护盾，摸 ${card.draw} 张牌`);
+    } else {
+      state.player.shield += card.value;
+      battleLog(`🛡 打出【${card.name}】→ 获得 ${card.value} 点护盾`);
+    }
+  }
+}
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 英雄结束回合 → 怪物行动
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function endPlayerTurn() {
+  if (state.phase !== 'battle') return;
+
+  battleLog('── 玩家回合结束，轮到怪物 ──');
+
+  // 怪物清盾、执行意图
+  const monster = state.battle.monster;
+  monster.shield = (monster.shield || 0);
+  // 护盾在结算前也清零（对称规则）
+  monster.shield = 0;
+
+  const en = battle_();
+  for (const card of en.intent) {
+    executeMonsterCard(card, monster);
+    if (state.player.hp <= 0) {
+      // 玩家死亡，不继续执行后续牌
+      showGameOver();
+      return;
+    }
+  }
+  en.intent = [];  // 意图已执行
+
+  // 开启下一回合
+  startNewTurn();
+}
+
+function executeMonsterCard(card, monster) {
   if (card.type === 'attack') {
     const hits = card.hits || 1;
     let totalDmg = 0;
     for (let i = 0; i < hits; i++) {
-      damageMonster(monster, card.value);
-      totalDmg += card.value;
+      const real = damagePlayer(card.value);
+      totalDmg += real;
     }
-    if (hits > 1) {
-      battleLog(`打出【${card.name}】：造成 ${card.value}×${hits}=${totalDmg} 点伤害`);
-    } else {
-      battleLog(`打出【${card.name}】：造成 ${totalDmg} 点伤害`);
-    }
+    const raw = card.value * hits;
+    battleLog(`👾 ${monster.name} 打出【${card.name}】→ 对英雄造成 ${raw} 点伤害（实际 ${totalDmg}）`);
   } else if (card.type === 'skill') {
-    if (card.isHeal) {
-      healPlayer(card.value);
-      battleLog(`打出【${card.name}】：恢复 ${card.value} 点生命`);
-    } else {
-      // 护盾技能
-      state.player.shield += card.value;
-      battleLog(`打出【${card.name}】：获得 ${card.value} 点护盾`);
-    }
+    monster.shield = (monster.shield || 0) + card.value;
+    battleLog(`👾 ${monster.name} 打出【${card.name}】→ 获得 ${card.value} 点护盾`);
   }
 }
 
-/**
- * 玩家结束回合
- */
-export function endPlayerTurn() {
-  if (state.phase !== 'battle') return;
+// ─────────────────────────────────────────────────────────────────────────────
+// 战斗结束
+// ─────────────────────────────────────────────────────────────────────────────
 
-  battleLog('--- 玩家结束回合 ---');
-
-  // 怪物行动
-  monsterAct();
-
-  // 检查玩家是否死亡
-  if (state.player.hp <= 0) {
-    state.phase = 'gameover';
-    showGameOverFromBattle();
-    return;
-  }
-
-  // 开始下一个玩家回合
-  startPlayerTurn();
-}
-
-/**
- * 怪物行动
- */
-function monsterAct() {
-  const monster = state.battle.monster;
-  const pattern = monster.actionPattern;
-  const action = pattern[monster.actionIndex % pattern.length];
-
-  if (action.type === 'attack' || action.type === 'power') {
-    const realDmg = damagePlayer(action.value);
-    battleLog(`${monster.name} 攻击！造成 ${action.value} 点伤害（实际伤害 ${realDmg}，护盾抵消 ${action.value - realDmg}）`);
-  }
-
-  // 推进怪物行动索引
-  monster.actionIndex = (monster.actionIndex + 1) % pattern.length;
-}
-
-/**
- * 开始新的玩家回合
- */
-function startPlayerTurn() {
-  state.battle.turn++;
-
-  // 护盾清零
-  state.player.shield = 0;
-
-  // 恢复能量
-  state.player.energy = state.player.maxEnergy;
-
-  // 弃掉剩余手牌，重新抽牌
-  discardHand();
-  drawCards(state.player.handSize || 5);
-
-  // 更新怪物意图（显示本回合将要做什么）
-  updateMonsterIntent();
-
-  battleLog(`--- 第 ${state.battle.turn} 回合 ---`);
-  updateBattleUI();
-}
-
-/**
- * 计算并更新怪物当前意图（预告下回合行动）
- */
-function updateMonsterIntent() {
-  const monster = state.battle.monster;
-  const pattern = monster.actionPattern;
-  const nextAction = pattern[monster.actionIndex % pattern.length];
-  state.battle.monsterIntent = nextAction;
-}
-
-/**
- * 战斗结束
- * @param {boolean} playerWon
- */
 function endBattle(playerWon) {
-  if (playerWon) {
-    const monster = state.battle.monster;
-    battleLog(`击败了 ${monster.name}！`);
+  if (!playerWon) return;
 
-    // 从怪物列表中移除
-    const idx = state.monsters.indexOf(monster);
-    if (idx !== -1) state.monsters.splice(idx, 1);
+  const monster = state.battle.monster;
+  battleLog(`🎉 击败了 ${monster.name}！`);
 
-    // 显示奖励（随机一张新卡）
-    const rewardCard = REWARD_CARD_POOL[Math.floor(Math.random() * REWARD_CARD_POOL.length)];
-    state.deck.allCards.push(rewardCard);
-    addMessage(`战斗胜利！获得新卡：【${rewardCard.name}】`);
+  // 从地图移除怪物
+  const idx = state.monsters.indexOf(monster);
+  if (idx !== -1) state.monsters.splice(idx, 1);
 
-    // 切换回探索阶段
-    state.phase = 'explore';
+  // 随机奖励一张新卡
+  const reward = REWARD_CARD_POOL[Math.floor(Math.random() * REWARD_CARD_POOL.length)];
+  state.deck.allCards.push(reward);
+  addMessage(`🏆 战斗胜利！获得新卡：【${reward.name}】`);
 
-    // 清空战斗状态
-    discardHand();
-    state.battle.monster = null;
-    state.battle.log = [];
+  // 清理战斗状态
+  state.phase = 'explore';
+  discardHand();
+  state.battle.monster      = null;
+  state.battle.enemy.intent = [];
 
-    // 隐藏战斗界面
-    hideBattleScreen();
-    renderMap();
-    updateExploreUI();
-
-    // 显示奖励弹窗
-    showVictoryOverlay(rewardCard);
-  }
-}
-
-/**
- * 显示胜利奖励弹窗
- * @param {object} rewardCard
- */
-function showVictoryOverlay(rewardCard) {
-  const overlay = document.getElementById('overlay');
-  const overlayTitle = document.getElementById('overlay-title');
-  const overlayMsg = document.getElementById('overlay-msg');
-  const overlayBtn = document.getElementById('overlay-btn');
-
-  overlayTitle.textContent = '🎉 战斗胜利！';
-  overlayMsg.innerHTML = `
-    获得奖励卡牌：<br>
-    <div class="reward-card card card-${rewardCard.type}">
-      <div class="card-name">${rewardCard.name}</div>
-      <div class="card-desc">${rewardCard.desc}</div>
-      <div class="card-cost">⚡${rewardCard.cost}</div>
-    </div>
-  `;
-  overlayBtn.textContent = '继续探索';
-  overlayBtn.onclick = () => {
-    overlay.classList.add('hidden');
-  };
-
-  overlay.classList.remove('hidden');
-}
-
-/**
- * 战斗中玩家死亡
- */
-function showGameOverFromBattle() {
   hideBattleScreen();
-  const overlay = document.getElementById('overlay');
-  const overlayTitle = document.getElementById('overlay-title');
-  const overlayMsg = document.getElementById('overlay-msg');
-  const overlayBtn = document.getElementById('overlay-btn');
+  renderMap();
+  updateExploreUI();
 
-  overlayTitle.textContent = '💀 游戏结束';
-  overlayMsg.textContent = '你在战斗中被击倒了……';
-  overlayBtn.textContent = '重新开始';
-  overlayBtn.onclick = () => location.reload();
+  showVictoryOverlay(reward);
+}
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 弹窗
+// ─────────────────────────────────────────────────────────────────────────────
+
+function showVictoryOverlay(card) {
+  const overlay  = document.getElementById('overlay');
+  document.getElementById('overlay-title').textContent = '🎉 战斗胜利！';
+  document.getElementById('overlay-msg').innerHTML = `
+    获得奖励卡牌：
+    <div class="reward-card card card-${card.type}" style="margin:12px auto;cursor:default">
+      <div class="card-name">${card.name}</div>
+      <div class="card-desc">${card.desc}</div>
+      <div class="card-cost">⚡ ${card.cost}</div>
+    </div>`;
+  const btn = document.getElementById('overlay-btn');
+  btn.textContent = '继续探索';
+  btn.onclick = () => overlay.classList.add('hidden');
   overlay.classList.remove('hidden');
 }
 
-/**
- * 添加战斗日志
- * @param {string} msg
- */
+function showGameOver() {
+  hideBattleScreen();
+  state.phase = 'gameover';
+  document.getElementById('overlay-title').textContent = '💀 游戏结束';
+  document.getElementById('overlay-msg').textContent   = '你在战斗中倒下了……';
+  const btn = document.getElementById('overlay-btn');
+  btn.textContent = '重新开始';
+  btn.onclick = () => location.reload();
+  document.getElementById('overlay').classList.remove('hidden');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 工具
+// ─────────────────────────────────────────────────────────────────────────────
+
 function battleLog(msg) {
   state.battle.log.push(msg);
-  if (state.battle.log.length > 20) state.battle.log.shift();
-  // 同步到探索消息（战斗中）
+  if (state.battle.log.length > 30) state.battle.log.shift();
   addMessage(msg);
 }
+
+// 简写 getter，避免每次写 state.battle.enemy
+function battle_() { return state.battle.enemy; }

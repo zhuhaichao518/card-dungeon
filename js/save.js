@@ -3,6 +3,8 @@
  * 使用 localStorage 存储最多 3 个存档槽位
  */
 
+import { MONSTER_DEFS } from './data.js';
+
 const SAVE_KEY_PREFIX = 'card_dungeon_save_';
 const SLOT_COUNT = 3;
 
@@ -32,18 +34,12 @@ export function saveGame(state, slot) {
     inventory: { ...state.inventory },
     // 只保存修改过的瓷砖（减少存储量）
     tiles: state.tiles.map(row => [...row]),
-    // 剩余怪物列表
+    // 剩余怪物（只保存位置+当前HP，加载时从MONSTER_DEFS重建）
     monsters: state.monsters.map(m => ({
-      id:          m.id,
-      name:        m.name,
-      emoji:       m.emoji,
-      x:           m.x,
-      y:           m.y,
-      hp:          m.hp,
-      maxHp:       m.maxHp,
-      atk:         m.atk,
-      actionPattern: m.actionPattern,
-      actionIndex:   m.actionIndex,
+      defId: m.id,   // 对应 MONSTER_DEFS 的 key
+      x:     m.x,
+      y:     m.y,
+      hp:    m.hp,   // 当前剩余HP（可能在战斗外被保存）
     })),
     // 完整牌组（含获得的新卡）
     allCards: state.deck.allCards.map(c => ({ ...c })),
@@ -107,7 +103,11 @@ export function restoreState(state, data) {
 
   state.inventory = { ...data.inventory };
   state.tiles     = data.tiles.map(row => [...row]);
-  state.monsters  = data.monsters.map(m => ({ ...m }));
+  // 从 MONSTER_DEFS 重建怪物，并恢复当前HP
+  state.monsters  = data.monsters.map(m => {
+    const def = JSON.parse(JSON.stringify(MONSTER_DEFS[m.defId] || {}));
+    return { ...def, x: m.x, y: m.y, hp: m.hp, maxHp: def.maxHp || m.hp, shield: 0 };
+  });
 
   // 重建牌组
   const { deck } = state;
