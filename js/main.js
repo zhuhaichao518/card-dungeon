@@ -86,6 +86,7 @@ function bindPauseMenu() {
   // 菜单按钮
   document.getElementById('btn-pause')?.addEventListener('click', togglePauseMenu);
   document.getElementById('pause-close')?.addEventListener('click', togglePauseMenu);
+  document.getElementById('pause-resume')?.addEventListener('click', togglePauseMenu);
   document.getElementById('pause-back-menu')?.addEventListener('click', () => {
     window.location.href = 'index.html';
   });
