@@ -4,273 +4,136 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>⚔️ Card Dungeon</title>
-  <style>
-    :root {
-      --bg: #0a0a0f;
-      --panel: #13131a;
-      --text: #e8e8e8;
-      --text-dim: #888;
-      --accent: #64b5f6;
-      --accent2: #9c27b0;
-      --gold: #ffd700;
-      --font: 'Courier New', monospace;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      overflow-x: hidden;
-    }
-
-    /* ── 粒子背景（CSS实现伪装像素粒子） ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 20%, rgba(100,181,246,0.05) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 80%, rgba(156,39,176,0.06) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    main {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 60px 24px 80px;
-      text-align: center;
-    }
-
-    /* ── ASCII 像素标题 ── */
-    .ascii-art {
-      font-size: clamp(0.45rem, 1.5vw, 0.75rem);
-      line-height: 1.25;
-      color: var(--accent);
-      text-shadow: 0 0 10px var(--accent);
-      white-space: pre;
-      overflow-x: auto;
-      margin-bottom: 20px;
-      animation: fadeDown 0.8s ease both;
-    }
-
-    .game-title {
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      letter-spacing: 6px;
-      color: var(--accent);
-      text-shadow:
-        0 0 12px var(--accent),
-        0 0 30px rgba(100,181,246,0.3);
-      margin-bottom: 10px;
-      animation: fadeDown 0.8s ease 0.1s both;
-    }
-
-    .subtitle {
-      font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-      color: var(--text-dim);
-      letter-spacing: 3px;
-      margin-bottom: 50px;
-      animation: fadeDown 0.8s ease 0.2s both;
-    }
-
-    .subtitle span {
-      color: var(--gold);
-    }
-
-    /* ── 特点介绍 ── */
-    .features {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 56px;
-      animation: fadeDown 0.8s ease 0.35s both;
-    }
-
-    .feature-card {
-      flex: 1;
-      min-width: 200px;
-      max-width: 260px;
-      background: var(--panel);
-      border: 1px solid rgba(100,181,246,0.2);
-      border-radius: 12px;
-      padding: 28px 20px;
-      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-    }
-
-    .feature-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 20px rgba(100,181,246,0.15);
-      transform: translateY(-4px);
-    }
-
-    .feature-icon {
-      font-size: 2.2rem;
-      margin-bottom: 14px;
-      display: block;
-    }
-
-    .feature-title {
-      font-size: 0.95rem;
-      letter-spacing: 1px;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .feature-desc {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      line-height: 1.7;
-    }
-
-    /* ── 开始按钮 ── */
-    .start-btn {
-      display: inline-block;
-      padding: 16px 56px;
-      background: transparent;
-      border: 2px solid var(--accent);
-      color: var(--accent);
-      font-family: var(--font);
-      font-size: 1.1rem;
-      letter-spacing: 3px;
-      cursor: pointer;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
-      animation: fadeDown 0.8s ease 0.5s both, pulse 3s ease-in-out 1.5s infinite;
-    }
-
-    .start-btn:hover {
-      background: rgba(100,181,246,0.12);
-      box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(100,181,246,0.2);
-      transform: scale(1.04);
-      animation: none;
-    }
-
-    /* ── 底部提示 ── */
-    .hint {
-      margin-top: 28px;
-      font-size: 0.75rem;
-      color: #444;
-      letter-spacing: 1px;
-      animation: fadeDown 0.8s ease 0.65s both;
-    }
-
-    /* ── 像素装饰线 ── */
-    .pixel-line {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 40px auto;
-      max-width: 400px;
-      animation: fadeDown 0.8s ease 0.3s both;
-    }
-    .pixel-line::before,
-    .pixel-line::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(100,181,246,0.4), transparent);
-    }
-    .pixel-line span {
-      font-size: 1.2rem;
-      color: var(--accent2);
-      text-shadow: 0 0 8px var(--accent2);
-    }
-
-    /* ── 版本角标 ── */
-    .version-badge {
-      position: fixed;
-      bottom: 16px;
-      right: 16px;
-      font-size: 0.65rem;
-      color: #333;
-      letter-spacing: 1px;
-    }
-
-    /* ── 动画 ── */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 8px rgba(100,181,246,0.3); }
-      50%       { box-shadow: 0 0 20px rgba(100,181,246,0.6); }
-    }
-
-    /* ── 响应式 ── */
-    @media (max-width: 500px) {
-      .features { gap: 12px; }
-      .feature-card { max-width: none; }
-      .ascii-art { display: none; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="menu-body">
 
-<main>
+  <!-- 背景粒子 / 装饰 -->
+  <div class="menu-bg">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+  </div>
 
-  <!-- ASCII 像素艺术（装饰） -->
-  <pre class="ascii-art">
- ██████╗ █████╗ ██████╗ ██████╗     ██████╗ ██╗   ██╗███╗   ██╗ ██████╗
-██╔════╝██╔══██╗██╔══██╗██╔══██╗    ██╔══██╗██║   ██║████╗  ██║██╔════╝
-██║     ███████║██████╔╝██║  ██║    ██║  ██║██║   ██║██╔██╗ ██║██║  ███╗
-██║     ██╔══██║██╔══██╗██║  ██║    ██║  ██║██║   ██║██║╚██╗██║██║   ██║
-╚██████╗██║  ██║██║  ██║██████╔╝    ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝
- ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝</pre>
-
-  <h1 class="game-title">⚔️ CARD DUNGEON</h1>
-  <p class="subtitle">
-    <span>魔塔</span> × <span>卡牌</span> × <span>肉鸽</span>
-  </p>
-
-  <div class="pixel-line"><span>✦</span></div>
-
-  <!-- 特点介绍 -->
-  <div class="features">
-    <div class="feature-card">
-      <span class="feature-icon">🗺️</span>
-      <div class="feature-title">探索地下城</div>
-      <div class="feature-desc">
-        魔塔风格的地图<br>
-        拾取钥匙、开启门锁<br>
-        避开陷阱，寻找路径
-      </div>
+  <!-- ══ 主菜单面板 ══ -->
+  <div id="menu-main" class="menu-screen active">
+    <div class="game-logo">
+      <div class="logo-icon">⚔️</div>
+      <h1 class="game-title">CARD DUNGEON</h1>
+      <p class="game-subtitle">魔塔 × 卡牌 × 肉鸽</p>
     </div>
-    <div class="feature-card">
-      <span class="feature-icon">🃏</span>
-      <div class="feature-title">卡牌战斗</div>
-      <div class="feature-desc">
-        用卡牌击败怪物<br>
-        管理能量，选择时机<br>
-        战胜后获得强力新卡
-      </div>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">⚔️</span>
-      <div class="feature-title">策略肉鸽</div>
-      <div class="feature-desc">
-        每次探险都是挑战<br>
-        不断强化你的牌组<br>
-        深入更深的地牢
-      </div>
+
+    <nav class="menu-nav">
+      <button class="menu-btn primary" onclick="newGame()">▶ 新游戏</button>
+      <button class="menu-btn" onclick="showScreen('load')">📁 读取存档</button>
+      <button class="menu-btn" onclick="showScreen('howto')">❓ 游戏说明</button>
+    </nav>
+
+    <div class="menu-footer">
+      素材来源：<a href="https://github.com/ckcz123/mota-js" target="_blank">mota-js</a>
     </div>
   </div>
 
-  <!-- 开始游戏按钮 -->
-  <a href="game.html" class="start-btn">▶ 开始游戏</a>
+  <!-- ══ 读档面板 ══ -->
+  <div id="menu-load" class="menu-screen">
+    <h2 class="panel-title">📁 读取存档</h2>
+    <div class="save-slots" id="load-slots">
+      <!-- JS动态生成 -->
+    </div>
+    <button class="menu-btn back-btn" onclick="showScreen('main')">◀ 返回</button>
+  </div>
 
-  <p class="hint">WASD / 方向键 移动 · 鼠标点击相邻格子移动 · 遭遇怪物自动进入卡牌战斗</p>
+  <!-- ══ 游戏说明面板 ══ -->
+  <div id="menu-howto" class="menu-screen">
+    <h2 class="panel-title">❓ 游戏说明</h2>
+    <div class="howto-content">
+      <section>
+        <h3>🗺️ 探索</h3>
+        <p>用 <kbd>WASD</kbd> 或方向键移动，也可点击相邻格子。</p>
+        <p>收集 <span style="color:#ffd700">🔑黄钥匙</span>/<span style="color:#4fc3f7">🔵蓝钥匙</span> 开对应颜色的门。</p>
+        <p>踩到 <span style="color:#ff7043">⚠刺陷阱</span> 会损失 10 HP。</p>
+        <p>拾取 <span style="color:#e53935">+血瓶</span> 恢复 30 HP。</p>
+      </section>
+      <section>
+        <h3>⚔️ 战斗</h3>
+        <p>走到怪物旁会自动触发卡牌战斗。</p>
+        <p>每回合获得 <span style="color:#00bcd4">3 点能量</span>，抽 5 张手牌。</p>
+        <p>点击卡牌打出，<kbd>结束回合</kbd> 后轮到怪物行动。</p>
+        <p>怪物头上会预告下一步行动——提前做好防御！</p>
+      </section>
+      <section>
+        <h3>🃏 牌组</h3>
+        <p>初始 10 张牌：打击×3、防御×3、速击、重击、招架、包扎。</p>
+        <p>击败怪物后随机获得 1 张新卡，永久加入牌组。</p>
+      </section>
+      <section>
+        <h3>💾 存档</h3>
+        <p>游戏中按 <kbd>Esc</kbd> 或点击 ⏸ 打开暂停菜单存档。</p>
+        <p>最多 3 个存档槽，随时覆盖保存。</p>
+      </section>
+    </div>
+    <button class="menu-btn back-btn" onclick="showScreen('main')">◀ 返回</button>
+  </div>
 
-</main>
+  <script>
+    const SAVE_KEY_PREFIX = 'card_dungeon_save_slot_';
 
-<div class="version-badge">v0.1.0 · alpha</div>
+    // 读取所有存档
+    function getAllSaves() {
+      return [0, 1, 2].map(i => {
+        try {
+          const raw = localStorage.getItem(SAVE_KEY_PREFIX + i);
+          return raw ? JSON.parse(raw) : null;
+        } catch { return null; }
+      });
+    }
 
+    // 切换面板
+    function showScreen(name) {
+      document.querySelectorAll('.menu-screen').forEach(el => el.classList.remove('active'));
+      document.getElementById('menu-' + name).classList.add('active');
+      if (name === 'load') renderLoadSlots();
+    }
+
+    // 渲染存档槽位
+    function renderLoadSlots() {
+      const saves = getAllSaves();
+      const container = document.getElementById('load-slots');
+      container.innerHTML = saves.map((save, i) => `
+        <div class="save-slot ${save ? 'has-data' : 'empty'}" onclick="${save ? `loadSlot(${i})` : ''}">
+          <div class="slot-header">
+            <span class="slot-num">存档 ${i + 1}</span>
+            ${save ? `<button class="slot-del" onclick="event.stopPropagation();deleteSlot(${i})">🗑</button>` : ''}
+          </div>
+          ${save
+            ? `<div class="slot-detail">
+                <span>⚔️ 第 ${save.floor} 层</span>
+                <span>❤️ ${save.player.hp}/${save.player.maxHp}</span>
+                <span>🃏 ${save.allCards ? save.allCards.length : '?'} 张牌</span>
+               </div>
+               <div class="slot-time">${save.savedAt}</div>`
+            : '<div class="slot-empty">— 空存档 —</div>'
+          }
+        </div>
+      `).join('');
+    }
+
+    // 新游戏
+    function newGame() {
+      window.location.href = 'game.html';
+    }
+
+    // 读取存档跳转
+    function loadSlot(slot) {
+      sessionStorage.setItem('load_slot', slot);
+      window.location.href = 'game.html';
+    }
+
+    // 删除存档
+    function deleteSlot(slot) {
+      if (!confirm(`确定删除存档 ${slot + 1}？`)) return;
+      localStorage.removeItem(SAVE_KEY_PREFIX + slot);
+      renderLoadSlots();
+    }
+  </script>
 </body>
 </html>

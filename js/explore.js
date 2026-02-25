@@ -9,6 +9,7 @@ import { renderMap } from './renderer.js';
 import { updateExploreUI } from './ui.js';
 import { startBattle } from './battle.js';
 
+
 /**
  * 尝试向指定方向移动
  * @param {number} dx - x方向偏移 (-1, 0, 1)

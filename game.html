@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⚔️ Card Dungeon - 游戏</title>
+  <title>⚔️ Card Dungeon</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ───── 头部：标题 + 血条 + 楼层 ───── -->
+  <!-- ───── 头部 ───── -->
   <header id="header">
+    <a href="index.html" class="header-back">◀ 菜单</a>
     <h1>⚔️ CARD DUNGEON</h1>
     <div class="hp-bar-container">
       <label>HP</label>
@@ -19,70 +20,57 @@
       <span class="hp-text" id="hp-text">50 / 80</span>
     </div>
     <span id="floor-label">第 1 层</span>
+    <button id="btn-pause" class="btn-icon" title="暂停 (Esc)">⏸</button>
   </header>
 
-  <!-- ───── 主体容器 ───── -->
+  <!-- ───── 主体 ───── -->
   <div id="game-container">
 
-    <!-- ══════ 探索界面 ══════ -->
+    <!-- ══ 探索界面 ══ -->
     <div id="explore-screen">
-
-      <!-- 地图区域 -->
       <div id="map-area">
-        <div id="map-grid"></div>
+        <!-- Canvas 地图 -->
+        <canvas id="map-canvas"></canvas>
       </div>
 
-      <!-- 侧边面板 -->
       <aside id="side-panel">
-
-        <!-- 背包 -->
         <div class="panel-section">
           <h3>📦 背包</h3>
           <div class="inventory-item">
-            <span class="key-icon" style="color:#ffd700">⚷</span>
-            <span>黄钥匙</span>
+            <span style="color:#ffd700">⚷</span> 黄钥匙
             <span class="key-count" id="key-yellow-count">0</span>
           </div>
           <div class="inventory-item">
-            <span class="key-icon" style="color:#4fc3f7">⚷</span>
-            <span>蓝钥匙</span>
+            <span style="color:#4fc3f7">⚷</span> 蓝钥匙
             <span class="key-count" id="key-blue-count">0</span>
           </div>
           <div class="inventory-item">
-            <span class="key-icon" style="color:#ef5350">⚷</span>
-            <span>红钥匙</span>
+            <span style="color:#ef5350">⚷</span> 红钥匙
             <span class="key-count" id="key-red-count">0</span>
           </div>
         </div>
 
-        <!-- 消息日志 -->
         <div class="panel-section">
           <h3>📜 日志</h3>
           <div id="message-log"></div>
         </div>
 
-        <!-- 操作提示 -->
         <div class="panel-section">
           <h3>🎮 操作</h3>
-          <div style="font-size:0.75rem;color:var(--text-dim);line-height:1.8">
+          <div class="tips">
             <div>WASD / 方向键 移动</div>
             <div>点击相邻格子 移动</div>
-            <div>遇怪自动进入战斗</div>
+            <div>Esc / ⏸ 暂停</div>
           </div>
         </div>
-
       </aside>
-    </div><!-- /explore-screen -->
+    </div>
 
-    <!-- ══════ 战斗界面 ══════ -->
+    <!-- ══ 战斗界面 ══ -->
     <div id="battle-screen" class="hidden">
-
       <div id="battle-title">⚔️ BATTLE!</div>
 
-      <!-- 双方角色 -->
       <div class="battle-combatants">
-
-        <!-- 英雄 -->
         <div class="combatant-card" id="battle-hero-card">
           <h3>🧙 英雄</h3>
           <div class="combatant-hp">
@@ -95,7 +83,6 @@
           <div class="combatant-shield">🛡 护盾: <span id="battle-hero-shield">0</span></div>
         </div>
 
-        <!-- 怪物 -->
         <div class="combatant-card" id="battle-monster-card">
           <h3 id="battle-monster-name">🟢 怪物</h3>
           <div class="combatant-hp">
@@ -106,12 +93,10 @@
             </div>
             <span class="hp-text" id="battle-monster-hp-text">25 / 25</span>
           </div>
-          <div class="combatant-intent" id="battle-monster-intent">💭 下回合: 攻击 8伤害</div>
+          <div class="combatant-intent" id="battle-monster-intent">💭 …</div>
         </div>
-
       </div>
 
-      <!-- 能量行 + 结束回合按钮 -->
       <div class="battle-energy-row">
         <label>能量</label>
         <div id="energy-display"></div>
@@ -119,18 +104,45 @@
         <button id="end-turn-btn">结束回合</button>
       </div>
 
-      <!-- 手牌 -->
       <div class="battle-hand-label">手牌</div>
       <div id="battle-hand"></div>
-
-      <!-- 战斗日志 -->
       <div id="battle-log"></div>
-
-    </div><!-- /battle-screen -->
+    </div>
 
   </div><!-- /game-container -->
 
-  <!-- ══════ 通用遮罩弹窗 ══════ -->
+  <!-- ══ 暂停菜单 ══ -->
+  <div id="pause-menu" class="hidden">
+    <div id="pause-box">
+      <button class="pause-close-btn" id="pause-close">✕</button>
+      <h2>⏸ 暂停</h2>
+
+      <div class="pause-section">
+        <h3>💾 保存存档</h3>
+        <div class="pause-slots">
+          <div class="pause-save-slot" data-slot="0">
+            <span class="slot-label">存档 1</span>
+            <span class="slot-info">（空）</span>
+          </div>
+          <div class="pause-save-slot" data-slot="1">
+            <span class="slot-label">存档 2</span>
+            <span class="slot-info">（空）</span>
+          </div>
+          <div class="pause-save-slot" data-slot="2">
+            <span class="slot-label">存档 3</span>
+            <span class="slot-info">（空）</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pause-actions">
+        <button class="pause-btn" id="pause-close">继续游戏</button>
+        <button class="pause-btn danger" id="pause-back-menu">🏠 返回主菜单</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 通用弹窗 ══ -->
   <div id="overlay" class="hidden">
     <div id="overlay-box">
       <div id="overlay-title"></div>
@@ -139,8 +151,9 @@
     </div>
   </div>
 
-  <!-- ES6模块入口 -->
-  <script type="module" src="js/main.js"></script>
+  <!-- ══ Toast 提示 ══ -->
+  <div id="toast" class="hidden"></div>
 
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
