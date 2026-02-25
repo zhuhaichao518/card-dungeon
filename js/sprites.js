@@ -60,6 +60,7 @@ export const TILE_SPRITE = {
   6:  { sheet: 'items', srcX: 0, srcY: 64,  srcW: 32, srcH: 32 },  // 蓝钥匙 row2
   7:  { sheet: 'items', srcX: 0, srcY: 128, srcW: 32, srcH: 32 },  // 红钥匙 row4
   12: { sheet: 'items', srcX: 0, srcY: 384, srcW: 32, srcH: 32 },  // 血瓶   row12
+  13: { sheet: 'items', srcX: 0, srcY: 512, srcW: 32, srcH: 32 },  // 大血瓶 row16 (蓝药水)
   15: { sheet: 'items', srcX: 0, srcY: 768, srcW: 32, srcH: 32 },  // 刺陷阱 row24 (岩浆)
 };
 

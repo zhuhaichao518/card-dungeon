@@ -1419,3 +1419,27 @@ body.menu-body {
   gap: 10px;
   box-sizing: border-box;
 }
+
+/* ── 状态效果徽章 ── */
+.effects-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 20px;
+}
+.effect-badge {
+  font-size: 0.75rem;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 1px 7px;
+  cursor: default;
+  white-space: nowrap;
+}
+
+/* ── 稀有度边框 ── */
+.card-rarity-rare   { border-color: #7b52ab !important; }
+.card-rarity-epic   { border-color: #ffa726 !important; box-shadow: 0 0 6px rgba(255,167,38,.3); }
+
+/* ── 意图区 ── */
+.no-intent { font-size:.72rem; color:#444; }
