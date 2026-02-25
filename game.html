@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚔️ Card Dungeon - 游戏</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ───── 头部：标题 + 血条 + 楼层 ───── -->
+  <header id="header">
+    <h1>⚔️ CARD DUNGEON</h1>
+    <div class="hp-bar-container">
+      <label>HP</label>
+      <div class="hp-bar">
+        <div class="hp-bar-fill" id="hp-bar-fill" style="width:62.5%"></div>
+      </div>
+      <span class="hp-text" id="hp-text">50 / 80</span>
+    </div>
+    <span id="floor-label">第 1 层</span>
+  </header>
+
+  <!-- ───── 主体容器 ───── -->
+  <div id="game-container">
+
+    <!-- ══════ 探索界面 ══════ -->
+    <div id="explore-screen">
+
+      <!-- 地图区域 -->
+      <div id="map-area">
+        <div id="map-grid"></div>
+      </div>
+
+      <!-- 侧边面板 -->
+      <aside id="side-panel">
+
+        <!-- 背包 -->
+        <div class="panel-section">
+          <h3>📦 背包</h3>
+          <div class="inventory-item">
+            <span class="key-icon" style="color:#ffd700">⚷</span>
+            <span>黄钥匙</span>
+            <span class="key-count" id="key-yellow-count">0</span>
+          </div>
+          <div class="inventory-item">
+            <span class="key-icon" style="color:#4fc3f7">⚷</span>
+            <span>蓝钥匙</span>
+            <span class="key-count" id="key-blue-count">0</span>
+          </div>
+          <div class="inventory-item">
+            <span class="key-icon" style="color:#ef5350">⚷</span>
+            <span>红钥匙</span>
+            <span class="key-count" id="key-red-count">0</span>
+          </div>
+        </div>
+
+        <!-- 消息日志 -->
+        <div class="panel-section">
+          <h3>📜 日志</h3>
+          <div id="message-log"></div>
+        </div>
+
+        <!-- 操作提示 -->
+        <div class="panel-section">
+          <h3>🎮 操作</h3>
+          <div style="font-size:0.75rem;color:var(--text-dim);line-height:1.8">
+            <div>WASD / 方向键 移动</div>
+            <div>点击相邻格子 移动</div>
+            <div>遇怪自动进入战斗</div>
+          </div>
+        </div>
+
+      </aside>
+    </div><!-- /explore-screen -->
+
+    <!-- ══════ 战斗界面 ══════ -->
+    <div id="battle-screen" class="hidden">
+
+      <div id="battle-title">⚔️ BATTLE!</div>
+
+      <!-- 双方角色 -->
+      <div class="battle-combatants">
+
+        <!-- 英雄 -->
+        <div class="combatant-card" id="battle-hero-card">
+          <h3>🧙 英雄</h3>
+          <div class="combatant-hp">
+            <label>HP</label>
+            <div class="hp-bar" style="flex:1">
+              <div class="hp-bar-fill" id="battle-hero-hp-bar" style="width:62.5%"></div>
+            </div>
+            <span class="hp-text" id="battle-hero-hp-text">50 / 80</span>
+          </div>
+          <div class="combatant-shield">🛡 护盾: <span id="battle-hero-shield">0</span></div>
+        </div>
+
+        <!-- 怪物 -->
+        <div class="combatant-card" id="battle-monster-card">
+          <h3 id="battle-monster-name">🟢 怪物</h3>
+          <div class="combatant-hp">
+            <label>HP</label>
+            <div class="hp-bar" style="flex:1">
+              <div class="hp-bar-fill" id="battle-monster-hp-bar"
+                   style="width:100%;background:linear-gradient(90deg,#2e7d32,#4caf50)"></div>
+            </div>
+            <span class="hp-text" id="battle-monster-hp-text">25 / 25</span>
+          </div>
+          <div class="combatant-intent" id="battle-monster-intent">💭 下回合: 攻击 8伤害</div>
+        </div>
+
+      </div>
+
+      <!-- 能量行 + 结束回合按钮 -->
+      <div class="battle-energy-row">
+        <label>能量</label>
+        <div id="energy-display"></div>
+        <span id="energy-text" style="font-size:0.8rem;color:var(--text-dim)">3 / 3</span>
+        <button id="end-turn-btn">结束回合</button>
+      </div>
+
+      <!-- 手牌 -->
+      <div class="battle-hand-label">手牌</div>
+      <div id="battle-hand"></div>
+
+      <!-- 战斗日志 -->
+      <div id="battle-log"></div>
+
+    </div><!-- /battle-screen -->
+
+  </div><!-- /game-container -->
+
+  <!-- ══════ 通用遮罩弹窗 ══════ -->
+  <div id="overlay" class="hidden">
+    <div id="overlay-box">
+      <div id="overlay-title"></div>
+      <div id="overlay-msg"></div>
+      <button id="overlay-btn"></button>
+    </div>
+  </div>
+
+  <!-- ES6模块入口 -->
+  <script type="module" src="js/main.js"></script>
+
+</body>
+</html>
