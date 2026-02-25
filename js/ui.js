@@ -158,8 +158,35 @@ function renderMonsterIntent() {
   intent.forEach(card => {
     const mini = document.createElement('div');
     mini.className = `intent-card intent-card-${card.type}`;
-    mini.title = card.desc;
     mini.innerHTML = `<span class="intent-card-name">${card.name}</span><span class="intent-card-cost">⚡${card.cost}</span>`;
+
+    // ── Tooltip（鼠标 + 触控）──────────────────────────────
+    const showTip = (e) => {
+      const tip = document.getElementById('intent-tooltip');
+      document.getElementById('intent-tooltip-name').textContent = card.name;
+      document.getElementById('intent-tooltip-desc').textContent = card.desc;
+      document.getElementById('intent-tooltip-cost').textContent = `⚡ 费用 ${card.cost}`;
+      tip.classList.remove('hidden');
+
+      // 定位到元素上方
+      const rect = mini.getBoundingClientRect();
+      tip.style.left = Math.min(rect.left, window.innerWidth - 180) + 'px';
+      tip.style.top  = (rect.top - tip.offsetHeight - 8) + 'px';
+
+      // 如果上方空间不够，显示在下方
+      if (rect.top - tip.offsetHeight - 8 < 4) {
+        tip.style.top = (rect.bottom + 6) + 'px';
+      }
+    };
+    const hideTip = () => {
+      document.getElementById('intent-tooltip')?.classList.add('hidden');
+    };
+
+    mini.addEventListener('mouseenter', showTip);
+    mini.addEventListener('mouseleave', hideTip);
+    mini.addEventListener('touchstart', (e) => { e.preventDefault(); showTip(e); }, { passive: false });
+    mini.addEventListener('touchend',   hideTip);
+
     intentEl.appendChild(mini);
   });
 }

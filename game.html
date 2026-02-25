@@ -17,7 +17,7 @@
       <div class="hp-bar"><div class="hp-bar-fill" id="hp-bar-fill"></div></div>
       <span class="hp-text" id="hp-text">70 / 70</span>
     </div>
-    <span id="floor-label">第 1 层</span>
+    <span id="floor-label">第 1 / 20 层</span>
     <button id="btn-pause" class="btn-icon" title="暂停 (Esc)">⏸</button>
   </header>
 
@@ -44,84 +44,80 @@
           <h3>🎮 操作</h3>
           <div class="tips">
             <div>WASD / 方向键 移动</div>
-            <div>点击相邻格子 移动</div>
-            <div>Esc / ⏸ 暂停</div>
+            <div>点击任意可达格子自动寻路</div>
+            <div>Esc / ⏸ 暂停存档</div>
           </div>
         </div>
       </aside>
     </div>
 
-    <!-- ▶ 战斗界面 -->
+    <!-- ▶ 战斗界面（怪物上方，英雄下方）-->
     <div id="battle-screen" class="hidden">
 
-      <div id="battle-title">⚔️ BATTLE</div>
-
-      <!-- 双方面板 -->
-      <div class="battle-combatants">
-
-        <!-- 英雄 -->
-        <div class="combatant-card hero-card">
-          <div class="combatant-header">
-            <span class="combatant-name">🧙 英雄</span>
-            <span class="combatant-shield-badge">🛡 <span id="battle-hero-shield">0</span></span>
-          </div>
-          <div class="combatant-hp">
-            <div class="hp-bar flex1"><div class="hp-bar-fill hero-hp" id="battle-hero-hp-bar"></div></div>
-            <span class="hp-text" id="battle-hero-hp-text">70 / 70</span>
-          </div>
-          <!-- 英雄行动值 -->
-          <div class="ap-row">
-            <span class="ap-label">⚡ 行动值</span>
-            <div id="ap-display" class="ap-gems"></div>
-            <span id="ap-text" class="ap-num">0/0</span>
-          </div>
-          <!-- 英雄状态效果 -->
-          <div id="battle-hero-effects" class="effects-row"></div>
+      <!-- ① 怪物区 -->
+      <div class="combatant-card enemy-card">
+        <div class="combatant-header">
+          <span class="combatant-name" id="battle-monster-name">🟢 怪物</span>
+          <span class="combatant-shield-badge">🛡 <span id="battle-monster-shield">0</span></span>
         </div>
-
-        <!-- 怪物 -->
-        <div class="combatant-card enemy-card">
-          <div class="combatant-header">
-            <span class="combatant-name" id="battle-monster-name">🟢 怪物</span>
-            <span class="combatant-shield-badge">🛡 <span id="battle-monster-shield">0</span></span>
-          </div>
-          <div class="combatant-hp">
-            <div class="hp-bar flex1"><div class="hp-bar-fill enemy-hp" id="battle-monster-hp-bar"></div></div>
-            <span class="hp-text" id="battle-monster-hp-text">30 / 30</span>
-          </div>
-          <!-- 怪物行动值 -->
-          <div class="ap-row">
-            <span class="ap-label">⚡ 行动值</span>
-            <div id="monster-ap-display" class="ap-gems"></div>
-          </div>
-          <!-- 怪物状态效果 -->
-          <div id="battle-monster-effects" class="effects-row"></div>
-          <!-- 怪物意图（本回合将打出的牌） -->
-          <div class="monster-intent-section">
-            <div id="battle-monster-intent" class="monster-intent-cards"></div>
-          </div>
+        <div class="combatant-hp">
+          <div class="hp-bar flex1"><div class="hp-bar-fill enemy-hp" id="battle-monster-hp-bar" style="width:100%"></div></div>
+          <span class="hp-text" id="battle-monster-hp-text">30 / 30</span>
         </div>
-
+        <div class="ap-row">
+          <span class="ap-label">⚡ 行动值</span>
+          <div id="monster-ap-display" class="ap-gems"></div>
+        </div>
+        <div id="battle-monster-effects" class="effects-row"></div>
+        <!-- 怪物意图 -->
+        <div class="monster-intent-section">
+          <div id="battle-monster-intent" class="monster-intent-cards"></div>
+        </div>
       </div>
 
-      <!-- 英雄操作行：回合数 + 结束回合 -->
+      <!-- ② 中间操作行 -->
       <div class="battle-action-row">
-        <span id="battle-turn-label" class="turn-label">回合 1</span>
+        <span id="battle-turn-label" class="turn-label">⚔️ 回合 1</span>
         <button id="end-turn-btn">结束回合 →</button>
       </div>
 
-      <!-- 手牌区 -->
+      <!-- ③ 英雄区 -->
+      <div class="combatant-card hero-card">
+        <div class="combatant-header">
+          <span class="combatant-name">🧙 英雄</span>
+          <span class="combatant-shield-badge">🛡 <span id="battle-hero-shield">0</span></span>
+        </div>
+        <div class="combatant-hp">
+          <div class="hp-bar flex1"><div class="hp-bar-fill hero-hp" id="battle-hero-hp-bar" style="width:100%"></div></div>
+          <span class="hp-text" id="battle-hero-hp-text">70 / 70</span>
+        </div>
+        <div class="ap-row">
+          <span class="ap-label">⚡ 行动值</span>
+          <div id="ap-display" class="ap-gems"></div>
+          <span id="ap-text" class="ap-num">0/0</span>
+        </div>
+        <div id="battle-hero-effects" class="effects-row"></div>
+      </div>
+
+      <!-- ④ 手牌 -->
       <div class="battle-hand-area">
         <div class="hand-label">手牌</div>
         <div id="battle-hand"></div>
       </div>
 
-      <!-- 战斗日志 -->
+      <!-- ⑤ 战斗日志 -->
       <div id="battle-log"></div>
 
     </div><!-- /battle-screen -->
 
   </div><!-- /game-container -->
+
+  <!-- ═══ 意图卡 Tooltip（全局） ═══ -->
+  <div id="intent-tooltip" class="intent-tooltip hidden">
+    <div id="intent-tooltip-name" class="tt-name"></div>
+    <div id="intent-tooltip-desc" class="tt-desc"></div>
+    <div id="intent-tooltip-cost" class="tt-cost"></div>
+  </div>
 
   <!-- ═══ 暂停菜单 ═══ -->
   <div id="pause-menu" class="hidden">

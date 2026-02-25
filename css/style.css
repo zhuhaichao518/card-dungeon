@@ -1443,3 +1443,133 @@ body.menu-body {
 
 /* ── 意图区 ── */
 .no-intent { font-size:.72rem; color:#444; }
+
+/* ══════════════════════════════════════════
+   战斗界面：竖向布局（怪物上方，英雄下方）
+   ════════════════════════════════════════ */
+
+/* 战斗界面整体改为竖向 */
+#battle-screen {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+/* 对战双方现在各占一行（全宽），不再并排 */
+.battle-combatants {
+  display: contents; /* 让子元素直接参与父flex */
+}
+
+.combatant-card {
+  width: 100%;
+  max-width: none;
+  min-width: unset;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 怪物卡：绿色边框 */
+.enemy-card { border-color: #1a3a1a; }
+.enemy-card:hover { border-color: #2e6a2e; }
+
+/* 英雄卡：蓝色边框 */
+.hero-card  { border-color: #1a2a3a; }
+
+/* HP条 */
+.enemy-hp { background: linear-gradient(90deg,#1b5e20,#43a047) !important; }
+.hero-hp  { background: linear-gradient(90deg,#b71c1c,#e53935) !important; }
+
+/* 怪物意图区 */
+.monster-intent-section {
+  border-top: 1px solid var(--panel-border);
+  padding-top: 6px;
+}
+
+.monster-intent-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-height: 26px;
+}
+
+/* ── 意图小卡片 ── */
+.intent-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  border: 1px solid;
+  cursor: help;
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.intent-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+.intent-card-attack {
+  background: rgba(123,26,26,0.7);
+  border-color: #c0392b;
+  color: #ff8a80;
+}
+.intent-card-skill {
+  background: rgba(26,58,123,0.7);
+  border-color: #2980b9;
+  color: #82b1ff;
+}
+
+/* ── 意图卡 Tooltip ── */
+.intent-tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: #12121f;
+  border: 1px solid var(--player-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  min-width: 150px;
+  max-width: 200px;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+}
+.tt-name {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 5px;
+}
+.tt-desc {
+  font-size: 0.78rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 5px;
+}
+.tt-cost {
+  font-size: 0.72rem;
+  color: var(--energy-blue);
+}
+
+/* ── 操作行 ── */
+.battle-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+.turn-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}

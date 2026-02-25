@@ -5,7 +5,7 @@
 
 import { renderMap, initCanvas, pixelToTile } from './renderer.js';
 import { updateExploreUI, bindEndTurnButton } from './ui.js';
-import { tryMove } from './explore.js';
+import { tryMove, handleMapClick } from './explore.js';
 import { state, resetState } from './state.js';
 import { loadAllSprites } from './sprites.js';
 import { saveGame, getAllSaves, restoreState } from './save.js';
@@ -72,11 +72,7 @@ function bindMapClick() {
     const canvasX = (e.clientX - rect.left) * scaleX;
     const canvasY = (e.clientY - rect.top)  * scaleY;
     const { x: tx, y: ty } = pixelToTile(canvasX, canvasY);
-    const dx = tx - state.player.x;
-    const dy = ty - state.player.y;
-    if (Math.abs(dx) + Math.abs(dy) === 1) {
-      tryMove(dx, dy);
-    }
+    handleMapClick(tx, ty);
   });
 }
 
