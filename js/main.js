@@ -4,7 +4,7 @@
  */
 
 import { renderMap, initCanvas, pixelToTile } from './renderer.js';
-import { updateExploreUI, bindEndTurnButton } from './ui.js';
+import { updateExploreUI, bindEndTurnButton, showDeckView } from './ui.js';
 import { tryMove, handleMapClick } from './explore.js';
 import { state, resetState } from './state.js';
 import { loadAllSprites } from './sprites.js';
@@ -80,6 +80,10 @@ function bindMapClick() {
 
 function bindPauseMenu() {
   // 菜单按钮
+  document.getElementById('btn-deck-view')?.addEventListener('click', showDeckView);
+  document.getElementById('deck-view-close')?.addEventListener('click', () => {
+    document.getElementById('deck-view-panel')?.classList.add('hidden');
+  });
   document.getElementById('btn-pause')?.addEventListener('click', togglePauseMenu);
   document.getElementById('pause-close')?.addEventListener('click', togglePauseMenu);
   document.getElementById('pause-resume')?.addEventListener('click', togglePauseMenu);

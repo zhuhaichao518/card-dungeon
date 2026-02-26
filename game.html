@@ -47,6 +47,7 @@
             <div>点击任意可达格子自动寻路</div>
             <div>Esc / ⏸ 暂停存档</div>
           </div>
+          <button id="btn-deck-view" class="btn-deck-view">📖 查看卡组</button>
         </div>
       </aside>
     </div>
@@ -157,6 +158,18 @@
         <button class="pause-btn" id="pause-resume">▶ 继续游戏</button>
         <button class="pause-btn danger" id="pause-back-menu">🏠 返回主菜单</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══ 查看卡组弹窗 ═══ -->
+  <div id="deck-view-panel" class="hidden">
+    <div id="deck-view-box">
+      <div id="deck-view-header">
+        <span>📖 我的卡组</span>
+        <span id="deck-view-count" class="deck-view-count"></span>
+        <button id="deck-view-close" class="deck-view-close">✕</button>
+      </div>
+      <div id="deck-view-grid"></div>
     </div>
   </div>
 

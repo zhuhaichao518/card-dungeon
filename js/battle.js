@@ -340,13 +340,6 @@ function endBattle(playerWon) {
   const idx = state.monsters.indexOf(monster);
   if (idx !== -1) state.monsters.splice(idx, 1);
 
-  // 奖励：从完整奖励池随机一张（兼容两种导出名）
-  const pool = HERO_CARD_POOL || REWARD_CARD_POOL || [];
-  if (!pool.length) { addMessage('（无奖励卡牌）'); }
-  const reward = pool[Math.floor(Math.random() * pool.length)];
-  state.deck.allCards.push({ ...reward });
-  addMessage(`🏆 获得奖励卡：【${reward.name}】`);
-
   state.phase = 'explore';
   discardHand();
   state.battle.monster      = null;
@@ -355,25 +348,47 @@ function endBattle(playerWon) {
   hideBattleScreen();
   renderMap();
   updateExploreUI();
-  showVictoryOverlay(reward);
+
+  // 奖励：随机3张不重复供选择
+  const pool = HERO_CARD_POOL || REWARD_CARD_POOL || [];
+  if (!pool.length) { addMessage('（无奖励卡牌）'); return; }
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  const choices  = shuffled.slice(0, Math.min(3, shuffled.length)).map(c => ({ ...c }));
+  showVictoryOverlay(choices);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // UI 弹窗
 // ─────────────────────────────────────────────────────────────────────────────
-function showVictoryOverlay(card) {
+function showVictoryOverlay(choices) {
   const ov = document.getElementById('overlay');
   document.getElementById('overlay-title').textContent = '🎉 战斗胜利！';
-  document.getElementById('overlay-msg').innerHTML = `
-    获得奖励卡牌：
-    <div class="reward-card card card-${card.type}" style="margin:12px auto;cursor:default;max-width:120px">
+
+  const cardsHtml = choices.map((card, i) => `
+    <div class="reward-choice card card-${card.type}" data-idx="${i}">
       <div class="card-cost-badge ap-badge-${card.type}">⚡${card.cost}</div>
-      <div class="card-name" style="padding-top:10px">${card.name}</div>
+      <div class="card-name">${card.name}</div>
       <div class="card-desc">${card.desc}</div>
-    </div>`;
+    </div>`).join('');
+
+  document.getElementById('overlay-msg').innerHTML = `
+    <div class="reward-prompt">选择一张加入卡组，或跳过：</div>
+    <div class="reward-choices">${cardsHtml}</div>`;
+
   const btn = document.getElementById('overlay-btn');
-  btn.textContent = '继续探索';
+  btn.textContent = '跳过';
   btn.onclick = () => ov.classList.add('hidden');
+
+  // 点击卡牌加入卡组
+  document.querySelectorAll('.reward-choice').forEach((el, i) => {
+    el.addEventListener('click', () => {
+      const card = choices[i];
+      state.deck.allCards.push(card);
+      addMessage(`🏆 加入卡组：【${card.name}】`);
+      ov.classList.add('hidden');
+    });
+  });
+
   ov.classList.remove('hidden');
 }
 

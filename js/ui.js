@@ -14,7 +14,7 @@ export function updateExploreUI() {
   updateHpBar('hp-bar-fill', 'hp-text', state.player.hp, state.player.maxHp);
   updateInventory();
   updateMessageLog();
-  setInner('floor-label', `第 ${state.floor} / 20 层`);
+  setInner('floor-label', `第 ${state.floor} / 50 层`);
 }
 
 function updateInventory() {
@@ -281,6 +281,32 @@ export function showVictoryScreen() {
 
 export function bindEndTurnButton() {
   document.getElementById('end-turn-btn')?.addEventListener('click', endPlayerTurn);
+}
+
+// ═══════════════════════════════════════
+// 查看卡组
+// ═══════════════════════════════════════
+
+export function showDeckView() {
+  const cards = state.deck.allCards;
+  const panel = document.getElementById('deck-view-panel');
+  const grid  = document.getElementById('deck-view-grid');
+  const count = document.getElementById('deck-view-count');
+  if (!panel || !grid) return;
+
+  count.textContent = `共 ${cards.length} 张`;
+  grid.innerHTML = '';
+  cards.forEach(card => {
+    const el = document.createElement('div');
+    el.className = `card card-${card.type} deck-view-card`;
+    el.innerHTML = `
+      <div class="card-cost-badge ap-badge-${card.type}">⚡${card.cost}</div>
+      <div class="card-name">${card.name}</div>
+      <div class="card-desc">${card.desc}</div>`;
+    grid.appendChild(el);
+  });
+
+  panel.classList.remove('hidden');
 }
 
 // ═══════════════════════════════════════

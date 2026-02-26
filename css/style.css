@@ -1698,3 +1698,125 @@ body.menu-body {
   cursor: pointer;
   font-size: 0.95rem;
 }
+
+/* ─── 战斗胜利三选一奖励 ─────────────────────────────────────── */
+.reward-prompt {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.reward-choices {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.reward-choice {
+  cursor: pointer;
+  max-width: 120px;
+  min-width: 90px;
+  flex: 1;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 2px solid transparent;
+}
+
+.reward-choice:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(255,215,0,0.35);
+  border-color: #ffd700;
+}
+
+.reward-choice:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* ─── 查看卡组弹窗 ───────────────────────────────────────────── */
+#deck-view-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#deck-view-panel.hidden { display: none; }
+
+#deck-view-box {
+  background: #1a1a2e;
+  border: 2px solid #4a4a7a;
+  border-radius: 14px;
+  width: min(90vw, 680px);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#deck-view-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #333;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #e8d5a0;
+  flex-shrink: 0;
+}
+
+.deck-view-count {
+  background: #333;
+  border-radius: 10px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.deck-view-close {
+  margin-left: auto;
+  background: #6d1212;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+#deck-view-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px;
+  overflow-y: auto;
+  justify-content: flex-start;
+}
+
+.deck-view-card {
+  cursor: default;
+  max-width: 100px;
+  min-width: 80px;
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+}
+
+/* 查看卡组按钮 */
+.btn-deck-view {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: #2a2a4a;
+  color: #c9a84c;
+  border: 1px solid #4a4a7a;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-align: center;
+  transition: background 0.15s;
+}
+.btn-deck-view:hover { background: #3a3a6a; }
