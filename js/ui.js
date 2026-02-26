@@ -153,7 +153,16 @@ function renderHeroHand() {
   handEl.innerHTML = '';
   const ap = state.battle.hero.ap;
   state.deck.hand.forEach((card, idx) => {
-    handEl.appendChild(buildCardEl(card, idx, ap));
+    const el = buildCardEl(card, idx, ap);
+    // 摸牌动画：新摸的牌加入动画类，动画结束后移除标记
+    if (card._isNew) {
+      el.classList.add('card-draw-anim');
+      el.addEventListener('animationend', () => {
+        el.classList.remove('card-draw-anim');
+        card._isNew = false;
+      }, { once: true });
+    }
+    handEl.appendChild(el);
   });
 }
 

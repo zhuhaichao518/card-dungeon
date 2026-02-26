@@ -1573,3 +1573,25 @@ body.menu-body {
   color: var(--text-dim);
   letter-spacing: 1px;
 }
+
+/* ══════════════════════════════════════════
+   摸牌动画
+   ════════════════════════════════════════ */
+
+@keyframes cardDeal {
+  0%   { transform: translateY(60px) scale(0.7) rotate(-8deg); opacity: 0; }
+  60%  { transform: translateY(-6px) scale(1.05) rotate(1deg);  opacity: 1; }
+  100% { transform: translateY(0)    scale(1)    rotate(0deg);  opacity: 1; }
+}
+
+.card-draw-anim {
+  animation: cardDeal 0.38s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 多张牌时错开时序 */
+.card-draw-anim:nth-child(1) { animation-delay: 0.00s; }
+.card-draw-anim:nth-child(2) { animation-delay: 0.07s; }
+.card-draw-anim:nth-child(3) { animation-delay: 0.14s; }
+.card-draw-anim:nth-child(4) { animation-delay: 0.21s; }
+.card-draw-anim:nth-child(5) { animation-delay: 0.28s; }
+.card-draw-anim:nth-child(6) { animation-delay: 0.35s; }

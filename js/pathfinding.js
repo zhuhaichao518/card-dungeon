@@ -7,12 +7,19 @@
 import { state } from './state.js';
 import { TILE } from './data.js';
 
+// 自动寻路不能穿过的格子：墙/门/陷阱/资源（钥匙、血瓶）
+// 玩家必须手动点击资源格才能收集，不能在路途中自动扫过
 const OBSTACLE_TILES = new Set([
   TILE.WALL,
   TILE.DOOR_YELLOW,
   TILE.DOOR_BLUE,
   TILE.DOOR_RED,
   TILE.SPIKE_TRAP,
+  TILE.KEY_YELLOW,
+  TILE.KEY_BLUE,
+  TILE.KEY_RED,
+  TILE.POTION_S,
+  TILE.POTION_L,
 ]);
 
 /**

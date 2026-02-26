@@ -12,9 +12,9 @@
 
 export const SPRITE_SHEETS = {
   terrains: 'assets/terrains.png',
+  animates: 'assets/animates.png',  // 门/陷阱动画（128×928，4帧/行，32×32/帧）
   items:    'assets/items.png',
   enemys:   'assets/enemys.png',   // 主要怪物图，73种
-  enemy48:  'assets/enemy48.png',  // 备用大图怪物
   hero:     'assets/hero.png',
 };
 
@@ -42,25 +42,51 @@ export function getSprite(key) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// 地图瓷砖精灵
+// 地图瓷砖精灵（经过验证的正确行号）
 // ─────────────────────────────────────────────────────────────────
 // TILE_SPRITE[tileType] = { sheet, srcX, srcY, srcW, srcH }
+//
+// terrains.png（32×1120，35行，单列）行号→颜色：
+//   row 0  srcY=0   : 深灰(83,83,83)   = ground 石板地板
+//   row 3  srcY=96  : 紫灰(174,171,196) = ground2 经典魔塔地板
+//   row 4  srcY=128 : 灰(132,132,132)  = ground3
+//   row 6  srcY=192 : 浅灰+楼梯图      = upFloor ↑
+//   row 21 srcY=672 : 砖红(211,57,42)  = 经典魔塔砖墙
+//
+// animates.png（128×928，4帧/行，29行）各行srcX=0取第0帧：
+//   row 1  srcY=32  : 红/岩浆            = lava → 陷阱
+//   row 4  srcY=128 : 黄(217,166,132)   = yellowDoor
+//   row 5  srcY=160 : 蓝(166,166,217)   = blueDoor
+//   row 6  srcY=192 : 红(205,111,99)    = redDoor
+//
+// items.png（32×1984，62行，单列）：
+//   row 0  srcY=0   : 黄钥匙(218,167,133)
+//   row 1  srcY=32  : 蓝钥匙(167,167,218)
+//   row 2  srcY=64  : 红钥匙(208,109,99)
+//   row 20 srcY=640 : 红血瓶(223,183,195) = redPotion  小血瓶
+//   row 21 srcY=672 : 蓝血瓶(194,194,223) = bluePotion 大血瓶
 export const TILE_SPRITE = {
-  // ─ 地形 (terrains.png) ─
-  0:  { sheet:'terrains', srcX:0, srcY:64,  srcW:32, srcH:32 },  // 地板  row2
-  1:  { sheet:'terrains', srcX:0, srcY:128, srcW:32, srcH:32 },  // 墙壁  row4
-  2:  { sheet:'terrains', srcX:0, srcY:576, srcW:32, srcH:32 },  // 黄门  row18
-  3:  { sheet:'terrains', srcX:0, srcY:256, srcW:32, srcH:32 },  // 蓝门  row8
-  4:  { sheet:'terrains', srcX:0, srcY:320, srcW:32, srcH:32 },  // 红门  row10
-  10: { sheet:'terrains', srcX:0, srcY:192, srcW:32, srcH:32 },  // 楼梯  row6
+  // ─ 地板 & 墙壁 & 楼梯 (terrains.png) ─
+  0:  { sheet:'terrains', srcX:0, srcY:96,  srcW:32, srcH:32 },  // 地板  row3 紫灰石板
+  1:  { sheet:'terrains', srcX:0, srcY:672, srcW:32, srcH:32 },  // 砖墙  row21 红砖(经典魔塔)
+  10: { sheet:'terrains', srcX:0, srcY:192, srcW:32, srcH:32 },  // 楼梯  row6 upFloor
 
-  // ─ 道具 (items.png) ─
-  5:  { sheet:'items', srcX:0, srcY:0,   srcW:32, srcH:32 },  // 黄钥匙 row0
-  6:  { sheet:'items', srcX:0, srcY:64,  srcW:32, srcH:32 },  // 蓝钥匙 row2
-  7:  { sheet:'items', srcX:0, srcY:128, srcW:32, srcH:32 },  // 红钥匙 row4
-  12: { sheet:'items', srcX:0, srcY:384, srcW:32, srcH:32 },  // 小血瓶 row12
-  13: { sheet:'items', srcX:0, srcY:512, srcW:32, srcH:32 },  // 大血瓶 row16
-  15: { sheet:'items', srcX:0, srcY:768, srcW:32, srcH:32 },  // 刺陷阱 row24
+  // ─ 门 (animates.png，取第0帧 srcX=0) ─
+  2:  { sheet:'animates', srcX:0, srcY:128, srcW:32, srcH:32 },  // 黄门  row4
+  3:  { sheet:'animates', srcX:0, srcY:160, srcW:32, srcH:32 },  // 蓝门  row5
+  4:  { sheet:'animates', srcX:0, srcY:192, srcW:32, srcH:32 },  // 红门  row6
+
+  // ─ 钥匙 (items.png) ─
+  5:  { sheet:'items', srcX:0, srcY:0,   srcW:32, srcH:32 },  // 黄钥匙 row0 ✓
+  6:  { sheet:'items', srcX:0, srcY:32,  srcW:32, srcH:32 },  // 蓝钥匙 row1 ✓ (修复：原为row2=红钥匙)
+  7:  { sheet:'items', srcX:0, srcY:64,  srcW:32, srcH:32 },  // 红钥匙 row2 ✓ (修复：原为row4=钢钥匙)
+
+  // ─ 血瓶 (items.png) ─
+  12: { sheet:'items', srcX:0, srcY:640, srcW:32, srcH:32 },  // 小血瓶 row20 redPotion  ✓ (修复：原为row12=罗盘)
+  13: { sheet:'items', srcX:0, srcY:672, srcW:32, srcH:32 },  // 大血瓶 row21 bluePotion ✓ (修复：原为row16=红宝石)
+
+  // ─ 陷阱 (animates.png，岩浆行) ─
+  15: { sheet:'animates', srcX:0, srcY:32,  srcW:32, srcH:32 },  // 刺陷阱 row1 lava 岩浆
 };
 
 // ─────────────────────────────────────────────────────────────────

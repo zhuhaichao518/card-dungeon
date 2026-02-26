@@ -23,7 +23,7 @@
 import {
   state, addMessage,
   damagePlayer, damageMonster, healPlayer,
-  drawCards, discardHand, shuffle, loadFloor,
+  discardHand, shuffle, loadFloor,
 } from './state.js';
 import { HERO_CARD_POOL, REWARD_CARD_POOL } from './data.js';
 import { renderMap } from './renderer.js';
@@ -61,13 +61,43 @@ export function startBattle(monster) {
   deck.hand        = [];
   deck.discardPile = [];
 
+  // ── 发初始手牌 ──────────────────────────────────────────────────────────
+  // 先手（英雄）3张，后手（怪物）4张
+  for (let i = 0; i < 3; i++) drawHeroCard();
+  for (let i = 0; i < 4; i++) drawEnemyCard();
+
   showBattleScreen();
-  blogf(`⚔️ 与【${monster.name}】的战斗开始！`);
+  blogf(`⚔️ 与【${monster.name}】的战斗开始！英雄先手3张，怪物后手4张`);
   startNewTurn();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 新回合
+// 摸牌辅助（带 isNew 标记用于动画）
+// ─────────────────────────────────────────────────────────────────────────────
+function drawHeroCard() {
+  const deck = state.deck;
+  if (deck.drawPile.length === 0) {
+    if (deck.discardPile.length === 0) return;
+    deck.drawPile    = shuffle(deck.discardPile);
+    deck.discardPile = [];
+  }
+  const card = deck.drawPile.pop();
+  card._isNew = true;   // 动画标记
+  deck.hand.push(card);
+}
+
+function drawEnemyCard() {
+  const en = state.battle.enemy;
+  if (en.drawPile.length === 0) {
+    if (en.discardPile.length === 0) return;
+    en.drawPile    = shuffle(en.discardPile);
+    en.discardPile = [];
+  }
+  en.hand.push(en.drawPile.pop());
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 新回合（每回合各摸1张，手牌留存 Hearthstone 风格）
 // ─────────────────────────────────────────────────────────────────────────────
 function startNewTurn() {
   const { battle, player } = state;
@@ -76,37 +106,27 @@ function startNewTurn() {
 
   // ─ 1. 玩家状态效果触发 ────────────────────────────────────────────────────
   tickEffects(player, 'hero');
-
   if (player.hp <= 0) { showGameOver(); return; }
 
-  // ─ 2. 怪物摸牌 & 决定意图 ─────────────────────────────────────────────────
+  // ─ 2. 怪物：每回合摸1张，更新行动值，决定意图 ────────────────────────────
   const monster = battle.monster;
   const en = battle.enemy;
 
   en.turnApMax = Math.min(t, monster.maxAp);
   en.ap        = en.turnApMax;
 
-  en.discardPile.push(...en.hand);
-  en.hand = [];
-  for (let i = 0; i < monster.handSize; i++) {
-    if (en.drawPile.length === 0) {
-      if (en.discardPile.length === 0) break;
-      en.drawPile    = shuffle(en.discardPile);
-      en.discardPile = [];
-    }
-    en.hand.push(en.drawPile.pop());
-  }
+  // 每回合追加1张（手牌留存）
+  if (t > 1) drawEnemyCard();   // 第1回合已在startBattle中发了4张
   en.intent = calcIntent(en.hand, en.ap);
 
-  // ─ 3. 英雄摸牌 & 恢复行动值 ──────────────────────────────────────────────
+  // ─ 3. 英雄：每回合摸1张，恢复行动值 ────────────────────────────────────
   player.shield  = 0;
   const hero = battle.hero;
   hero.turnApMax = Math.min(t, player.maxAp);
   hero.ap        = hero.turnApMax;
 
-  // 临时强化效果 - 已在effectState中追踪，本回合不重置
-  discardHand();
-  drawCards(player.handSize);
+  // 每回合追加1张（手牌留存）
+  if (t > 1) drawHeroCard();    // 第1回合已在startBattle中发了3张
 
   blogf(`── 第 ${t} 回合 ── 行动值 ${hero.ap}/${hero.turnApMax}`);
   updateBattleUI();
@@ -244,11 +264,11 @@ function executeHeroCard(card) {
       blogf(`🛡 【${card.name}】→ 获得 ${card.value} 护盾`);
     }
     // 护盾牌也可以有draw
-    if (card.draw) drawCards(card.draw);
+    if (card.draw) for (let _i=0;_i<card.draw;_i++) drawHeroCard();
   }
 
   // 摸牌（部分攻击牌也有摸牌效果）
-  if (card.type === 'attack' && card.draw) drawCards(card.draw);
+  if (card.type === 'attack' && card.draw) for (let _i=0;_i<card.draw;_i++) drawHeroCard();
 }
 
 /** 将卡牌的状态效果施加给目标 */
