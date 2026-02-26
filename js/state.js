@@ -69,6 +69,9 @@ function createInitialState() {
     },
 
     messages: ['欢迎来到卡牌地牢！', '用 WASD / 方向键移动。'],
+
+    storyFlags: {},       // 已触发的剧情标记，防止重复触发
+    _scriptedBattle: false, // 当前是否为剧情战斗
   };
 }
 

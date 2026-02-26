@@ -8,6 +8,7 @@ import { renderMap } from './renderer.js';
 import { updateExploreUI, showVictoryScreen } from './ui.js';
 import { startBattle } from './battle.js';
 import { findPath, findPathToMonster } from './pathfinding.js';
+import { runStorySequence, AMBUSH_STORY, PRISON_ESCAPE_STORY } from './story.js';
 
 // ─── 单步移动 ─────────────────────────────────────────────────────────────────
 // 返回 'moved' | 'battle' | 'blocked' | 'dead'
@@ -114,8 +115,30 @@ export function tryMove(dx, dy) {
       addMessage('⚠️ 刺陷阱！-15 HP');
       break;
 
+    case TILE.EVENT: {
+      move(nx, ny);
+      // 将该格子替换为普通地板（防止重复触发）
+      state.tiles[ny][nx] = TILE.FLOOR;
+      const evKey = `floor${state.floor}_${nx}_${ny}`;
+      if (!state.storyFlags[evKey]) {
+        state.storyFlags[evKey] = true;
+        triggerStoryEvent(state.floor, nx, ny);
+        return 'story';
+      }
+      break;
+    }
+
     case TILE.STAIRS:
       move(nx, ny);
+      // 监狱逃脱对话（第4层）
+      if (state.floor === 4 && !state.storyFlags['prison_escape']) {
+        state.storyFlags['prison_escape'] = true;
+        renderMap(); updateExploreUI();
+        runStorySequence(PRISON_ESCAPE_STORY, () => {
+          advanceFloor();
+        });
+        return 'floor';
+      }
       renderMap();
       updateExploreUI();
       advanceFloor();
@@ -209,6 +232,18 @@ function walkPath(path) {
 function move(nx, ny) {
   state.player.x = nx;
   state.player.y = ny;
+}
+
+function triggerStoryEvent(floor, x, y) {
+  if (floor === 3) {
+    // 第3层伏击
+    state.phase = 'story';
+    renderMap(); updateExploreUI();
+    runStorySequence(AMBUSH_STORY, () => {
+      state.phase = 'explore';
+      renderMap(); updateExploreUI();
+    });
+  }
 }
 
 function advanceFloor() {

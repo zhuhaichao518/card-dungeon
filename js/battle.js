@@ -106,7 +106,7 @@ function startNewTurn() {
 
   // ─ 1. 玩家状态效果触发 ────────────────────────────────────────────────────
   tickEffects(player, 'hero');
-  if (player.hp <= 0) { showGameOver(); return; }
+  if (player.hp <= 0) { handlePlayerDeath(); return; }
 
   // ─ 2. 怪物：每回合摸1张，更新行动值，决定意图 ────────────────────────────
   const monster = battle.monster;
@@ -300,7 +300,7 @@ export function endPlayerTurn() {
   // 怪物执行意图
   for (const card of en.intent) {
     executeMonsterCard(card, monster);
-    if (state.player.hp <= 0) { showGameOver(); return; }
+    if (state.player.hp <= 0) { handlePlayerDeath(); return; }
   }
   en.intent = [];
 
@@ -375,6 +375,19 @@ function showVictoryOverlay(card) {
   btn.textContent = '继续探索';
   btn.onclick = () => ov.classList.add('hidden');
   ov.classList.remove('hidden');
+}
+
+function handlePlayerDeath() {
+  // 剧情战斗：失败触发故事续接而不是游戏结束
+  if (state._scriptedBattle && state._scriptedBattleCallback) {
+    state._scriptedBattle = false;
+    const cb = state._scriptedBattleCallback;
+    state._scriptedBattleCallback = null;
+    hideBattleScreen();
+    cb();
+    return;
+  }
+  showGameOver();
 }
 
 function showGameOver() {

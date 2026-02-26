@@ -87,6 +87,9 @@ export const TILE_SPRITE = {
 
   // ─ 陷阱 (animates.png，岩浆行) ─
   15: { sheet:'animates', srcX:0, srcY:32,  srcW:32, srcH:32 },  // 刺陷阱 row1 lava 岩浆
+
+  // ─ 事件触发点（渲染为普通地板，玩家看不见） ─
+  16: { sheet:'terrains', srcX:0, srcY:96,  srcW:32, srcH:32 },  // EVENT 渲染为地板
 };
 
 // ─────────────────────────────────────────────────────────────────
