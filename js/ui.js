@@ -4,6 +4,7 @@
 
 import { state } from './state.js';
 import { playCard, endPlayerTurn } from './battle.js';
+import { MONSTER_SPRITE, getSprite } from './sprites.js';
 
 // ═══════════════════════════════════════
 // 探索界面
@@ -75,7 +76,19 @@ function renderHeroPanel() {
 function renderMonsterPanel() {
   const m = state.battle.monster;
   if (!m) return;
-  setInner('battle-monster-name', `${m.emoji} ${m.name}`);
+  setInner('battle-monster-name', m.name);
+
+  // 绘制怪物精灵到小canvas
+  const spriteCanvas = document.getElementById('battle-monster-sprite');
+  if (spriteCanvas) {
+    const sctx = spriteCanvas.getContext('2d');
+    sctx.clearRect(0, 0, 32, 32);
+    sctx.imageSmoothingEnabled = false;
+    const key = m.defId || m.id;
+    const sp  = MONSTER_SPRITE[key] || MONSTER_SPRITE.default;
+    const img = getSprite(sp.sheet);
+    if (img) sctx.drawImage(img, sp.srcX, sp.srcY, sp.srcW, sp.srcH, 0, 0, 32, 32);
+  }
   updateHpBar('battle-monster-hp-bar', 'battle-monster-hp-text', m.hp, m.maxHp, false);
   setInner('battle-monster-shield', m.shield || 0);
   renderEffects('battle-monster-effects', m.effects || {});

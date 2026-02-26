@@ -214,6 +214,12 @@ function executeHeroCard(card) {
       log += ` + 龙杀 ${bonus}`;
     }
 
+    // 吸血效果（攻击顺带回血）
+    if (card.healOnHit && total > 0) {
+      healPlayer(card.healOnHit);
+      log += ` + 吸血 +${card.healOnHit}HP`;
+    }
+
     blogf(log);
 
     // 施加状态

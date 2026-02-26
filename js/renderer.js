@@ -55,13 +55,14 @@ export function renderMap() {
     }
   }
 
-  // 3. 画怪物
+  // 3. 画怪物（enemys.png 32×32，缩放填充 48×48 tile）
   for (const monster of monsters) {
     const dx = monster.x * TILE_SIZE;
     const dy = monster.y * TILE_SIZE;
-    const sp = MONSTER_SPRITE[monster.id] || MONSTER_SPRITE.slime_green;
-    // enemy48.png: 32×48 → 显示在 tile 中央 (offset x+8, y+0 for 48px tile)
-    drawSprite(ctx, sp, dx + 8, dy, 32, 48);
+    const key = monster.defId || monster.id;
+    const sp  = MONSTER_SPRITE[key] || MONSTER_SPRITE.default;
+    // 32×32 精灵放大至 48×48 填充整格
+    drawSprite(ctx, sp, dx, dy, TILE_SIZE, TILE_SIZE);
   }
 
   // 4. 画玩家

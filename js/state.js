@@ -15,6 +15,7 @@ export function buildMonster(entry) {
   if (!def) { console.error('Unknown monster:', entry.defId); return null; }
   return {
     ...def,
+    defId:   entry.defId,  // 保存defId用于精灵查找
     x:       entry.x,
     y:       entry.y,
     hp:      def.hp,
