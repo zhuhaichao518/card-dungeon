@@ -258,13 +258,17 @@ function executeHeroCard(card) {
       player.effects.strength = card.strengthSelf;
       player.shield += (card.value || 0);
       blogf(`💪 【${card.name}】→ 强化 +${card.strengthSelf}（${card.strengthSelf} 回合攻击加成）`);
+    } else if (card.draw && !card.value) {
+      // 纯过牌卡（无攻击/护盾）
+      blogf(`🃏 【${card.name}】→ 摸 ${card.draw} 张`);
+      for (let _i = 0; _i < card.draw; _i++) drawHeroCard();
     } else {
       // 普通护盾
-      player.shield += card.value;
-      blogf(`🛡 【${card.name}】→ 获得 ${card.value} 护盾`);
+      player.shield += (card.value || 0);
+      if (card.value) blogf(`🛡 【${card.name}】→ 获得 ${card.value} 护盾`);
     }
-    // 护盾牌也可以有draw
-    if (card.draw) for (let _i=0;_i<card.draw;_i++) drawHeroCard();
+    // 护盾牌也可以有额外draw
+    if (card.draw && card.value) for (let _i=0;_i<card.draw;_i++) drawHeroCard();
   }
 
   // 摸牌（部分攻击牌也有摸牌效果）

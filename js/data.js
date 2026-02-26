@@ -60,6 +60,8 @@ export const HERO_CARD_POOL = [
   { id:'venom_nova',  name:'致命毒雾',cost:3, type:'attack', value:5, poison:8, rarity:'epic', desc:'造成5伤害+8毒' },
   { id:'inferno',     name:'炼狱火',  cost:3, type:'attack', value:10, burn:6, rarity:'epic', desc:'造成10伤害+6灼烧' },
   { id:'lifesteal',   name:'生命汲取',cost:3, type:'attack', value:12, healOnHit:8, rarity:'epic', desc:'造成12伤害，恢复8HP' },
+  { id:'quick_draw',  name:'快速过牌',cost:2, type:'skill',  draw:2, rarity:'rare',   desc:'摸2张牌' },
+  { id:'deep_draw',   name:'深度汲取',cost:3, type:'skill',  draw:3, rarity:'epic',   desc:'摸3张牌' },
 ];
 export const REWARD_CARD_POOL = HERO_CARD_POOL;
 
