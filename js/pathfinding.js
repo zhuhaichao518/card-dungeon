@@ -7,8 +7,8 @@
 import { state } from './state.js';
 import { TILE } from './data.js';
 
-// 自动寻路不能穿过的格子：墙/门/陷阱/资源（钥匙、血瓶）
-// 玩家必须手动点击资源格才能收集，不能在路途中自动扫过
+// 自动寻路中间路径不能穿过的格子
+// 注意：这些格子只阻止"途经"，不阻止"作为终点被点击"
 const OBSTACLE_TILES = new Set([
   TILE.WALL,
   TILE.DOOR_YELLOW,
@@ -21,6 +21,9 @@ const OBSTACLE_TILES = new Set([
   TILE.POTION_S,
   TILE.POTION_L,
 ]);
+
+// 终点也绝对不可达的格子（只有实体墙）
+const HARD_BLOCK = new Set([TILE.WALL]);
 
 /**
  * BFS 寻路
@@ -73,13 +76,14 @@ export function findPath(sx, sy, tx, ty) {
 
       const tileType = tiles[ny][nx];
 
-      // 跳过障碍（目标格子本身允许，为了能到达）
       if (nx !== tx || ny !== ty) {
+        // 中间格子：墙/门/陷阱/资源均不可穿越
         if (OBSTACLE_TILES.has(tileType)) continue;
         if (monsterPos.has(`${nx},${ny}`)) continue;
       } else {
-        // 目标格子是墙/门则不可达
-        if (tileType === TILE.WALL || OBSTACLE_TILES.has(tileType)) continue;
+        // 终点格子：只有实体墙不可到达
+        // 血瓶/钥匙/门/陷阱均可作为点击目标（由 tryMove 处理逻辑）
+        if (HARD_BLOCK.has(tileType)) continue;
       }
 
       visited[ny][nx] = 1;
