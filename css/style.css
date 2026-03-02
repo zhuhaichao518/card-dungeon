@@ -1932,3 +1932,39 @@ body.menu-body {
   color: #888;
   text-align: center;
 }
+
+/* ─── 战斗面板顶部攻防小徽章 ────────────────────────────────── */
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.atk-badge-sm {
+  color: #ff7043;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background: rgba(255,112,67,0.15);
+  border-radius: 6px;
+  padding: 1px 7px;
+}
+.def-badge-sm {
+  color: #64b5f6;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background: rgba(100,181,246,0.15);
+  border-radius: 6px;
+  padding: 1px 7px;
+}
+
+/* ─── 探索侧边栏属性 ─────────────────────────────────────────── */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 0.88rem;
+}
+.stat-atk { color: #ff7043; font-weight: bold; }
+.stat-def { color: #64b5f6; font-weight: bold; }
+.stat-val { font-weight: bold; color: #e8d5a0; min-width: 30px; text-align: right; }

@@ -4,7 +4,7 @@
  */
 
 import {
-  FLOORS, PLAYER_INIT, STARTER_DECK, MONSTER_DEFS,
+  FLOORS, PLAYER_INIT, STARTER_DECK, MONSTER_DEFS, GEM_SPAWNS, TILE,
 } from './data.js';
 
 function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
@@ -52,7 +52,14 @@ function createInitialState() {
 
     inventory: { keyYellow:0, keyBlue:0, keyRed:0 },
 
-    tiles:    deepClone(floorData.tiles),
+    tiles:    (() => {
+      const t = deepClone(floorData.tiles);
+      (GEM_SPAWNS[1] || []).forEach(g => {
+        if (t[g.y] && t[g.y][g.x] === 0)
+          t[g.y][g.x] = g.type === 'red' ? TILE.GEM_RED : TILE.GEM_BLUE;
+      });
+      return t;
+    })(),
     monsters: floorData.monsters.map(buildMonster).filter(Boolean),
 
     deck: {
@@ -97,6 +104,16 @@ export function loadFloor(floorNum) {
   state.floor    = floorNum;
   state.tiles    = deepClone(floorData.tiles);
   state.monsters = floorData.monsters.map(buildMonster).filter(Boolean);
+
+  // 注入宝石到地图（覆盖空地格）
+  const gems = GEM_SPAWNS[floorNum];
+  if (gems) {
+    gems.forEach(g => {
+      if (state.tiles[g.y] && state.tiles[g.y][g.x] === 0) {
+        state.tiles[g.y][g.x] = g.type === 'red' ? TILE.GEM_RED : TILE.GEM_BLUE;
+      }
+    });
+  }
 
   // 玩家移动到入口
   state.player.x = floorData.playerStart.x;

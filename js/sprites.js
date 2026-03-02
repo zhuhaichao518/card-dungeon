@@ -90,6 +90,10 @@ export const TILE_SPRITE = {
 
   // ─ 事件触发点（渲染为普通地板，玩家看不见） ─
   16: { sheet:'terrains', srcX:0, srcY:96,  srcW:32, srcH:32 },  // EVENT 渲染为地板
+
+  // ─ 宝石 (items.png row16/17) ─
+  17: { sheet:'items', srcX:0, srcY:512, srcW:32, srcH:32 },  // 红宝石 row16 → 攻击力+1
+  18: { sheet:'items', srcX:0, srcY:544, srcW:32, srcH:32 },  // 蓝宝石 row17 → 防御力+1
 };
 
 // ─────────────────────────────────────────────────────────────────

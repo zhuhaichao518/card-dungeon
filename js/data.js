@@ -6,6 +6,7 @@ export const TILE = {
   FLOOR:0, WALL:1, DOOR_YELLOW:2, DOOR_BLUE:3, DOOR_RED:4,
   KEY_YELLOW:5, KEY_BLUE:6, KEY_RED:7,
   STAIRS:10, POTION_S:12, POTION_L:13, SPIKE_TRAP:15, EVENT:16,
+  GEM_RED:17, GEM_BLUE:18,
 };
 
 export const PLAYER_INIT = {
@@ -268,6 +269,39 @@ export const MONSTER_DEFS = {
       {id:'pg_block',name:'躲避',cost:1,type:'skill',value:2,desc:'获得2护盾'},
     ],
   },
+};
+
+export const GEM_SPAWNS = {
+  1:  [{type:'red',x:7,y:1}, {type:'blue',x:8,y:3}, {type:'red',x:5,y:6}, {type:'blue',x:2,y:9}],
+  2:  [{type:'red',x:8,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:7,y:6}, {type:'blue',x:1,y:9}],
+  3:  [{type:'red',x:7,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:2,y:9}],
+  4:  [{type:'red',x:8,y:1}, {type:'blue',x:6,y:3}, {type:'red',x:4,y:6}, {type:'blue',x:9,y:8}],
+  5:  [{type:'red',x:7,y:1}, {type:'blue',x:6,y:4}, {type:'red',x:9,y:6}, {type:'blue',x:3,y:9}],
+  6:  [{type:'red',x:8,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:3,y:6}, {type:'blue',x:1,y:9}],
+  7:  [{type:'red',x:9,y:1}, {type:'blue',x:9,y:4}, {type:'red',x:2,y:7}, {type:'blue',x:3,y:9}],
+  8:  [{type:'red',x:8,y:1}, {type:'blue',x:3,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:1,y:9}],
+  9:  [{type:'red',x:8,y:1}, {type:'blue',x:3,y:4}, {type:'red',x:9,y:6}, {type:'blue',x:2,y:9}],
+  10: [{type:'red',x:2,y:2}, {type:'blue',x:4,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:7,y:8}],
+  11: [{type:'red',x:8,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:2,y:9}],
+  12: [{type:'red',x:7,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:3,y:6}, {type:'blue',x:9,y:8}],
+  13: [{type:'red',x:8,y:1}, {type:'blue',x:6,y:4}, {type:'red',x:3,y:6}, {type:'blue',x:1,y:9}],
+  14: [{type:'red',x:7,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:3,y:9}],
+  15: [{type:'red',x:2,y:2}, {type:'blue',x:5,y:4}, {type:'red',x:6,y:6}, {type:'blue',x:9,y:8}],
+  16: [{type:'red',x:7,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:2,y:9}],
+  17: [{type:'red',x:8,y:1}, {type:'blue',x:3,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:2,y:9}],
+  18: [{type:'red',x:7,y:1}, {type:'blue',x:3,y:4}, {type:'red',x:9,y:6}, {type:'blue',x:4,y:9}],
+  19: [{type:'red',x:8,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:1,y:9}],
+  20: [{type:'red',x:2,y:2}, {type:'blue',x:5,y:4}, {type:'red',x:8,y:6}, {type:'blue',x:9,y:8}],
+  21: [{type:'red',x:7,y:1}, {type:'blue',x:9,y:3}, {type:'red',x:1,y:6}, {type:'blue',x:9,y:8}],
+  22: [{type:'red',x:7,y:1}, {type:'blue',x:9,y:3}, {type:'red',x:5,y:6}, {type:'blue',x:3,y:9}],
+  23: [{type:'red',x:8,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:9,y:6}, {type:'blue',x:4,y:9}],
+  24: [{type:'red',x:6,y:1}, {type:'blue',x:7,y:3}, {type:'red',x:1,y:6}, {type:'blue',x:1,y:9}],
+  25: [{type:'red',x:7,y:1}, {type:'blue',x:9,y:3}, {type:'red',x:3,y:6}, {type:'blue',x:1,y:9}],
+  26: [{type:'red',x:7,y:1}, {type:'blue',x:3,y:4}, {type:'red',x:7,y:6}, {type:'blue',x:4,y:9}],
+  27: [{type:'red',x:8,y:1}, {type:'blue',x:1,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:3,y:9}],
+  28: [{type:'red',x:6,y:1}, {type:'blue',x:7,y:3}, {type:'red',x:3,y:6}, {type:'blue',x:1,y:9}],
+  29: [{type:'red',x:8,y:1}, {type:'blue',x:3,y:4}, {type:'red',x:5,y:6}, {type:'blue',x:2,y:9}],
+  30: [{type:'red',x:2,y:2}, {type:'blue',x:4,y:4}, {type:'red',x:6,y:6}, {type:'blue',x:8,y:8}],
 };
 
 export const FLOORS = [

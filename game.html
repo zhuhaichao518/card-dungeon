@@ -31,6 +31,11 @@
       </div>
       <aside id="side-panel">
         <div class="panel-section">
+          <h3>🧙 属性</h3>
+          <div class="stat-row"><span class="stat-atk">⚔️ 攻击</span><span id="explore-atk" class="stat-val">5</span></div>
+          <div class="stat-row"><span class="stat-def">🔰 防御</span><span id="explore-def" class="stat-val">3</span></div>
+        </div>
+        <div class="panel-section">
           <h3>📦 背包</h3>
           <div class="inventory-item"><span style="color:#ffd700">⚷</span> 黄钥匙 <span class="key-count" id="key-yellow-count">0</span></div>
           <div class="inventory-item"><span style="color:#4fc3f7">⚷</span> 蓝钥匙 <span class="key-count" id="key-blue-count">0</span></div>
@@ -61,7 +66,11 @@
         <div class="combatant-header">
           <canvas id="battle-monster-sprite" width="32" height="32" style="image-rendering:pixelated;width:48px;height:48px;border-radius:6px;background:#111;"></canvas>
           <span class="combatant-name" id="battle-monster-name">怪物</span>
-          <span class="combatant-shield-badge">🛡 <span id="battle-monster-shield">0</span></span>
+          <div class="header-badges">
+            <span class="combatant-shield-badge">🛡 <span id="battle-monster-shield">0</span></span>
+            <span class="atk-badge-sm">⚔️<span id="battle-monster-atk">0</span></span>
+            <span class="def-badge-sm">🔰<span id="battle-monster-def">0</span></span>
+          </div>
         </div>
         <div class="combatant-hp">
           <div class="hp-bar flex1"><div class="hp-bar-fill enemy-hp" id="battle-monster-hp-bar" style="width:100%"></div></div>
@@ -72,10 +81,6 @@
           <div id="monster-ap-display" class="ap-gems"></div>
         </div>
         <div id="battle-monster-effects" class="effects-row"></div>
-        <div class="atk-def-row">
-          <span class="atk-badge">⚔️ <span id="battle-monster-atk">0</span></span>
-          <span class="def-badge">🛡 <span id="battle-monster-def">0</span></span>
-        </div>
         <!-- 怪物意图 -->
         <div class="monster-intent-section">
           <div id="battle-monster-intent" class="monster-intent-cards"></div>
@@ -92,7 +97,11 @@
       <div class="combatant-card hero-card">
         <div class="combatant-header">
           <span class="combatant-name">🧙 英雄</span>
-          <span class="combatant-shield-badge">🛡 <span id="battle-hero-shield">0</span></span>
+          <div class="header-badges">
+            <span class="combatant-shield-badge">🛡 <span id="battle-hero-shield">0</span></span>
+            <span class="atk-badge-sm">⚔️<span id="battle-hero-atk">0</span></span>
+            <span class="def-badge-sm">🔰<span id="battle-hero-def">0</span></span>
+          </div>
         </div>
         <div class="combatant-hp">
           <div class="hp-bar flex1"><div class="hp-bar-fill hero-hp" id="battle-hero-hp-bar" style="width:100%"></div></div>
@@ -104,10 +113,6 @@
           <span id="ap-text" class="ap-num">0/0</span>
         </div>
         <div id="battle-hero-effects" class="effects-row"></div>
-        <div class="atk-def-row">
-          <span class="atk-badge">⚔️ <span id="battle-hero-atk">0</span></span>
-          <span class="def-badge">🛡 <span id="battle-hero-def">0</span></span>
-        </div>
       </div>
 
       <!-- ④ 手牌 -->

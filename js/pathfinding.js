@@ -20,6 +20,8 @@ const OBSTACLE_TILES = new Set([
   TILE.KEY_RED,
   TILE.POTION_S,
   TILE.POTION_L,
+  TILE.GEM_RED,
+  TILE.GEM_BLUE,
 ]);
 
 // 终点也绝对不可达的格子（只有实体墙）

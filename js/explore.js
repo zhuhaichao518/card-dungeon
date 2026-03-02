@@ -109,6 +109,20 @@ export function tryMove(dx, dy) {
       addMessage('💉 大血瓶：+60 HP');
       break;
 
+    case TILE.GEM_RED:
+      move(nx, ny);
+      state.tiles[ny][nx] = TILE.FLOOR;
+      state.player.atk += 1;
+      addMessage(`💎 红宝石！攻击力 ${state.player.atk - 1} → ${state.player.atk}`);
+      break;
+
+    case TILE.GEM_BLUE:
+      move(nx, ny);
+      state.tiles[ny][nx] = TILE.FLOOR;
+      state.player.def += 1;
+      addMessage(`💙 蓝宝石！防御力 ${state.player.def - 1} → ${state.player.def}`);
+      break;
+
     case TILE.SPIKE_TRAP:
       move(nx, ny);
       damagePlayer(15);
