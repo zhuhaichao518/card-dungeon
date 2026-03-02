@@ -48,6 +48,7 @@
             <div>Esc / ⏸ 暂停存档</div>
           </div>
           <button id="btn-deck-view" class="btn-deck-view">📖 查看卡组</button>
+          <button id="btn-monster-book" class="btn-deck-view" style="margin-top:6px">📕 怪物手册</button>
         </div>
       </aside>
     </div>
@@ -71,6 +72,10 @@
           <div id="monster-ap-display" class="ap-gems"></div>
         </div>
         <div id="battle-monster-effects" class="effects-row"></div>
+        <div class="atk-def-row">
+          <span class="atk-badge">⚔️ <span id="battle-monster-atk">0</span></span>
+          <span class="def-badge">🛡 <span id="battle-monster-def">0</span></span>
+        </div>
         <!-- 怪物意图 -->
         <div class="monster-intent-section">
           <div id="battle-monster-intent" class="monster-intent-cards"></div>
@@ -99,6 +104,10 @@
           <span id="ap-text" class="ap-num">0/0</span>
         </div>
         <div id="battle-hero-effects" class="effects-row"></div>
+        <div class="atk-def-row">
+          <span class="atk-badge">⚔️ <span id="battle-hero-atk">0</span></span>
+          <span class="def-badge">🛡 <span id="battle-hero-def">0</span></span>
+        </div>
       </div>
 
       <!-- ④ 手牌 -->
@@ -158,6 +167,17 @@
         <button class="pause-btn" id="pause-resume">▶ 继续游戏</button>
         <button class="pause-btn danger" id="pause-back-menu">🏠 返回主菜单</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══ 怪物手册弹窗 ═══ -->
+  <div id="monster-book-panel" class="hidden">
+    <div id="monster-book-box">
+      <div id="monster-book-header">
+        <span>📕 怪物手册</span>
+        <button id="monster-book-close" class="deck-view-close">✕</button>
+      </div>
+      <div id="monster-book-grid"></div>
     </div>
   </div>
 

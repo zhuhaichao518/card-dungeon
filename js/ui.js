@@ -5,6 +5,7 @@
 import { state } from './state.js';
 import { playCard, endPlayerTurn } from './battle.js';
 import { MONSTER_SPRITE, getSprite } from './sprites.js';
+import { MONSTER_DEFS } from './data.js';
 
 // ═══════════════════════════════════════
 // 探索界面
@@ -65,9 +66,11 @@ export function updateBattleUI() {
 // ── 英雄面板 ────────────────────────────
 
 function renderHeroPanel() {
-  const { hp, maxHp, shield, effects } = state.player;
+  const { hp, maxHp, shield, effects, atk, def } = state.player;
   updateHpBar('battle-hero-hp-bar', 'battle-hero-hp-text', hp, maxHp, true);
   setInner('battle-hero-shield', shield);
+  setInner('battle-hero-atk', atk ?? 0);
+  setInner('battle-hero-def', def ?? 0);
   renderEffects('battle-hero-effects', effects);
 }
 
@@ -91,6 +94,8 @@ function renderMonsterPanel() {
   }
   updateHpBar('battle-monster-hp-bar', 'battle-monster-hp-text', m.hp, m.maxHp, false);
   setInner('battle-monster-shield', m.shield || 0);
+  setInner('battle-monster-atk', m.atk ?? 0);
+  setInner('battle-monster-def', m.def ?? 0);
   renderEffects('battle-monster-effects', m.effects || {});
 
   renderApCrystalsFor('monster-ap-display',
@@ -304,6 +309,53 @@ export function showDeckView() {
       <div class="card-name">${card.name}</div>
       <div class="card-desc">${card.desc}</div>`;
     grid.appendChild(el);
+  });
+
+  panel.classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════
+// 怪物手册
+// ═══════════════════════════════════════
+
+export function showMonsterBook() {
+  const grid  = document.getElementById('monster-book-grid');
+  const panel = document.getElementById('monster-book-panel');
+  if (!grid || !panel) return;
+
+  grid.innerHTML = '';
+  const excluded = new Set(['general_red']); // 剧情专用，不列入手册
+
+  Object.values(MONSTER_DEFS).forEach(def => {
+    if (excluded.has(def.id)) return;
+    const card = document.createElement('div');
+    card.className = 'monster-book-card';
+
+    // 精灵图
+    const sprKey = def.id;
+    const sp  = MONSTER_SPRITE[sprKey] || MONSTER_SPRITE.default;
+    const canvas = document.createElement('canvas');
+    canvas.width = 32; canvas.height = 32;
+    canvas.style.cssText = 'image-rendering:pixelated;width:40px;height:40px;border-radius:4px;background:#111;';
+    const img = getSprite(sp?.sheet);
+    if (img) {
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(img, sp.srcX, sp.srcY, sp.srcW, sp.srcH, 0, 0, 32, 32);
+    }
+
+    card.innerHTML = `
+      <div class="mb-header"></div>
+      <div class="mb-name">${def.emoji || ''} ${def.name}</div>
+      <div class="mb-stats">
+        <span class="mb-stat mb-hp">❤️ ${def.maxHp}</span>
+        <span class="mb-stat mb-atk">⚔️ ${def.atk ?? 0}</span>
+        <span class="mb-stat mb-def">🛡 ${def.def ?? 0}</span>
+      </div>
+      <div class="mb-ap">行动⚡${def.maxAp} &nbsp; 手牌${def.handSize}</div>`;
+
+    card.querySelector('.mb-header').appendChild(canvas);
+    grid.appendChild(card);
   });
 
   panel.classList.remove('hidden');

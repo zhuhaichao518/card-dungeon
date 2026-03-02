@@ -43,6 +43,8 @@ function createInitialState() {
       hp:       PLAYER_INIT.hp,
       maxHp:    PLAYER_INIT.maxHp,
       shield:   0,
+      atk:      PLAYER_INIT.atk,
+      def:      PLAYER_INIT.def,
       maxAp:    PLAYER_INIT.maxAp,
       handSize: PLAYER_INIT.handSize,
       effects:  emptyEffects(),

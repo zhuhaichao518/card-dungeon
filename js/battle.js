@@ -205,6 +205,9 @@ function executeHeroCard(card) {
 
   if (card.type === 'attack') {
     let dmg = card.value;
+    // 攻防差额（魔塔核心机制）
+    const atkBonus = Math.max(0, (player.atk || 0) - (monster.def || 0));
+    dmg += atkBonus;
     // 强化加成
     if (eff.strength > 0) dmg += eff.strength;
     // 虚弱减半
@@ -218,6 +221,7 @@ function executeHeroCard(card) {
     }
 
     let log = `🗡 【${card.name}】→ ${hits > 1 ? dmg+'×'+hits+'=' : ''}${total} 伤害`;
+    if (atkBonus > 0) log += `（含攻防差+${atkBonus}）`;
 
     // 毒爆：对中毒目标额外爆发
     if (card.poisonExploit && (monster.effects?.poison || 0) > 0) {
@@ -316,6 +320,9 @@ function executeMonsterCard(card, monster) {
 
   if (card.type === 'attack') {
     let dmg = card.value;
+    // 攻防差额（怪物攻击力 - 玩家防御力）
+    const atkBonus = Math.max(0, (monster.atk || 0) - (player.def || 0));
+    dmg += atkBonus;
     if (monster.effects?.strength > 0) dmg += monster.effects.strength;
     const hits = card.hits || 1;
     let total = 0;
@@ -324,7 +331,7 @@ function executeMonsterCard(card, monster) {
       total += real;
     }
     const raw = dmg * hits;
-    blogf(`👾 ${monster.name}【${card.name}】→ ${raw} 伤害（实际 ${total}，盾挡 ${raw-total}）`);
+    blogf(`👾 ${monster.name}【${card.name}】→ ${raw} 伤害（实际 ${total}，盾挡 ${raw-total}）${atkBonus>0?' 含攻防差+'+atkBonus:''}`);
     // 怪物攻击牌也可施加状态给玩家
     applyEffectsToTarget(card, player);
   } else if (card.type === 'skill') {

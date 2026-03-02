@@ -10,6 +10,7 @@ export const TILE = {
 
 export const PLAYER_INIT = {
   hp: 80, maxHp: 80, shield: 0,
+  atk: 5, def: 3,
   maxAp: 3, handSize: 4,
 };
 
@@ -69,7 +70,7 @@ export const MONSTER_DEFS = {
   // ── 普通怪物 ──
   slime_green: {
     id:'slime_green', name:'绿史莱姆', emoji:'🟢',
-    hp:28, maxHp:28, maxAp:3, handSize:3,
+    hp:28, maxHp:28, atk:3, def:1, maxAp:3, handSize:3,
     deck:[
       {id:'s_punch',name:'黏液拳',cost:1,type:'attack',value:5,desc:'造成5伤害'},
       {id:'s_punch',name:'黏液拳',cost:1,type:'attack',value:5,desc:'造成5伤害'},
@@ -82,7 +83,7 @@ export const MONSTER_DEFS = {
   },
   slime_red: {
     id:'slime_red', name:'红史莱姆', emoji:'🔴',
-    hp:35, maxHp:35, maxAp:3, handSize:3,
+    hp:35, maxHp:35, atk:4, def:1, maxAp:3, handSize:3,
     deck:[
       {id:'r_punch',name:'灼热拳',cost:1,type:'attack',value:4,burn:2,desc:'4伤+2灼烧'},
       {id:'r_punch',name:'灼热拳',cost:1,type:'attack',value:4,burn:2,desc:'4伤+2灼烧'},
@@ -94,7 +95,7 @@ export const MONSTER_DEFS = {
   },
   bat: {
     id:'bat', name:'蝙蝠', emoji:'🦇',
-    hp:22, maxHp:22, maxAp:3, handSize:4,
+    hp:22, maxHp:22, atk:3, def:0, maxAp:3, handSize:4,
     deck:[
       {id:'b_bite',name:'咬击',cost:1,type:'attack',value:4,desc:'造成4伤害'},
       {id:'b_bite',name:'咬击',cost:1,type:'attack',value:4,desc:'造成4伤害'},
@@ -106,7 +107,7 @@ export const MONSTER_DEFS = {
   },
   skeleton: {
     id:'skeleton', name:'骷髅兵', emoji:'💀',
-    hp:40, maxHp:40, maxAp:3, handSize:3,
+    hp:40, maxHp:40, atk:5, def:3, maxAp:3, handSize:3,
     deck:[
       {id:'sk_slash',name:'骨刃',cost:1,type:'attack',value:6,desc:'造成6伤害'},
       {id:'sk_slash',name:'骨刃',cost:1,type:'attack',value:6,desc:'造成6伤害'},
@@ -119,7 +120,7 @@ export const MONSTER_DEFS = {
   },
   goblin: {
     id:'goblin', name:'哥布林', emoji:'👺',
-    hp:30, maxHp:30, maxAp:3, handSize:4,
+    hp:30, maxHp:30, atk:4, def:1, maxAp:3, handSize:4,
     deck:[
       {id:'g_stab',name:'匕首',cost:1,type:'attack',value:4,desc:'造成4伤害'},
       {id:'g_stab',name:'匕首',cost:1,type:'attack',value:4,desc:'造成4伤害'},
@@ -131,7 +132,7 @@ export const MONSTER_DEFS = {
   },
   gargoyle: {
     id:'gargoyle', name:'石像鬼', emoji:'🗿',
-    hp:52, maxHp:52, maxAp:3, handSize:3,
+    hp:52, maxHp:52, atk:5, def:4, maxAp:3, handSize:3,
     deck:[
       {id:'gar_claw',name:'石爪',cost:1,type:'attack',value:5,desc:'造成5伤害'},
       {id:'gar_claw',name:'石爪',cost:1,type:'attack',value:5,desc:'造成5伤害'},
@@ -144,7 +145,7 @@ export const MONSTER_DEFS = {
   },
   fire_demon: {
     id:'fire_demon', name:'火焰魔', emoji:'🔥',
-    hp:45, maxHp:45, maxAp:3, handSize:3,
+    hp:45, maxHp:45, atk:5, def:2, maxAp:3, handSize:3,
     deck:[
       {id:'fd_bolt',name:'火箭',cost:1,type:'attack',value:5,burn:2,desc:'5伤+2灼烧'},
       {id:'fd_bolt',name:'火箭',cost:1,type:'attack',value:5,burn:2,desc:'5伤+2灼烧'},
@@ -156,7 +157,7 @@ export const MONSTER_DEFS = {
   },
   lich: {
     id:'lich', name:'巫妖', emoji:'👻',
-    hp:38, maxHp:38, maxAp:3, handSize:3,
+    hp:38, maxHp:38, atk:6, def:2, maxAp:3, handSize:3,
     deck:[
       {id:'li_bolt',name:'暗箭',cost:1,type:'attack',value:5,desc:'造成5伤害'},
       {id:'li_bolt',name:'暗箭',cost:1,type:'attack',value:5,desc:'造成5伤害'},
@@ -168,7 +169,7 @@ export const MONSTER_DEFS = {
   },
   demon_knight: {
     id:'demon_knight', name:'恶魔骑士', emoji:'⚔️',
-    hp:62, maxHp:62, maxAp:4, handSize:4,
+    hp:62, maxHp:62, atk:7, def:4, maxAp:4, handSize:4,
     deck:[
       {id:'dk_slash',name:'魔剑',cost:1,type:'attack',value:6,desc:'造成6伤害'},
       {id:'dk_slash',name:'魔剑',cost:1,type:'attack',value:6,desc:'造成6伤害'},
@@ -181,7 +182,7 @@ export const MONSTER_DEFS = {
   },
   dragon: {
     id:'dragon', name:'火龙', emoji:'🐉',
-    hp:72, maxHp:72, maxAp:4, handSize:4,
+    hp:72, maxHp:72, atk:8, def:5, maxAp:4, handSize:4,
     deck:[
       {id:'dr_claw',name:'龙爪',cost:1,type:'attack',value:6,desc:'造成6伤害'},
       {id:'dr_claw',name:'龙爪',cost:1,type:'attack',value:6,desc:'造成6伤害'},
@@ -194,7 +195,7 @@ export const MONSTER_DEFS = {
   // ── 魔王四使（剧情用，极强） ──
   general_red: {
     id:'general_red', name:'赤甲将军', emoji:'🔴',
-    hp:9999, maxHp:9999, maxAp:5, handSize:5, scripted_loss:true,
+    hp:9999, maxHp:9999, atk:20, def:10, maxAp:5, handSize:5, scripted_loss:true,
     deck:[
       {id:'gen_kill',name:'必杀斩',cost:0,type:'attack',value:200,desc:'无法抵挡的斩击'},
       {id:'gen_kill',name:'必杀斩',cost:0,type:'attack',value:200,desc:'无法抵挡的斩击'},
@@ -206,7 +207,7 @@ export const MONSTER_DEFS = {
   // ── 普通BOSS ──
   slime_king: {
     id:'slime_king', name:'史莱姆王', emoji:'👑',
-    hp:95, maxHp:95, maxAp:3, handSize:4,
+    hp:95, maxHp:95, atk:6, def:3, maxAp:3, handSize:4,
     deck:[
       {id:'sk2_punch',name:'王拳',cost:1,type:'attack',value:6,desc:'造成6伤害'},
       {id:'sk2_punch',name:'王拳',cost:1,type:'attack',value:6,desc:'造成6伤害'},
@@ -218,7 +219,7 @@ export const MONSTER_DEFS = {
   },
   skeleton_king: {
     id:'skeleton_king', name:'骷髅王', emoji:'💀',
-    hp:115, maxHp:115, maxAp:4, handSize:4,
+    hp:115, maxHp:115, atk:8, def:5, maxAp:4, handSize:4,
     deck:[
       {id:'skk_slash',name:'亡灵斩',cost:1,type:'attack',value:7,desc:'造成7伤害'},
       {id:'skk_slash',name:'亡灵斩',cost:1,type:'attack',value:7,desc:'造成7伤害'},
@@ -230,7 +231,7 @@ export const MONSTER_DEFS = {
   },
   archmage: {
     id:'archmage', name:'大法师', emoji:'🧙',
-    hp:130, maxHp:130, maxAp:4, handSize:4,
+    hp:130, maxHp:130, atk:9, def:4, maxAp:4, handSize:4,
     deck:[
       {id:'am_bolt',name:'魔弹',cost:1,type:'attack',value:6,desc:'造成6伤害'},
       {id:'am_bolt',name:'魔弹',cost:1,type:'attack',value:6,desc:'造成6伤害'},
@@ -243,7 +244,7 @@ export const MONSTER_DEFS = {
   },
   dragon_god: {
     id:'dragon_god', name:'魔王', emoji:'👹',
-    hp:200, maxHp:200, maxAp:5, handSize:5,
+    hp:200, maxHp:200, atk:12, def:8, maxAp:5, handSize:5,
     deck:[
       {id:'dg_claw',name:'魔爪',cost:1,type:'attack',value:8,desc:'造成8伤害'},
       {id:'dg_claw',name:'魔爪',cost:1,type:'attack',value:8,desc:'造成8伤害'},

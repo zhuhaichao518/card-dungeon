@@ -1820,3 +1820,115 @@ body.menu-body {
   transition: background 0.15s;
 }
 .btn-deck-view:hover { background: #3a3a6a; }
+
+/* ─── 攻防显示行 ─────────────────────────────────────────────── */
+.atk-def-row {
+  display: flex;
+  gap: 14px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+}
+.atk-badge {
+  color: #ff7043;
+  font-weight: bold;
+}
+.def-badge {
+  color: #64b5f6;
+  font-weight: bold;
+}
+
+/* ─── 怪物手册弹窗 ──────────────────────────────────────────── */
+#monster-book-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#monster-book-panel.hidden { display: none; }
+
+#monster-book-box {
+  background: #1a1a2e;
+  border: 2px solid #6a2a2a;
+  border-radius: 14px;
+  width: min(92vw, 700px);
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#monster-book-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #444;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #e8c080;
+  flex-shrink: 0;
+}
+
+#monster-book-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+  overflow-y: auto;
+  justify-content: flex-start;
+}
+
+.monster-book-card {
+  background: #23233a;
+  border: 1px solid #44446a;
+  border-radius: 10px;
+  padding: 10px;
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: border-color 0.15s, transform 0.12s;
+}
+.monster-book-card:hover {
+  border-color: #e8c080;
+  transform: translateY(-3px);
+}
+
+.mb-header {
+  display: flex;
+  justify-content: center;
+}
+
+.mb-name {
+  font-size: 0.82rem;
+  font-weight: bold;
+  color: #e8d5a0;
+  text-align: center;
+}
+
+.mb-stats {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mb-stat {
+  font-size: 0.78rem;
+  padding: 2px 7px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+.mb-hp  { background: #4a1a1a; color: #ff8a80; }
+.mb-atk { background: #3a1a0a; color: #ff7043; }
+.mb-def { background: #0a2a4a; color: #64b5f6; }
+
+.mb-ap {
+  font-size: 0.72rem;
+  color: #888;
+  text-align: center;
+}
