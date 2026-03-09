@@ -42,14 +42,41 @@ function updateMessageLog() {
 // 战斗界面切换
 // ═══════════════════════════════════════
 
+// 战斗怪物精灵动画定时器
+let _battleAnimTimer = null;
+let _battleAnimFrame = 0;
+
 export function showBattleScreen() {
   document.getElementById('explore-screen').classList.add('hidden');
   document.getElementById('battle-screen').classList.remove('hidden');
+  // 启动战斗怪物动画
+  _battleAnimFrame = 0;
+  _battleAnimTimer = setInterval(() => {
+    _battleAnimFrame = 1 - _battleAnimFrame;
+    _drawBattleMonsterSprite(_battleAnimFrame);
+  }, 400);
 }
 
 export function hideBattleScreen() {
   document.getElementById('battle-screen').classList.add('hidden');
   document.getElementById('explore-screen').classList.remove('hidden');
+  if (_battleAnimTimer) { clearInterval(_battleAnimTimer); _battleAnimTimer = null; }
+}
+
+// 绘制战斗怪物精灵（带帧）
+function _drawBattleMonsterSprite(frame) {
+  const m = state.battle?.monster;
+  if (!m) return;
+  const spriteCanvas = document.getElementById('battle-monster-sprite');
+  if (!spriteCanvas) return;
+  const sctx = spriteCanvas.getContext('2d');
+  sctx.clearRect(0, 0, 32, 32);
+  sctx.imageSmoothingEnabled = false;
+  const key = m.defId || m.id;
+  const sp  = MONSTER_SPRITE[key] || MONSTER_SPRITE.default;
+  if (!sp) return;
+  const img = getSprite(sp.sheet);
+  if (img) sctx.drawImage(img, frame * 32, sp.srcY, sp.srcW, sp.srcH, 0, 0, 32, 32);
 }
 
 // ═══════════════════════════════════════
@@ -83,17 +110,8 @@ function renderMonsterPanel() {
   if (!m) return;
   setInner('battle-monster-name', m.name);
 
-  // 绘制怪物精灵到小canvas
-  const spriteCanvas = document.getElementById('battle-monster-sprite');
-  if (spriteCanvas) {
-    const sctx = spriteCanvas.getContext('2d');
-    sctx.clearRect(0, 0, 32, 32);
-    sctx.imageSmoothingEnabled = false;
-    const key = m.defId || m.id;
-    const sp  = MONSTER_SPRITE[key] || MONSTER_SPRITE.default;
-    const img = getSprite(sp.sheet);
-    if (img) sctx.drawImage(img, sp.srcX, sp.srcY, sp.srcW, sp.srcH, 0, 0, 32, 32);
-  }
+  // 绘制怪物精灵（初始帧，后续由动画定时器接管）
+  _drawBattleMonsterSprite(_battleAnimFrame);
   updateHpBar('battle-monster-hp-bar', 'battle-monster-hp-text', m.hp, m.maxHp, false);
   setInner('battle-monster-shield', m.shield || 0);
   setInner('battle-monster-atk', m.atk ?? 0);

@@ -11,10 +11,11 @@
  */
 
 export const SPRITE_SHEETS = {
+  ground:   'assets/ground.png',   // 32×32 单块地板（defaultGround）
   terrains: 'assets/terrains.png',
   animates: 'assets/animates.png',  // 门/陷阱动画（128×928，4帧/行，32×32/帧）
   items:    'assets/items.png',
-  enemys:   'assets/enemys.png',   // 主要怪物图，73种
+  enemys:   'assets/enemys.png',   // 主要怪物图，73种（2帧/行）
   hero:     'assets/hero.png',
 };
 
@@ -66,9 +67,9 @@ export function getSprite(key) {
 //   row 20 srcY=640 : 红血瓶(223,183,195) = redPotion  小血瓶
 //   row 21 srcY=672 : 蓝血瓶(194,194,223) = bluePotion 大血瓶
 export const TILE_SPRITE = {
-  // ─ 地板 & 墙壁 & 楼梯 (terrains.png) ─
-  0:  { sheet:'terrains', srcX:0, srcY:96,  srcW:32, srcH:32 },  // 地板  row3 紫灰石板
-  1:  { sheet:'terrains', srcX:0, srcY:672, srcW:32, srcH:32 },  // 砖墙  row21 红砖(经典魔塔)
+  // ─ 地板 & 墙壁 & 楼梯 ─
+  0:  { sheet:'ground',   srcX:0, srcY:0,   srcW:32, srcH:32 },  // 地板  ground.png（魔塔标准地板）
+  // 1 = 墙壁：无精灵，由 renderer 用深色填充
   10: { sheet:'terrains', srcX:0, srcY:192, srcW:32, srcH:32 },  // 楼梯  row6 upFloor
 
   // ─ 门 (animates.png，取第0帧 srcX=0) ─

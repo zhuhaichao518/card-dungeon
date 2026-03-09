@@ -12,6 +12,25 @@ export const TILE_SIZE = 48;  // 每个瓷砖的像素大小
 let canvas = null;
 let ctx    = null;
 
+// ── 动画帧状态 ──────────────────────────────────────────────────────────────
+let animFrame    = 0;      // 当前帧索引 (0 或 1)
+let lastAnimTime = 0;
+const ANIM_INTERVAL = 400; // ms，每400ms切换一帧
+
+/** 启动地图动画循环（在 init 时调用一次） */
+export function startAnimLoop() {
+  function loop(ts) {
+    if (ts - lastAnimTime >= ANIM_INTERVAL) {
+      animFrame = 1 - animFrame;
+      lastAnimTime = ts;
+      // 只在探索阶段自动重绘
+      if (state.phase === 'explore') renderMap();
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+
 /** 初始化 Canvas */
 export function initCanvas() {
   canvas = document.getElementById('map-canvas');
@@ -41,27 +60,41 @@ export function renderMap() {
     for (let x = 0; x < cols; x++) {
       const dx = x * TILE_SIZE;
       const dy = y * TILE_SIZE;
-
-      // 1. 先画地板（所有非墙格子下面都有地板）
       const tileType = tiles[y][x];
-      if (tileType !== 1) {
-        drawTileSprite(ctx, 0, dx, dy);  // 地板
-      }
 
-      // 2. 画瓷砖本身（如果不是地板）
-      if (tileType !== 0) {
+      // 1. 所有格子先铺地板（包括墙下面）
+      drawTileSprite(ctx, 0, dx, dy);
+
+      // 2. 画墙或其他非地板瓷砖
+      if (tileType === 1) {
+        // 墙：先画深色底，再画半透明砖纹
+        ctx.fillStyle = '#111118';
+        ctx.fillRect(dx, dy, TILE_SIZE, TILE_SIZE);
+        // 用terrains row21画砖纹（半透明叠加更协调）
+        const wallSp = { sheet:'terrains', srcX:0, srcY:672, srcW:32, srcH:32 };
+        const img = getSprite('terrains');
+        if (img) {
+          ctx.save();
+          ctx.globalAlpha = 0.85;
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(img, wallSp.srcX, wallSp.srcY, wallSp.srcW, wallSp.srcH,
+                        dx, dy, TILE_SIZE, TILE_SIZE);
+          ctx.restore();
+        }
+      } else if (tileType !== 0) {
         drawTileSprite(ctx, tileType, dx, dy);
       }
     }
   }
 
-  // 3. 画怪物（enemys.png 32×32，缩放填充 48×48 tile）
+  // 3. 画怪物（使用 animFrame 切换动画帧）
   for (const monster of monsters) {
     const dx = monster.x * TILE_SIZE;
     const dy = monster.y * TILE_SIZE;
     const key = monster.defId || monster.id;
-    const sp  = MONSTER_SPRITE[key] || MONSTER_SPRITE.default;
-    // 32×32 精灵放大至 48×48 填充整格
+    const baseSp = MONSTER_SPRITE[key] || MONSTER_SPRITE.default;
+    // enemys.png：每行2帧，frame0=srcX:0, frame1=srcX:32
+    const sp = { ...baseSp, srcX: animFrame * 32 };
     drawSprite(ctx, sp, dx, dy, TILE_SIZE, TILE_SIZE);
   }
 
@@ -79,8 +112,8 @@ function drawTileSprite(ctx, tileType, dx, dy) {
   if (sp) {
     drawSprite(ctx, sp, dx, dy, TILE_SIZE, TILE_SIZE);
   } else {
-    // 找不到精灵时画占位色块
-    ctx.fillStyle = tileType === 1 ? '#2a1f3d' : '#1a1a2e';
+    // 无精灵时的占位色块（排除墙，墙在主循环里单独处理）
+    ctx.fillStyle = '#1a1a2e';
     ctx.fillRect(dx, dy, TILE_SIZE, TILE_SIZE);
   }
 }

@@ -3,7 +3,7 @@
  * 初始化游戏、绑定事件处理器、存读档
  */
 
-import { renderMap, initCanvas, pixelToTile } from './renderer.js';
+import { renderMap, initCanvas, pixelToTile, startAnimLoop } from './renderer.js';
 import { updateExploreUI, bindEndTurnButton, showDeckView, showMonsterBook } from './ui.js';
 import { tryMove, handleMapClick } from './explore.js';
 import { state, resetState } from './state.js';
@@ -25,8 +25,9 @@ async function init() {
   // 加载素材
   await loadAllSprites();
 
-  // 初始化 canvas
+  // 初始化 canvas + 启动动画循环
   initCanvas();
+  startAnimLoop();
 
   // 渲染地图
   renderMap();
