@@ -48,6 +48,8 @@ function createInitialState() {
       maxAp:    PLAYER_INIT.maxAp,
       handSize: PLAYER_INIT.handSize,
       effects:  emptyEffects(),
+      dir:      'down',   // 行走方向: down/left/right/up
+      animFrame: 1,       // brave.png 帧列: 0-3
     },
 
     inventory: { keyYellow:0, keyBlue:0, keyRed:0 },

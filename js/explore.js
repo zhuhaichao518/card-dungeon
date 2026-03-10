@@ -36,26 +36,26 @@ export function tryMove(dx, dy) {
     case TILE.WALL: return 'blocked';
 
     case TILE.FLOOR:
-      move(nx, ny); break;
+      move(nx, ny, dx, dy); break;
 
     case TILE.KEY_YELLOW:
       state.inventory.keyYellow++;
       state.tiles[ny][nx] = TILE.FLOOR;
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       addMessage('🔑 拾取黄钥匙');
       break;
 
     case TILE.KEY_BLUE:
       state.inventory.keyBlue++;
       state.tiles[ny][nx] = TILE.FLOOR;
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       addMessage('🔵 拾取蓝钥匙');
       break;
 
     case TILE.KEY_RED:
       state.inventory.keyRed++;
       state.tiles[ny][nx] = TILE.FLOOR;
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       addMessage('🔴 拾取红钥匙');
       break;
 
@@ -63,7 +63,7 @@ export function tryMove(dx, dy) {
       if (state.inventory.keyYellow > 0) {
         state.inventory.keyYellow--;
         state.tiles[ny][nx] = TILE.FLOOR;
-        move(nx, ny);
+        move(nx, ny, dx, dy);
         addMessage('🚪 黄门已打开');
       } else {
         addMessage('❌ 需要黄钥匙');
@@ -75,7 +75,7 @@ export function tryMove(dx, dy) {
       if (state.inventory.keyBlue > 0) {
         state.inventory.keyBlue--;
         state.tiles[ny][nx] = TILE.FLOOR;
-        move(nx, ny);
+        move(nx, ny, dx, dy);
         addMessage('🚪 蓝门已打开');
       } else {
         addMessage('❌ 需要蓝钥匙');
@@ -87,7 +87,7 @@ export function tryMove(dx, dy) {
       if (state.inventory.keyRed > 0) {
         state.inventory.keyRed--;
         state.tiles[ny][nx] = TILE.FLOOR;
-        move(nx, ny);
+        move(nx, ny, dx, dy);
         addMessage('🚪 红门已打开');
       } else {
         addMessage('❌ 需要红钥匙');
@@ -97,40 +97,40 @@ export function tryMove(dx, dy) {
 
     case TILE.POTION_S:
       state.tiles[ny][nx] = TILE.FLOOR;
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       healPlayer(30);
       addMessage('💊 小血瓶：+30 HP');
       break;
 
     case TILE.POTION_L:
       state.tiles[ny][nx] = TILE.FLOOR;
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       healPlayer(60);
       addMessage('💉 大血瓶：+60 HP');
       break;
 
     case TILE.GEM_RED:
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       state.tiles[ny][nx] = TILE.FLOOR;
       state.player.atk += 1;
       addMessage(`💎 红宝石！攻击力 ${state.player.atk - 1} → ${state.player.atk}`);
       break;
 
     case TILE.GEM_BLUE:
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       state.tiles[ny][nx] = TILE.FLOOR;
       state.player.def += 1;
       addMessage(`💙 蓝宝石！防御力 ${state.player.def - 1} → ${state.player.def}`);
       break;
 
     case TILE.SPIKE_TRAP:
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       damagePlayer(15);
       addMessage('⚠️ 刺陷阱！-15 HP');
       break;
 
     case TILE.EVENT: {
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       // 将该格子替换为普通地板（防止重复触发）
       state.tiles[ny][nx] = TILE.FLOOR;
       const evKey = `floor${state.floor}_${nx}_${ny}`;
@@ -143,7 +143,7 @@ export function tryMove(dx, dy) {
     }
 
     case TILE.STAIRS:
-      move(nx, ny);
+      move(nx, ny, dx, dy);
       // 监狱逃脱对话（第4层）
       if (state.floor === 4 && !state.storyFlags['prison_escape']) {
         state.storyFlags['prison_escape'] = true;
@@ -159,7 +159,7 @@ export function tryMove(dx, dy) {
       return 'floor';
 
     default:
-      move(nx, ny);
+      move(nx, ny, dx, dy);
   }
 
   if (state.player.hp <= 0) {
@@ -177,8 +177,9 @@ export function tryMove(dx, dy) {
  * 处理地图点击
  * 先判断是否有怪物，再尝试寻路，依次走完路径
  */
-export function handleMapClick(tx, ty) {
+export async function handleMapClick(tx, ty) {
   if (state.phase !== 'explore') return;
+  if (_isWalking) return; // 走路中不接受新点击
 
   const px = state.player.x;
   const py = state.player.y;
@@ -191,8 +192,8 @@ export function handleMapClick(tx, ty) {
   if (monster) {
     const result = findPathToMonster(px, py, tx, ty);
     if (!result) { addMessage('无法到达怪物'); renderMap(); updateExploreUI(); return; }
-    // 走到旁边
-    walkPath(result.path);
+    // 走到旁边（等待动画完成）
+    await walkPath(result.path);
     if (state.phase !== 'explore') return;
     // 触发战斗
     tryMove(result.dx, result.dy);
@@ -215,13 +216,19 @@ export function handleMapClick(tx, ty) {
     updateExploreUI();
     return;
   }
-  walkPath(path);
+  await walkPath(path);
 }
 
-/**
- * 依次走完路径（每步调用 tryMove，遇到战斗/死亡/楼层变化即停）
- */
-function walkPath(path) {
+// ─── 行走动画 ─────────────────────────────────────────────────────────────────
+
+let _isWalking = false;
+const WALK_CYCLE = [1, 0, 1, 2]; // 每步对应的帧: 站立→左脚→站立→右脚
+let _walkCycleIdx = 0;
+
+async function walkPath(path) {
+  _isWalking = true;
+  const STEP_MS = 90; // 每步停留毫秒
+
   for (let i = 0; i < path.length; i++) {
     if (state.phase !== 'explore') break;
 
@@ -230,11 +237,19 @@ function walkPath(path) {
     const dy = step.y - state.player.y;
 
     const result = tryMove(dx, dy);
+    renderMap(); // 每步渲染一次
+
     if (result === 'battle' || result === 'dead' || result === 'floor' || result === 'blocked') {
       break;
     }
+
+    await new Promise(r => setTimeout(r, STEP_MS));
   }
-  // 最终统一渲染
+
+  // 回到站立帧
+  state.player.animFrame = 1;
+  _isWalking = false;
+
   if (state.phase === 'explore') {
     renderMap();
     updateExploreUI();
@@ -243,9 +258,17 @@ function walkPath(path) {
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
-function move(nx, ny) {
+function move(nx, ny, dx, dy) {
   state.player.x = nx;
   state.player.y = ny;
+  // 记录朝向
+  if      (dx < 0) state.player.dir = 'left';
+  else if (dx > 0) state.player.dir = 'right';
+  else if (dy < 0) state.player.dir = 'up';
+  else             state.player.dir = 'down';
+  // 推进走路帧
+  _walkCycleIdx = (_walkCycleIdx + 1) % 4;
+  state.player.animFrame = WALK_CYCLE[_walkCycleIdx];
 }
 
 function triggerStoryEvent(floor, x, y) {

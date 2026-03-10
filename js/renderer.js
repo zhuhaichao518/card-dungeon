@@ -98,7 +98,13 @@ export function renderMap() {
   // 4. 画玩家
   const px = player.x * TILE_SIZE;
   const py = player.y * TILE_SIZE;
-  drawSprite(ctx, HERO_SPRITE, px, py, TILE_SIZE, TILE_SIZE);
+  // brave.png: 4方向行(row) × 4帧列(col)，各32×32
+  // row: down=0, left=1, right=2, up=3 | col = animFrame(0-3)
+  const DIR_ROW = { down:0, left:1, right:2, up:3 };
+  const dirRow   = DIR_ROW[state.player.dir ?? 'down'];
+  const animFr   = state.player.animFrame ?? 1;
+  const heroSp   = { sheet:'brave', srcX: animFr * 32, srcY: dirRow * 32, srcW:32, srcH:32 };
+  drawSprite(ctx, heroSp, px, py, TILE_SIZE, TILE_SIZE);
 }
 
 /**
