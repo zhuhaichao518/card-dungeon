@@ -45,13 +45,15 @@ async function init() {
 function bindKeyboard() {
   document.addEventListener('keydown', (e) => {
     if (state.phase === 'explore') {
+      let moved = false;
       switch (e.key) {
-        case 'ArrowUp':  case 'w': case 'W': e.preventDefault(); tryMove(0, -1); break;
-        case 'ArrowDown':case 's': case 'S': e.preventDefault(); tryMove(0,  1); break;
-        case 'ArrowLeft':case 'a': case 'A': e.preventDefault(); tryMove(-1, 0); break;
-        case 'ArrowRight':case 'd':case 'D': e.preventDefault(); tryMove(1,  0); break;
+        case 'ArrowUp':  case 'w': case 'W': e.preventDefault(); tryMove(0, -1); moved = true; break;
+        case 'ArrowDown':case 's': case 'S': e.preventDefault(); tryMove(0,  1); moved = true; break;
+        case 'ArrowLeft':case 'a': case 'A': e.preventDefault(); tryMove(-1, 0); moved = true; break;
+        case 'ArrowRight':case 'd':case 'D': e.preventDefault(); tryMove(1,  0); moved = true; break;
         case 'Escape': togglePauseMenu(); break;
       }
+      if (moved) { renderMap(); updateExploreUI(); }
     } else if (state.phase === 'battle') {
       if (e.key === 'Escape') togglePauseMenu();
     }

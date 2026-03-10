@@ -256,38 +256,38 @@ function animateTileStep(fromX, fromY, toX, toY) {
 
 async function walkPath(path) {
   _isWalking = true;
+  try {
+    for (let i = 0; i < path.length; i++) {
+      if (state.phase !== 'explore') break;
 
-  for (let i = 0; i < path.length; i++) {
-    if (state.phase !== 'explore') break;
+      const step = path[i];
+      const dx = step.x - state.player.x;
+      const dy = step.y - state.player.y;
 
-    const step = path[i];
-    const dx = step.x - state.player.x;
-    const dy = step.y - state.player.y;
+      // 捕获动画起点（在 tryMove/move 之前，move 会将 renderX/Y 吸附到目标格）
+      const fromX = state.player.renderX ?? (state.player.x * TILE_PX);
+      const fromY = state.player.renderY ?? (state.player.y * TILE_PX);
 
-    // 记录动画起点
-    const fromX = state.player.renderX ?? (state.player.x * TILE_PX);
-    const fromY = state.player.renderY ?? (state.player.y * TILE_PX);
+      const result = tryMove(dx, dy);
 
-    // 切换走路帧（逻辑先行）
-    _walkCycleIdx = (_walkCycleIdx + 1) % 4;
-    state.player.animFrame = WALK_CYCLE[_walkCycleIdx];
+      // move() 已将 renderX/Y 吸附到新格，取为动画终点
+      const toX = state.player.renderX;
+      const toY = state.player.renderY;
 
-    const result = tryMove(dx, dy);
+      if (fromX !== toX || fromY !== toY) {
+        // 实际移动了：用动画从起点平滑到终点
+        await animateTileStep(fromX, fromY, toX, toY);
+      }
 
-    const toX = state.player.x * TILE_PX;
-    const toY = state.player.y * TILE_PX;
-
-    // 平滑滑动到目标格
-    await animateTileStep(fromX, fromY, toX, toY);
-
-    if (result === 'battle' || result === 'dead' || result === 'floor' || result === 'blocked') {
-      break;
+      if (result === 'battle' || result === 'dead' || result === 'floor' || result === 'blocked') {
+        break;
+      }
     }
+  } finally {
+    // 无论如何都重置状态
+    state.player.animFrame = 1;
+    _isWalking = false;
   }
-
-  // 回到站立帧
-  state.player.animFrame = 1;
-  _isWalking = false;
 
   if (state.phase === 'explore') {
     renderMap();
@@ -300,12 +300,15 @@ async function walkPath(path) {
 function move(nx, ny, dx, dy) {
   state.player.x = nx;
   state.player.y = ny;
+  // 始终同步像素坐标（键盘/直接 tryMove 时也不会脱同步）
+  state.player.renderX = nx * TILE_PX;
+  state.player.renderY = ny * TILE_PX;
   // 记录朝向
   if      (dx < 0) state.player.dir = 'left';
   else if (dx > 0) state.player.dir = 'right';
   else if (dy < 0) state.player.dir = 'up';
   else             state.player.dir = 'down';
-  // 推进走路帧
+  // 推进走路帧（仅在有动画 context 时有意义；walkPath 会在 animateTileStep 里覆盖）
   _walkCycleIdx = (_walkCycleIdx + 1) % 4;
   state.player.animFrame = WALK_CYCLE[_walkCycleIdx];
 }
