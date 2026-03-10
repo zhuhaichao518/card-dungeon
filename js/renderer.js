@@ -67,19 +67,16 @@ export function renderMap() {
 
       // 2. 画墙或其他非地板瓷砖
       if (tileType === 1) {
-        // 墙：先画深色底，再画半透明砖纹
-        ctx.fillStyle = '#111118';
-        ctx.fillRect(dx, dy, TILE_SIZE, TILE_SIZE);
-        // 用terrains row21画砖纹（半透明叠加更协调）
-        const wallSp = { sheet:'terrains', srcX:0, srcY:672, srcW:32, srcH:32 };
+        // 墙：直接画经典黄色砖墙（terrains row10 = yellowWall）
         const img = getSprite('terrains');
         if (img) {
           ctx.save();
-          ctx.globalAlpha = 0.85;
           ctx.imageSmoothingEnabled = false;
-          ctx.drawImage(img, wallSp.srcX, wallSp.srcY, wallSp.srcW, wallSp.srcH,
-                        dx, dy, TILE_SIZE, TILE_SIZE);
+          ctx.drawImage(img, 0, 320, 32, 32, dx, dy, TILE_SIZE, TILE_SIZE);
           ctx.restore();
+        } else {
+          ctx.fillStyle = '#c8a020';
+          ctx.fillRect(dx, dy, TILE_SIZE, TILE_SIZE);
         }
       } else if (tileType !== 0) {
         drawTileSprite(ctx, tileType, dx, dy);
