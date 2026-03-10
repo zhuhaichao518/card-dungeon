@@ -17,6 +17,7 @@ export const SPRITE_SHEETS = {
   items:    'assets/items.png',
   enemys:   'assets/enemys.png',   // 主要怪物图，73种（2帧/行）
   hero:     'assets/hero.png',
+  brave:    'assets/brave.png',    // 经典32×32勇者行走图（128×128，4方向×4帧）
 };
 
 // 已加载的 Image 对象缓存
@@ -150,7 +151,9 @@ export const MONSTER_SPRITE = {
 // ─────────────────────────────────────────────────────────────────
 // 英雄精灵（hero.png：32×48，row0=朝下，取第2帧 srcX=32）
 // ─────────────────────────────────────────────────────────────────
-export const HERO_SPRITE = { sheet:'hero', srcX:32, srcY:0, srcW:32, srcH:48 };
+// brave.png: 128×128, 4方向(行)×4帧(列), 每格32×32
+// Row0=朝下, Row1=朝左, Row2=朝右, Row3=朝上；Frame1(srcX=32)=站立姿势
+export const HERO_SPRITE = { sheet:'brave', srcX:32, srcY:0, srcW:32, srcH:32 };
 
 // ─────────────────────────────────────────────────────────────────
 // 绘制精灵

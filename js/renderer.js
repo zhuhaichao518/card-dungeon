@@ -98,7 +98,7 @@ export function renderMap() {
   // 4. 画玩家
   const px = player.x * TILE_SIZE;
   const py = player.y * TILE_SIZE;
-  drawSprite(ctx, HERO_SPRITE, px + 8, py, 32, 48);
+  drawSprite(ctx, HERO_SPRITE, px, py, TILE_SIZE, TILE_SIZE);
 }
 
 /**
