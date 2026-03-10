@@ -67,8 +67,8 @@ export function renderMap() {
 
       // 2. 画墙或其他非地板瓷砖
       if (tileType === 1) {
-        // 墙：直接画经典黄色砖墙（terrains row10 = yellowWall）
-        const img = getSprite('terrains');
+        // 墙：animates.png row10 = yellowWall（经典黄色砖墙，第0帧 srcX=0）
+        const img = getSprite('animates');
         if (img) {
           ctx.save();
           ctx.imageSmoothingEnabled = false;
