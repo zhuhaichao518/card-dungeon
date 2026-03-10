@@ -221,13 +221,41 @@ export async function handleMapClick(tx, ty) {
 
 // ─── 行走动画 ─────────────────────────────────────────────────────────────────
 
-let _isWalking = false;
-const WALK_CYCLE = [1, 0, 1, 2]; // 每步对应的帧: 站立→左脚→站立→右脚
+const TILE_PX    = 32;           // 与 renderer.js 的 TILE_SIZE 保持一致
+const STEP_MS    = 150;          // 每步动画时长（毫秒）
+const WALK_CYCLE = [1, 0, 1, 2]; // 帧序: 站立→左脚→站立→右脚
+
+let _isWalking    = false;
 let _walkCycleIdx = 0;
+
+/**
+ * 平滑将 renderX/Y 从 (fromX,fromY) 插值到 (toX,toY)，easeInOut
+ * 同时每帧调用 renderMap 以更新画面
+ */
+function animateTileStep(fromX, fromY, toX, toY) {
+  return new Promise(resolve => {
+    const start = performance.now();
+    function tick(now) {
+      const raw  = Math.min((now - start) / STEP_MS, 1);
+      // ease-in-out: 3t²-2t³
+      const ease = raw * raw * (3 - 2 * raw);
+      state.player.renderX = fromX + (toX - fromX) * ease;
+      state.player.renderY = fromY + (toY - fromY) * ease;
+      renderMap();
+      if (raw < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        state.player.renderX = toX;
+        state.player.renderY = toY;
+        resolve();
+      }
+    }
+    requestAnimationFrame(tick);
+  });
+}
 
 async function walkPath(path) {
   _isWalking = true;
-  const STEP_MS = 90; // 每步停留毫秒
 
   for (let i = 0; i < path.length; i++) {
     if (state.phase !== 'explore') break;
@@ -236,14 +264,25 @@ async function walkPath(path) {
     const dx = step.x - state.player.x;
     const dy = step.y - state.player.y;
 
+    // 记录动画起点
+    const fromX = state.player.renderX ?? (state.player.x * TILE_PX);
+    const fromY = state.player.renderY ?? (state.player.y * TILE_PX);
+
+    // 切换走路帧（逻辑先行）
+    _walkCycleIdx = (_walkCycleIdx + 1) % 4;
+    state.player.animFrame = WALK_CYCLE[_walkCycleIdx];
+
     const result = tryMove(dx, dy);
-    renderMap(); // 每步渲染一次
+
+    const toX = state.player.x * TILE_PX;
+    const toY = state.player.y * TILE_PX;
+
+    // 平滑滑动到目标格
+    await animateTileStep(fromX, fromY, toX, toY);
 
     if (result === 'battle' || result === 'dead' || result === 'floor' || result === 'blocked') {
       break;
     }
-
-    await new Promise(r => setTimeout(r, STEP_MS));
   }
 
   // 回到站立帧

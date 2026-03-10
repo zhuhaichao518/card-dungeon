@@ -95,9 +95,9 @@ export function renderMap() {
     drawSprite(ctx, sp, dx, dy, TILE_SIZE, TILE_SIZE);
   }
 
-  // 4. 画玩家
-  const px = player.x * TILE_SIZE;
-  const py = player.y * TILE_SIZE;
+  // 4. 画玩家（使用平滑插值坐标 renderX/Y）
+  const px = player.renderX ?? (player.x * TILE_SIZE);
+  const py = player.renderY ?? (player.y * TILE_SIZE);
   // brave.png: 4方向行(row) × 4帧列(col)，各32×32
   // row: down=0, left=1, right=2, up=3 | col = animFrame(0-3)
   const DIR_ROW = { down:0, left:1, right:2, up:3 };

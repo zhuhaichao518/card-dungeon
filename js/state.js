@@ -40,6 +40,8 @@ function createInitialState() {
     player: {
       x:        floorData.playerStart.x,
       y:        floorData.playerStart.y,
+      renderX:  floorData.playerStart.x * 32,  // 像素渲染坐标
+      renderY:  floorData.playerStart.y * 32,
       hp:       PLAYER_INIT.hp,
       maxHp:    PLAYER_INIT.maxHp,
       shield:   0,
@@ -103,8 +105,10 @@ export function loadFloor(floorNum) {
 
 
   // 玩家移动到入口
-  state.player.x = floorData.playerStart.x;
-  state.player.y = floorData.playerStart.y;
+  state.player.x       = floorData.playerStart.x;
+  state.player.y       = floorData.playerStart.y;
+  state.player.renderX = floorData.playerStart.x * 32;
+  state.player.renderY = floorData.playerStart.y * 32;
 
   // 清空战斗状态
   state.player.shield   = 0;
