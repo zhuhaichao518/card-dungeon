@@ -195,8 +195,11 @@ export async function animatedMove(dx, dy) {
     const fromX = state.player.renderX ?? (state.player.x * TILE_PX);
     const fromY = state.player.renderY ?? (state.player.y * TILE_PX);
 
-    _walkCycleIdx = (_walkCycleIdx + 1) % 4;
-    state.player.animFrame = WALK_CYCLE[_walkCycleIdx];
+    // 立即更新朝向（撞墙时也能转身），帧循环交给 move() 处理
+    if      (dx < 0) state.player.dir = 'left';
+    else if (dx > 0) state.player.dir = 'right';
+    else if (dy < 0) state.player.dir = 'up';
+    else             state.player.dir = 'down';
 
     const result = tryMove(dx, dy);
 
@@ -205,9 +208,10 @@ export async function animatedMove(dx, dy) {
 
     if (fromX !== toX || fromY !== toY) {
       await animateTileStep(fromX, fromY, toX, toY);
+    } else {
+      renderMap(); // 撞墙时也刷新以显示转身
     }
     if (result === 'moved') {
-      renderMap();
       updateExploreUI();
     }
     return result !== 'blocked';
