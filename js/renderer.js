@@ -79,7 +79,19 @@ export function renderMap() {
           ctx.fillRect(dx, dy, TILE_SIZE, TILE_SIZE);
         }
       } else if (tileType !== 0) {
-        drawTileSprite(ctx, tileType, dx, dy);
+        // 开门动画覆盖：用 state.doorAnim 当前帧替换正常门贴图
+        const da = state.doorAnim;
+        if (da && da.x === x && da.y === y) {
+          const img = getSprite('animates');
+          if (img) {
+            ctx.save();
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(img, da.frame * 32, da.row * 32, 32, 32, dx, dy, TILE_SIZE, TILE_SIZE);
+            ctx.restore();
+          }
+        } else {
+          drawTileSprite(ctx, tileType, dx, dy);
+        }
       }
     }
   }

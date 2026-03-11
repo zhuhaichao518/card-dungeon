@@ -201,6 +201,9 @@ export async function animatedMove(dx, dy) {
     else if (dy < 0) state.player.dir = 'up';
     else             state.player.dir = 'down';
 
+    // 开门动画
+    await playDoorAnim(state.player.x + dx, state.player.y + dy);
+
     const result = tryMove(dx, dy);
 
     const toX = state.player.renderX;
@@ -269,6 +272,38 @@ export async function handleMapClick(tx, ty) {
   await walkPath(path);
 }
 
+// ─── 开门动画 ─────────────────────────────────────────────────────────────────
+// animates.png 各门的行号
+const DOOR_ANIM_ROW = {
+  [TILE.DOOR_YELLOW]: 4,
+  [TILE.DOOR_BLUE]:   5,
+  [TILE.DOOR_RED]:    6,
+};
+const KEY_FOR_DOOR = {
+  [TILE.DOOR_YELLOW]: 'keyYellow',
+  [TILE.DOOR_BLUE]:   'keyBlue',
+  [TILE.DOOR_RED]:    'keyRed',
+};
+
+/**
+ * 如果目标格是门且玩家有钥匙，先播放4帧开门动画再返回
+ */
+async function playDoorAnim(nx, ny) {
+  const tileType = state.tiles[ny]?.[nx];
+  const row = DOOR_ANIM_ROW[tileType];
+  if (!row) return;
+  const key = KEY_FOR_DOOR[tileType];
+  if (!key || state.inventory[key] <= 0) return;
+
+  const FRAME_MS = 60;
+  for (let frame = 0; frame < 4; frame++) {
+    state.doorAnim = { x: nx, y: ny, row, frame };
+    renderMap();
+    await new Promise(r => setTimeout(r, FRAME_MS));
+  }
+  state.doorAnim = null;
+}
+
 // ─── 行走动画 ─────────────────────────────────────────────────────────────────
 
 const TILE_PX    = 48;           // 与 renderer.js 的 TILE_SIZE 保持一致
@@ -316,6 +351,9 @@ async function walkPath(path) {
       // 捕获动画起点（在 tryMove/move 之前，move 会将 renderX/Y 吸附到目标格）
       const fromX = state.player.renderX ?? (state.player.x * TILE_PX);
       const fromY = state.player.renderY ?? (state.player.y * TILE_PX);
+
+      // 开门动画（有钥匙才播）
+      await playDoorAnim(state.player.x + dx, state.player.y + dy);
 
       const result = tryMove(dx, dy);
 
