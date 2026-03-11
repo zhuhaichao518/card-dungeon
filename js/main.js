@@ -42,19 +42,48 @@ async function init() {
 
 // ─── 键盘 ────────────────────────────────────────────────────────────────────
 
+// ─── 键盘持续移动 ──────────────────────────────────────────────────────────────
+const heldKeys = new Set();
+let moveLoopRunning = false;
+
+const DIR_MAP = {
+  ArrowUp: [0,-1], w:[0,-1], W:[0,-1],
+  ArrowDown:[0,1],  s:[0,1],  S:[0,1],
+  ArrowLeft:[-1,0], a:[-1,0], A:[-1,0],
+  ArrowRight:[1,0], d:[1,0],  D:[1,0],
+};
+
+function getHeldDir() {
+  for (const k of heldKeys) {
+    if (DIR_MAP[k]) return DIR_MAP[k];
+  }
+  return null;
+}
+
+async function startMoveLoop() {
+  if (moveLoopRunning) return;
+  moveLoopRunning = true;
+  while (state.phase === 'explore') {
+    const dir = getHeldDir();
+    if (!dir) break;
+    await animatedMove(dir[0], dir[1]);
+  }
+  moveLoopRunning = false;
+}
+
 function bindKeyboard() {
   document.addEventListener('keydown', (e) => {
-    if (state.phase === 'explore') {
-      switch (e.key) {
-        case 'ArrowUp':  case 'w': case 'W': e.preventDefault(); animatedMove(0, -1); break;
-        case 'ArrowDown':case 's': case 'S': e.preventDefault(); animatedMove(0,  1); break;
-        case 'ArrowLeft':case 'a': case 'A': e.preventDefault(); animatedMove(-1, 0); break;
-        case 'ArrowRight':case 'd':case 'D': e.preventDefault(); animatedMove(1,  0); break;
-        case 'Escape': togglePauseMenu(); break;
-      }
-    } else if (state.phase === 'battle') {
-      if (e.key === 'Escape') togglePauseMenu();
+    if (DIR_MAP[e.key]) e.preventDefault();
+    if (state.phase === 'explore' && DIR_MAP[e.key]) {
+      heldKeys.add(e.key);
+      startMoveLoop();
+    } else if (e.key === 'Escape') {
+      togglePauseMenu();
     }
+  });
+
+  document.addEventListener('keyup', (e) => {
+    heldKeys.delete(e.key);
   });
 }
 
