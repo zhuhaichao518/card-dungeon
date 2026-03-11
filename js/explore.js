@@ -273,7 +273,7 @@ export async function handleMapClick(tx, ty) {
 
 const TILE_PX    = 48;           // 与 renderer.js 的 TILE_SIZE 保持一致
 const STEP_MS    = 150;          // 每步动画时长（毫秒）
-const WALK_CYCLE = [1, 0, 1, 2]; // 帧序: 站立→左脚→站立→右脚
+const WALK_CYCLE = [0, 1, 2, 1]; // 帧序: 左脚→站立→右脚→站立
 
 let _isWalking    = false;
 let _walkCycleIdx = 0;
