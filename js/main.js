@@ -5,7 +5,7 @@
 
 import { renderMap, initCanvas, pixelToTile, startAnimLoop } from './renderer.js';
 import { updateExploreUI, bindEndTurnButton, showDeckView, showMonsterBook } from './ui.js';
-import { tryMove, handleMapClick } from './explore.js';
+import { tryMove, handleMapClick, animatedMove } from './explore.js';
 import { state, resetState } from './state.js';
 import { loadAllSprites } from './sprites.js';
 import { saveGame, getAllSaves, restoreState } from './save.js';
@@ -45,15 +45,13 @@ async function init() {
 function bindKeyboard() {
   document.addEventListener('keydown', (e) => {
     if (state.phase === 'explore') {
-      let moved = false;
       switch (e.key) {
-        case 'ArrowUp':  case 'w': case 'W': e.preventDefault(); tryMove(0, -1); moved = true; break;
-        case 'ArrowDown':case 's': case 'S': e.preventDefault(); tryMove(0,  1); moved = true; break;
-        case 'ArrowLeft':case 'a': case 'A': e.preventDefault(); tryMove(-1, 0); moved = true; break;
-        case 'ArrowRight':case 'd':case 'D': e.preventDefault(); tryMove(1,  0); moved = true; break;
+        case 'ArrowUp':  case 'w': case 'W': e.preventDefault(); animatedMove(0, -1); break;
+        case 'ArrowDown':case 's': case 'S': e.preventDefault(); animatedMove(0,  1); break;
+        case 'ArrowLeft':case 'a': case 'A': e.preventDefault(); animatedMove(-1, 0); break;
+        case 'ArrowRight':case 'd':case 'D': e.preventDefault(); animatedMove(1,  0); break;
         case 'Escape': togglePauseMenu(); break;
       }
-      if (moved) { renderMap(); updateExploreUI(); }
     } else if (state.phase === 'battle') {
       if (e.key === 'Escape') togglePauseMenu();
     }

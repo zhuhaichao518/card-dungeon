@@ -181,6 +181,38 @@ export function tryMove(dx, dy) {
   return 'moved';
 }
 
+// ─── 键盘单步动画移动 ──────────────────────────────────────────────────────────
+/**
+ * 带平滑动画的单步移动（供键盘 WASD 使用）
+ */
+export async function animatedMove(dx, dy) {
+  if (_isWalking || state.phase !== 'explore') return;
+  _isWalking = true;
+  try {
+    const fromX = state.player.renderX ?? (state.player.x * TILE_PX);
+    const fromY = state.player.renderY ?? (state.player.y * TILE_PX);
+
+    _walkCycleIdx = (_walkCycleIdx + 1) % 4;
+    state.player.animFrame = WALK_CYCLE[_walkCycleIdx];
+
+    const result = tryMove(dx, dy);
+
+    const toX = state.player.renderX;
+    const toY = state.player.renderY;
+
+    if (fromX !== toX || fromY !== toY) {
+      await animateTileStep(fromX, fromY, toX, toY);
+    }
+    if (result === 'moved') {
+      renderMap();
+      updateExploreUI();
+    }
+  } finally {
+    state.player.animFrame = 1;
+    _isWalking = false;
+  }
+}
+
 // ─── 寻路点击处理（非相邻格子）─────────────────────────────────────────────────
 
 /**
