@@ -66,7 +66,8 @@ async function startMoveLoop() {
   while (state.phase === 'explore') {
     const dir = getHeldDir();
     if (!dir) break;
-    await animatedMove(dir[0], dir[1]);
+    const moved = await animatedMove(dir[0], dir[1]);
+    if (!moved) break; // 撞墙或触发战斗/楼层切换，停止循环
   }
   moveLoopRunning = false;
 }

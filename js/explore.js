@@ -185,8 +185,11 @@ export function tryMove(dx, dy) {
 /**
  * 带平滑动画的单步移动（供键盘 WASD 使用）
  */
+/**
+ * 带动画的单步移动。返回 true=实际移动了，false=被阻挡/未移动。
+ */
 export async function animatedMove(dx, dy) {
-  if (_isWalking || state.phase !== 'explore') return;
+  if (_isWalking || state.phase !== 'explore') return false;
   _isWalking = true;
   try {
     const fromX = state.player.renderX ?? (state.player.x * TILE_PX);
@@ -207,6 +210,7 @@ export async function animatedMove(dx, dy) {
       renderMap();
       updateExploreUI();
     }
+    return result !== 'blocked';
   } finally {
     state.player.animFrame = 1;
     _isWalking = false;
