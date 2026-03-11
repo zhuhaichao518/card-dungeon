@@ -247,10 +247,9 @@ function animateTileStep(fromX, fromY, toX, toY) {
     const start = performance.now();
     function tick(now) {
       const raw  = Math.min((now - start) / STEP_MS, 1);
-      // ease-in-out: 3t²-2t³
-      const ease = raw * raw * (3 - 2 * raw);
-      state.player.renderX = fromX + (toX - fromX) * ease;
-      state.player.renderY = fromY + (toY - fromY) * ease;
+      // 匀速线性插值
+      state.player.renderX = fromX + (toX - fromX) * raw;
+      state.player.renderY = fromY + (toY - fromY) * raw;
       renderMap();
       if (raw < 1) {
         requestAnimationFrame(tick);
