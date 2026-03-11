@@ -2,7 +2,7 @@
  * explore.js - 探索逻辑（含自动寻路）
  */
 
-import { state, addMessage, healPlayer, damagePlayer, loadFloor } from './state.js';
+import { state, addMessage, healPlayer, damagePlayer, loadFloor, retreatFloor } from './state.js';
 import { TILE } from './data.js';
 import { renderMap } from './renderer.js';
 import { updateExploreUI, showVictoryScreen } from './ui.js';
@@ -157,6 +157,16 @@ export function tryMove(dx, dy) {
       updateExploreUI();
       advanceFloor();
       return 'floor';
+
+    case TILE.STAIRS_DOWN:
+      if (state.floor > 1) {
+        move(nx, ny, dx, dy);
+        renderMap();
+        updateExploreUI();
+        retreatFloor();
+        return 'floor';
+      }
+      return 'blocked';
 
     default:
       move(nx, ny, dx, dy);

@@ -71,7 +71,8 @@ export const TILE_SPRITE = {
   // ─ 地板 & 墙壁 & 楼梯 ─
   0:  { sheet:'ground',   srcX:0, srcY:0,   srcW:32, srcH:32 },  // 地板  ground.png（魔塔标准地板）
   // 1 = 墙壁：无精灵，由 renderer 用深色填充
-  10: { sheet:'terrains', srcX:0, srcY:192, srcW:32, srcH:32 },  // 楼梯  row6 upFloor
+  10: { sheet:'terrains', srcX:0, srcY:192, srcW:32, srcH:32 },  // 上楼梯  row6 upFloor
+  11: { sheet:'terrains', srcX:0, srcY:160, srcW:32, srcH:32 },  // 下楼梯  row5 downFloor
 
   // ─ 门 (animates.png，取第0帧 srcX=0) ─
   2:  { sheet:'animates', srcX:0, srcY:128, srcW:32, srcH:32 },  // 黄门  row4

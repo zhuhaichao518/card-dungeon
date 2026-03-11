@@ -102,6 +102,14 @@ export function loadFloor(floorNum) {
   state.tiles    = deepClone(floorData.tiles);
   state.monsters = floorData.monsters.map(buildMonster).filter(Boolean);
 
+  // 注入下楼梯：floor 2+ 的 playerStart 位置放 STAIRS_DOWN tile
+  if (floorNum > 1) {
+    const { x: dsx, y: dsy } = floorData.playerStart;
+    if (state.tiles[dsy][dsx] === TILE.FLOOR) {
+      state.tiles[dsy][dsx] = TILE.STAIRS_DOWN;
+    }
+  }
+
 
 
   // 玩家移动到入口
@@ -115,6 +123,36 @@ export function loadFloor(floorNum) {
   state.player.effects  = emptyEffects();
 
   addMessage(`进入第 ${floorNum} 层！`);
+}
+
+// ─── 下楼 ────────────────────────────────────────────────────────────────────
+export function retreatFloor() {
+  const prevFloor = state.floor - 1;
+  loadFloor(prevFloor);
+
+  // 在上楼梯 (STAIRS:10) 旁找一个可走格子放玩家
+  const dirs = [[0,1],[1,0],[0,-1],[-1,0]];
+  const rows = state.tiles.length;
+  const cols = state.tiles[0].length;
+
+  outer:
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (state.tiles[y][x] === TILE.STAIRS) {
+        for (const [ddx, ddy] of dirs) {
+          const nx = x + ddx, ny = y + ddy;
+          if (nx >= 0 && nx < cols && ny >= 0 && ny < rows &&
+              (state.tiles[ny][nx] === TILE.FLOOR || state.tiles[ny][nx] === TILE.STAIRS_DOWN)) {
+            state.player.x = nx;
+            state.player.y = ny;
+            state.player.renderX = nx * 48;
+            state.player.renderY = ny * 48;
+            break outer;
+          }
+        }
+      }
+    }
+  }
 }
 
 // ─── 通用工具 ─────────────────────────────────────────────────────────────────
