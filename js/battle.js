@@ -26,6 +26,7 @@ import {
   discardHand, shuffle, loadFloor,
 } from './state.js';
 import { HERO_CARD_POOL, REWARD_CARD_POOL } from './data.js';
+import { playBattleBgm, playFloorBgm } from './audio.js';
 import { renderMap } from './renderer.js';
 import {
   updateBattleUI, updateExploreUI,
@@ -37,6 +38,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 export function startBattle(monster) {
   state.phase = 'battle';
+  playBattleBgm();
   const { battle, player, deck } = state;
 
   battle.monster = monster;
@@ -352,6 +354,7 @@ function endBattle(playerWon) {
   if (idx !== -1) state.monsters.splice(idx, 1);
 
   state.phase = 'explore';
+  playFloorBgm(state.floor);
   discardHand();
   state.battle.monster      = null;
   state.battle.enemy.intent = [];

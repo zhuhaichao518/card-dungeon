@@ -9,6 +9,7 @@ import { updateExploreUI, showVictoryScreen } from './ui.js';
 import { startBattle } from './battle.js';
 import { findPath, findPathToMonster } from './pathfinding.js';
 import { runStorySequence, AMBUSH_STORY, PRISON_ESCAPE_STORY } from './story.js';
+import { playFloorBgm } from './audio.js';
 
 // ─── 单步移动 ─────────────────────────────────────────────────────────────────
 // 返回 'moved' | 'battle' | 'blocked' | 'dead'
@@ -507,6 +508,7 @@ function advanceFloor() {
   }
   renderMap();
   updateExploreUI();
+  playFloorBgm(state.floor);
 }
 
 function showGameOver() {

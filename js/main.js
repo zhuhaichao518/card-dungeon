@@ -9,6 +9,7 @@ import { tryMove, handleMapClick, animatedMove } from './explore.js';
 import { state, resetState, loadFloor } from './state.js';
 import { loadAllSprites } from './sprites.js';
 import { saveGame, getAllSaves, restoreState } from './save.js';
+import { playFloorBgm, playBattleBgm, stopBgm, toggleBgm, isBgmEnabled, setBgmVolume } from './audio.js';
 
 // ─── 启动 ───────────────────────────────────────────────────────────────────
 
@@ -37,8 +38,20 @@ async function init() {
   bindMapClick();
   bindPauseMenu();
 
+  // 第一次用户交互后自动开始 BGM（绕过浏览器自动播放限制）
+  const startBgmOnce = () => {
+    playFloorBgm(state.floor);
+    document.removeEventListener('click', startBgmOnce);
+    document.removeEventListener('keydown', startBgmOnce);
+  };
+  document.addEventListener('click', startBgmOnce);
+  document.addEventListener('keydown', startBgmOnce);
+
   console.log('⚔️ Card Dungeon 已启动！');
 }
+
+// 供 explore.js / battle.js 调用
+export { playFloorBgm, playBattleBgm, stopBgm };
 
 // ─── 键盘 ────────────────────────────────────────────────────────────────────
 
@@ -128,6 +141,13 @@ function bindPauseMenu() {
       renderMap();
       updateExploreUI();
     }
+  });
+
+  // BGM 开关
+  document.getElementById('btn-bgm-toggle')?.addEventListener('click', () => {
+    const on = toggleBgm();
+    document.getElementById('btn-bgm-toggle').textContent = on ? '🎵' : '🔇';
+    if (on) playFloorBgm(state.floor);
   });
 
   document.getElementById('btn-pause')?.addEventListener('click', togglePauseMenu);
