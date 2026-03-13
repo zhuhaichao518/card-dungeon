@@ -36,7 +36,9 @@ export function tryMove(dx, dy) {
     case TILE.WALL: return 'blocked';
 
     case TILE.FLOOR:
-      move(nx, ny, dx, dy); break;
+      move(nx, ny, dx, dy);
+      checkCoordEvent(nx, ny);
+      break;
 
     case TILE.KEY_YELLOW:
       state.inventory.keyYellow++;
@@ -130,15 +132,17 @@ export function tryMove(dx, dy) {
       break;
 
     case TILE.EVENT: {
-      move(nx, ny, dx, dy);
-      // 先检查是否是 NPC 事件（NPC 保留格子，可以重复对话）
+      // 检查是否是 NPC ──────────────────────────────────────────────────────
       const npcKey = `${state.floor + 1}_${nx}_${ny}`;
       const npcEv  = NPC_EVENTS[npcKey];
       if (npcEv) {
-        triggerNpcEvent(npcEv);
+        // ★ NPC 阻挡移动（原版行为：player 留在原地，贴近触发对话）
+        // 智慧老人说完后 tile 变地板（消失）；商人/公主保留
+        triggerNpcEvent(npcEv, nx, ny);
         return 'story';
       }
-      // 否则按剧情事件处理（消耗格子）
+      // 否则是一次性剧情格（可走入）
+      move(nx, ny, dx, dy);
       state.tiles[ny][nx] = TILE.FLOOR;
       const evKey = `floor${state.floor}_${nx}_${ny}`;
       if (!state.storyFlags[evKey]) {
@@ -413,40 +417,58 @@ function triggerStoryEvent(floor, x, y) {
 
 // ── NPC 对话 / 商店事件 ───────────────────────────────────────────────────────
 
-function triggerNpcEvent(ev) {
+function triggerNpcEvent(ev, tx, ty) {
+  // tx/ty = NPC的格子坐标（玩家不会走进去，只是贴近触发）
   state.phase = 'story';
   renderMap(); updateExploreUI();
+
+  const afterTalk = () => {
+    // 智慧老人说完后消失（同原版 role[f][idx]=0）
+    if (ev.type === 'wiser' || ev.type === 'npc') {
+      state.tiles[ty][tx] = TILE.FLOOR;
+      applyNpcEffect(ev);
+    }
+    state.phase = 'explore';
+    renderMap(); updateExploreUI();
+  };
 
   switch (ev.type) {
     case 'wiser':
     case 'npc':
     case 'princess':
-      // 普通对话：复用 story overlay
       runStorySequence([
         { type:'text', portrait: npcPortrait(ev.type), speaker: ev.speaker, text: ev.text }
-      ], () => {
-        state.phase = 'explore';
-        renderMap(); updateExploreUI();
-      });
+      ], afterTalk);
       break;
 
     case 'shop':
-      showNpcShop(ev);
+      showNpcShop(ev, afterTalk);
       break;
 
     case 'dragon':
       runStorySequence([
         { type:'text', portrait:'🐉', speaker:'魔龙', text: ev.text },
         { type:'text', portrait:'🐉', speaker:'魔龙', text:'你休想通过这里！与我战斗，或者从暗道绕行！' }
-      ], () => {
-        state.phase = 'explore';
-        renderMap(); updateExploreUI();
-      });
+      ], afterTalk);
       break;
 
     default:
-      state.phase = 'explore';
-      renderMap(); updateExploreUI();
+      afterTalk();
+  }
+}
+
+/** NPC 对话后的副作用（对应原版 checkEvent） */
+function applyNpcEffect(ev) {
+  const key = `${ev.floor}_${ev.x}_${ev.y}`;
+  // floor2 (0-indexed=1) 智慧老人(idx=43): 攻防+10%
+  if (ev.floor === 2 && ev.x === 10 && ev.y === 3) {
+    state.player.atk  = Math.floor(state.player.atk * 1.1);
+    state.player.def  = Math.floor(state.player.def * 1.1);
+    addMessage('✨ 智慧老人：攻防 +10%！');
+  }
+  // floor3 (0-indexed=2) 智慧老人: 给"怪物书"提示
+  if (ev.floor === 3 && ev.x === 10 && ev.y === 3) {
+    addMessage('📖 获得怪物书！（可在手册查看怪物详情）');
   }
 }
 
@@ -454,15 +476,26 @@ function npcPortrait(type) {
   return { wiser:'🧙', shop:'💰', princess:'👸', dragon:'🐉', npc:'👤' }[type] || '👤';
 }
 
-function showNpcShop(ev) {
-  // 简单商店 UI：复用 story overlay 展示商品信息
+function showNpcShop(ev, onDone) {
   runStorySequence([
     { type:'text', portrait:'💰', speaker:ev.speaker, text: ev.text },
     { type:'text', portrait:'💰', speaker:ev.speaker, text:'（商店功能即将上线……目前只提供情报。）' }
-  ], () => {
-    state.phase = 'explore';
-    renderMap(); updateExploreUI();
-  });
+  ], onDone);
+}
+
+// ── 坐标触发事件（同原版 checkEvent 的位置判断） ────────────────────────────────
+function checkCoordEvent(x, y) {
+  // 3楼（state.floor=2，0-indexed）走廊中央 (x=5, y=4)：将军埋伏！
+  // 对应原版 10楼陷阱逻辑：player.floor===10 && player.x===6 && player.y===6
+  if (state.floor === 2 && x === 5 && y === 4 && !state.storyFlags['ambush_3']) {
+    state.storyFlags['ambush_3'] = true;
+    state.phase = 'story';
+    renderMap();
+    runStorySequence(AMBUSH_STORY, () => {
+      state.phase = 'explore';
+      renderMap(); updateExploreUI();
+    });
+  }
 }
 
 function advanceFloor() {
@@ -474,23 +507,6 @@ function advanceFloor() {
   }
   renderMap();
   updateExploreUI();
-  checkFloorEntryStory(nextFloor);
-}
-
-/** 进入某楼层时的一次性触发事件 */
-function checkFloorEntryStory(floor) {
-  const flagKey = `floor_entry_${floor}`;
-  if (state.storyFlags[flagKey]) return;
-
-  if (floor === 3) {
-    state.storyFlags[flagKey] = true;
-    state.phase = 'story';
-    renderMap();
-    runStorySequence(AMBUSH_STORY, () => {
-      state.phase = 'explore';
-      renderMap(); updateExploreUI();
-    });
-  }
 }
 
 function showGameOver() {
