@@ -18,6 +18,7 @@ export const SPRITE_SHEETS = {
   enemys:   'assets/enemys.png',   // 主要怪物图，73种（2帧/行）
   hero:     'assets/hero.png',
   brave:    'assets/brave.png',    // 经典32×32勇者行走图（128×128，4方向×4帧）
+  npcs:     'assets/npcs.png',     // NPC 图（64×448，2帧/行，14种NPC，32×32/帧）
 };
 
 // 已加载的 Image 对象缓存

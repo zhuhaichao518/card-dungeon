@@ -34,6 +34,9 @@
           <h3>🧙 属性</h3>
           <div class="stat-row"><span class="stat-atk">⚔️ 攻击</span><span id="explore-atk" class="stat-val">5</span></div>
           <div class="stat-row"><span class="stat-def">🔰 防御</span><span id="explore-def" class="stat-val">3</span></div>
+          <div class="stat-row" style="font-size:11px;color:#aaa">
+            📍 <span id="player-coord">x:0 y:0</span>
+          </div>
         </div>
         <div class="panel-section">
           <h3>📦 背包</h3>
@@ -54,6 +57,11 @@
           </div>
           <button id="btn-deck-view" class="btn-deck-view">📖 查看卡组</button>
           <button id="btn-monster-book" class="btn-deck-view" style="margin-top:6px">📕 怪物手册</button>
+          <div style="margin-top:8px;display:flex;gap:4px;align-items:center">
+            <input id="debug-floor-input" type="number" min="1" max="50" value="1"
+              style="width:48px;padding:2px 4px;font-size:12px;background:#1a1a2e;border:1px solid #555;color:#eee;border-radius:4px">
+            <button id="btn-goto-floor" class="btn-deck-view" style="flex:1;margin-top:0;font-size:11px">🔼 跳层</button>
+          </div>
         </div>
       </aside>
     </div>

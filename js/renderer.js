@@ -4,7 +4,17 @@
  */
 
 import { state } from './state.js';
+import { NPC_EVENTS } from './data.js';
 import { TILE_SPRITE, MONSTER_SPRITE, HERO_SPRITE, drawSprite, getSprite } from './sprites.js';
+
+// NPC 类型 → npcs.png 行号（srcY = row * 32）
+const NPC_ROW = {
+  wiser:    5,  // recluse（隐士/智慧老人）
+  shop:     1,  // trader（商人）
+  npc:      0,  // man（普通NPC）
+  princess: 11, // princess（公主）
+  dragon:   4,  // wizard 占位（魔龙有自己的怪物贴图）
+};
 
 export const TILE_SIZE = 48;  // 每个瓷砖的像素大小
 
@@ -88,6 +98,24 @@ export function renderMap() {
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(img, da.frame * 32, da.row * 32, 32, 32, dx, dy, TILE_SIZE, TILE_SIZE);
             ctx.restore();
+          }
+        } else if (tileType === 16) {
+          // EVENT 格：若是 NPC 则画对应贴图
+          const npcKey = `${state.floor}_${x}_${y}`;
+          const npcEv = NPC_EVENTS[npcKey];
+          if (npcEv && state.tiles[y][x] === 16) {
+            const row = NPC_ROW[npcEv.type] ?? 0;
+            const img = getSprite('npcs');
+            if (img) {
+              ctx.save();
+              ctx.imageSmoothingEnabled = false;
+              ctx.drawImage(img, 0, row * 32, 32, 32, dx, dy, TILE_SIZE, TILE_SIZE);
+              ctx.restore();
+            } else {
+              drawTileSprite(ctx, 0, dx, dy); // fallback 地板
+            }
+          } else {
+            drawTileSprite(ctx, 0, dx, dy); // 已消失的 NPC → 地板
           }
         } else {
           drawTileSprite(ctx, tileType, dx, dy);

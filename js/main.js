@@ -6,7 +6,7 @@
 import { renderMap, initCanvas, pixelToTile, startAnimLoop } from './renderer.js';
 import { updateExploreUI, bindEndTurnButton, showDeckView, showMonsterBook } from './ui.js';
 import { tryMove, handleMapClick, animatedMove } from './explore.js';
-import { state, resetState } from './state.js';
+import { state, resetState, loadFloor } from './state.js';
 import { loadAllSprites } from './sprites.js';
 import { saveGame, getAllSaves, restoreState } from './save.js';
 
@@ -119,6 +119,17 @@ function bindPauseMenu() {
   document.getElementById('monster-book-close')?.addEventListener('click', () => {
     document.getElementById('monster-book-panel')?.classList.add('hidden');
   });
+  // 调试：楼层跳转
+  document.getElementById('btn-goto-floor')?.addEventListener('click', () => {
+    const n = parseInt(document.getElementById('debug-floor-input')?.value, 10);
+    if (n >= 1 && n <= 50) {
+      loadFloor(n);
+      state.phase = 'explore';
+      renderMap();
+      updateExploreUI();
+    }
+  });
+
   document.getElementById('btn-pause')?.addEventListener('click', togglePauseMenu);
   document.getElementById('pause-close')?.addEventListener('click', togglePauseMenu);
   document.getElementById('pause-resume')?.addEventListener('click', togglePauseMenu);

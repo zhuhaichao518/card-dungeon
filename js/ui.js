@@ -18,6 +18,7 @@ export function updateExploreUI() {
   setInner('floor-label', `第 ${state.floor} / 50 层`);
   setInner('explore-atk', state.player.atk ?? 5);
   setInner('explore-def', state.player.def ?? 3);
+  setInner('player-coord', `x:${state.player.x} y:${state.player.y}`);
 }
 
 function updateInventory() {
