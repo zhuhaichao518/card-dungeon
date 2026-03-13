@@ -1178,3 +1178,22 @@ export const NPC_EVENTS = {
 };
 
 // DATA_COMPLETE
+
+// ── Custom game data override (from editor) ───────────────────────────────────
+// If localStorage has 'cardDungeon_customData', override FLOORS and NPC_EVENTS.
+// Uses array mutation so existing imports still point to the same object.
+try {
+  const _raw = typeof localStorage !== 'undefined' && localStorage.getItem('cardDungeon_customData');
+  if (_raw) {
+    const _cd = JSON.parse(_raw);
+    if (Array.isArray(_cd.floors) && _cd.floors.length > 0) {
+      FLOORS.length = 0;
+      _cd.floors.forEach(f => FLOORS.push(f));
+      console.log(`[Editor] Loaded custom data: ${FLOORS.length} floors`);
+    }
+    if (_cd.npcEvents && typeof _cd.npcEvents === 'object') {
+      Object.keys(NPC_EVENTS).forEach(k => delete NPC_EVENTS[k]);
+      Object.assign(NPC_EVENTS, _cd.npcEvents);
+    }
+  }
+} catch(e) { console.warn('[Editor] Custom data parse error:', e); }

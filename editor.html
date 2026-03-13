@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Card Dungeon 关卡编辑器</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#c9d1d9;font-family:'Segoe UI',Arial,sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+/* Toolbar */
+#toolbar{background:#161b22;border-bottom:1px solid #30363d;padding:0 14px;height:46px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+#toolbar h1{font-size:15px;color:#58a6ff;font-weight:700;white-space:nowrap}
+#toolbar .sep{width:1px;height:20px;background:#30363d}
+#toolbar .spacer{flex:1}
+.btn{padding:5px 11px;border:1px solid #30363d;border-radius:5px;background:#21262d;color:#c9d1d9;cursor:pointer;font-size:12px;transition:background .12s;white-space:nowrap}
+.btn:hover{background:#30363d}
+.btn.primary{background:#1f6feb;border-color:#388bfd;color:#fff}
+.btn.primary:hover{background:#388bfd}
+.btn.success{background:#238636;border-color:#2ea043;color:#fff}
+.btn.success:hover{background:#2ea043}
+.btn.danger{background:#da3633;border-color:#f85149;color:#fff}
+.btn.danger:hover{background:#f85149}
+
+/* Main layout */
+#main{display:flex;flex:1;overflow:hidden}
+
+/* Left panel */
+#left{width:168px;flex-shrink:0;background:#161b22;border-right:1px solid #30363d;display:flex;flex-direction:column}
+.tabs{display:flex;border-bottom:1px solid #30363d}
+.tab{flex:1;padding:7px 4px;text-align:center;cursor:pointer;font-size:12px;color:#8b949e;border-bottom:2px solid transparent;transition:color .1s}
+.tab.on{color:#58a6ff;border-bottom-color:#58a6ff}
+.pane{flex:1;overflow-y:auto;padding:8px;display:none}
+.pane.on{display:block}
+.pane::-webkit-scrollbar{width:3px}
+.pane::-webkit-scrollbar-thumb{background:#30363d}
+
+/* Tile palette */
+.sec-label{font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px}
+.tile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.tpick{aspect-ratio:1;border:2px solid #30363d;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;color:#8b949e;gap:1px;transition:border-color .1s;user-select:none}
+.tpick:hover{border-color:#58a6ff}
+.tpick.on{border-color:#58a6ff;box-shadow:0 0 6px #58a6ff55}
+.tpick .ico{font-size:14px;line-height:1}
+
+/* Monster / NPC palette */
+.mlist{display:flex;flex-direction:column;gap:3px}
+.mpick{display:flex;align-items:center;gap:6px;padding:5px 6px;border:1px solid #30363d;border-radius:4px;cursor:pointer;background:#0d1117;font-size:12px;transition:background .1s}
+.mpick:hover{background:#21262d}
+.mpick.on{border-color:#58a6ff;background:#1f3a5f}
+.mpick .em{font-size:16px;width:22px;text-align:center}
+.npc-options{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.npc-options label{font-size:10px;color:#8b949e}
+.npc-options textarea,.npc-options input{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:4px;color:#c9d1d9;font-size:11px;padding:4px;resize:vertical}
+.npc-options textarea{min-height:56px}
+
+/* Center canvas */
+#center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#0d1117;overflow:hidden}
+#floor-nav{display:flex;align-items:center;gap:8px;padding:5px 12px;background:#161b22;border:1px solid #30363d;border-radius:6px}
+#floor-nav .fnum{font-size:14px;font-weight:700;min-width:80px;text-align:center}
+#grid-wrap{position:relative;cursor:crosshair}
+canvas#grid{display:block;border:1px solid #30363d}
+#coord-bar{font-size:11px;color:#8b949e;font-family:monospace;height:16px}
+
+/* Right panel */
+#right{width:172px;flex-shrink:0;background:#161b22;border-left:1px solid #30363d;padding:10px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.rsec h4{font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #30363d;padding-bottom:4px;margin-bottom:6px}
+.rsec .btn{width:100%;margin-bottom:3px;display:block;text-align:center}
+.flist{max-height:190px;overflow-y:auto;border:1px solid #30363d;border-radius:4px}
+.flist::-webkit-scrollbar{width:3px}
+.flist::-webkit-scrollbar-thumb{background:#30363d}
+.fitem{padding:4px 8px;font-size:12px;cursor:pointer;border-bottom:1px solid #1a1f26}
+.fitem:hover{background:#21262d}
+.fitem.on{background:#1f3a5f;color:#58a6ff}
+.info{background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:7px;font-size:11px;color:#8b949e;line-height:1.7}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;z-index:200}
+.overlay.hide{display:none}
+.modal{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;min-width:340px;max-width:520px;max-height:82vh;overflow-y:auto}
+.modal h3{font-size:15px;margin-bottom:14px;color:#58a6ff}
+.fgrp{margin-bottom:10px}
+.fgrp label{font-size:11px;color:#8b949e;display:block;margin-bottom:3px}
+.fgrp input,.fgrp select,.fgrp textarea{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:4px;color:#c9d1d9;padding:5px 7px;font-size:12px}
+.fgrp textarea{min-height:60px;resize:vertical}
+.btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.card-pool{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;max-height:160px;overflow-y:auto;border:1px solid #30363d;border-radius:4px;padding:4px}
+.cpick{padding:3px 5px;border:1px solid #30363d;border-radius:3px;cursor:pointer;font-size:11px;background:#0d1117;color:#c9d1d9;text-align:left;transition:background .1s}
+.cpick:hover{background:#21262d}
+.cpick.on{border-color:#388bfd;background:#1f3a5f}
+.shop-row{display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 0;border-bottom:1px solid #21262d}
+.shop-row span{flex:1}
+.shop-row input{width:55px;padding:1px 4px;background:#0d1117;border:1px solid #30363d;border-radius:3px;color:#c9d1d9;font-size:11px}
+.shop-row .rm{cursor:pointer;color:#f85149;font-size:14px;line-height:1;padding:0 3px}
+</style>
+</head>
+<body>
+<div id="toolbar">
+  <h1>🗺 Card Dungeon 编辑器</h1>
+  <div class="sep"></div>
+  <span id="mode-label" style="font-size:12px;color:#8b949e">模式: 地板</span>
+  <div class="spacer"></div>
+  <button class="btn" onclick="importJSON()">📂 导入JSON</button>
+  <button class="btn" onclick="loadStandard()">🔄 加载标准版</button>
+  <button class="btn primary" onclick="exportJSON()">💾 导出JSON</button>
+  <button class="btn success" onclick="loadInGame()">🎮 加载到游戏</button>
+</div>
+
+<div id="main">
+  <!-- Left: Palette -->
+  <div id="left">
+    <div class="tabs">
+      <div class="tab on" onclick="switchTab('tile',this)">地板</div>
+      <div class="tab" onclick="switchTab('monster',this)">怪物</div>
+      <div class="tab" onclick="switchTab('npc',this)">NPC</div>
+    </div>
+
+    <!-- Tile Pane -->
+    <div class="pane on" id="pane-tile">
+      <div class="sec-label">基础</div>
+      <div class="tile-grid" id="tile-palette"></div>
+      <div class="sec-label">工具</div>
+      <div class="tile-grid">
+        <div class="tpick" onclick="setErase()" id="erase-btn" title="右键也可擦除">
+          <div class="ico">🧹</div><div>擦除</div>
+        </div>
+        <div class="tpick" onclick="fillFloor(0)" title="用地面填满整层">
+          <div class="ico">🗑️</div><div>清空层</div>
+        </div>
+        <div class="tpick" onclick="fillFloor(1)" title="用墙填满整层">
+          <div class="ico">🧱</div><div>填墙</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monster Pane -->
+    <div class="pane" id="pane-monster">
+      <div class="sec-label">选择怪物类型</div>
+      <div class="mlist" id="monster-palette"></div>
+    </div>
+
+    <!-- NPC Pane -->
+    <div class="pane" id="pane-npc">
+      <div class="sec-label">选择NPC类型</div>
+      <div class="mlist" id="npc-palette"></div>
+      <div class="npc-options" id="npc-opts">
+        <label>称呼</label>
+        <input id="npc-speaker" type="text" value="智慧老人" placeholder="显示名称">
+        <label>对话内容</label>
+        <textarea id="npc-text" placeholder="输入NPC对话内容…">……</textarea>
+        <small style="color:#8b949e;font-size:10px">放置后点击NPC可编辑商店卡牌</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center: Canvas -->
+  <div id="center">
+    <div id="floor-nav">
+      <button class="btn" onclick="navFloor(-1)">◀</button>
+      <span class="fnum" id="floor-label">Floor 1</span>
+      <button class="btn" onclick="navFloor(1)">▶</button>
+    </div>
+    <div id="grid-wrap">
+      <canvas id="grid" width="528" height="528"></canvas>
+    </div>
+    <div id="coord-bar">x: - &nbsp; y: -</div>
+  </div>
+
+  <!-- Right: Floor manager + info -->
+  <div id="right">
+    <div class="rsec">
+      <h4>楼层管理</h4>
+      <button class="btn" onclick="addFloor()">➕ 添加楼层</button>
+      <button class="btn danger" onclick="removeFloor()">🗑 删除当前层</button>
+      <div class="flist" id="floor-list"></div>
+    </div>
+    <div class="rsec">
+      <h4>当前格子信息</h4>
+      <div class="info" id="cell-info">点击格子查看信息</div>
+    </div>
+    <div class="rsec">
+      <h4>说明</h4>
+      <div class="info">
+        <b>左键</b>: 放置所选元素<br>
+        <b>右键</b>: 擦除（还原地面）<br>
+        <b>拖拽</b>: 连续绘制地板<br>
+        <b>NPC</b>: 商人支持设置商品卡牌<br>
+        <b>导出JSON</b>: 下载关卡文件<br>
+        <b>加载到游戏</b>: 直接在游戏中测试
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NPC Shop Modal -->
+<div class="overlay hide" id="shop-modal">
+  <div class="modal">
+    <h3>🛒 编辑商店卡牌</h3>
+    <p style="font-size:12px;color:#8b949e;margin-bottom:10px">点击卡牌加入商店，设置金币价格</p>
+    <div class="fgrp">
+      <label>从卡池选择（点击添加）</label>
+      <div class="card-pool" id="shop-card-pool"></div>
+    </div>
+    <div class="fgrp">
+      <label>商店商品 <small style="color:#8b949e">(价格为金币)</small></label>
+      <div id="shop-items-list"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="closeShopModal()">取消</button>
+      <button class="btn primary" onclick="saveShopModal()">确认</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="file-input" accept=".json" style="display:none" onchange="handleFileImport(event)">
+
+<script type="module">
+import { FLOORS as STD_FLOORS, NPC_EVENTS as STD_NPC, TILE, MONSTER_DEFS, HERO_CARD_POOL } from './js/data.js';
+
+const TILE_SIZE = 48;
+const COLS = 11, ROWS = 11;
+const canvas = document.getElementById('grid');
+const ctx = canvas.getContext('2d');
+
+// ── Tile Definitions ────────────────────────────────────────────────────────
+const TILES = [
+  {id:0,  name:'地面',    ico:'',   bg:'#3a3a4a', fg:'#555'},
+  {id:1,  name:'墙壁',    ico:'',   bg:'#111',    fg:'#333'},
+  {id:2,  name:'黄门',    ico:'🟡', bg:'#4a3700', fg:'#FFD700'},
+  {id:3,  name:'蓝门',    ico:'🔵', bg:'#001a4a', fg:'#4169E1'},
+  {id:4,  name:'红门',    ico:'🔴', bg:'#4a0000', fg:'#DC143C'},
+  {id:5,  name:'黄钥匙',  ico:'🗝', bg:'#3a2a00', fg:'#FFD700'},
+  {id:6,  name:'蓝钥匙',  ico:'🗝', bg:'#001040', fg:'#6090FF'},
+  {id:7,  name:'红钥匙',  ico:'🗝', bg:'#3a0000', fg:'#FF6060'},
+  {id:10, name:'上楼梯',  ico:'▲',  bg:'#0a3a0a', fg:'#50C050'},
+  {id:11, name:'下楼梯',  ico:'▼',  bg:'#062806', fg:'#30a030'},
+  {id:12, name:'小血瓶',  ico:'💊', bg:'#3a1020', fg:'#FF80B0'},
+  {id:13, name:'大血瓶',  ico:'💊', bg:'#4a0830', fg:'#FF40D0'},
+  {id:15, name:'刺陷阱',  ico:'⚡', bg:'#3a1a00', fg:'#FF8C00'},
+  {id:17, name:'红宝石',  ico:'◆',  bg:'#3a0000', fg:'#FF4040'},
+  {id:18, name:'蓝宝石',  ico:'◆',  bg:'#00103a', fg:'#4080FF'},
+];
+const TILE_MAP = {};
+TILES.forEach(t => TILE_MAP[t.id] = t);
+
+// ── Monster List ─────────────────────────────────────────────────────────────
+const MONSTER_LIST = Object.entries(MONSTER_DEFS).map(([defId, d]) => ({
+  defId, name: d.name, emoji: d.emoji || '👾'
+}));
+
+// ── NPC Types ────────────────────────────────────────────────────────────────
+const NPC_TYPES = [
+  {type:'wiser',    name:'智慧老人', emoji:'🧙', color:'#9932CC'},
+  {type:'shop',     name:'商人',     emoji:'🛒', color:'#F0A500'},
+  {type:'princess', name:'公主',     emoji:'👸', color:'#FF69B4'},
+  {type:'dragon',   name:'魔龙',     emoji:'🐉', color:'#CC3300'},
+  {type:'npc',      name:'普通NPC',  emoji:'🧑', color:'#5588FF'},
+];
+const NPC_COLOR = {};
+NPC_TYPES.forEach(n => NPC_COLOR[n.type] = n.color);
+
+// ── Editor State ─────────────────────────────────────────────────────────────
+const ed = {
+  floors: [],
+  npcEvents: {},
+  floor: 0,       // 0-indexed
+  mode: 'tile',   // 'tile' | 'monster' | 'npc' | 'erase'
+  tile: 0,
+  monster: 'slime_green',
+  npcType: 'wiser',
+  painting: false,
+  shopKey: null,   // key of shop NPC being edited
+  shopItems: [],
+};
+
+function deepCopy(o){ return JSON.parse(JSON.stringify(o)); }
+
+function blankFloor(n){
+  const tiles = [];
+  for(let y=0;y<ROWS;y++){
+    const row=[];
+    for(let x=0;x<COLS;x++) row.push(y===0||y===ROWS-1||x===0||x===COLS-1 ? 1 : 0);
+    tiles.push(row);
+  }
+  // stairs up at (0,0), stairs down at (10,10)
+  tiles[0][0] = 10;
+  tiles[ROWS-1][COLS-1] = 11;
+  return { playerStart:{x:1,y:1}, tiles, monsters:[] };
+}
+
+function initFromStd(){
+  ed.floors = deepCopy(STD_FLOORS);
+  ed.npcEvents = deepCopy(STD_NPC);
+  // Normalise tiles: convert flat array to 2d if needed
+  ed.floors.forEach(f => {
+    if(f.tiles.length === ROWS && !Array.isArray(f.tiles[0])) return;
+    // already 2d — OK
+  });
+  refreshAll();
+}
+
+// ── Build Palettes ───────────────────────────────────────────────────────────
+function buildTilePalette(){
+  const el = document.getElementById('tile-palette');
+  el.innerHTML='';
+  TILES.forEach(t=>{
+    const d=document.createElement('div');
+    d.className='tpick'+(ed.tile===t.id&&ed.mode==='tile'?' on':'');
+    d.title=t.name;
+    d.style.background=t.bg;
+    d.innerHTML=`<div class="ico" style="color:${t.fg}">${t.ico||'&nbsp;'}</div><div style="color:${t.fg}">${t.name}</div>`;
+    d.onclick=()=>{ ed.mode='tile'; ed.tile=t.id; buildTilePalette(); updateModeLabel(); };
+    el.appendChild(d);
+  });
+}
+
+function buildMonsterPalette(){
+  const el=document.getElementById('monster-palette');
+  el.innerHTML='';
+  MONSTER_LIST.forEach(m=>{
+    const d=document.createElement('div');
+    d.className='mpick'+(ed.monster===m.defId&&ed.mode==='monster'?' on':'');
+    d.innerHTML=`<span class="em">${m.emoji}</span><span>${m.name}</span>`;
+    d.onclick=()=>{ ed.mode='monster'; ed.monster=m.defId; buildMonsterPalette(); updateModeLabel(); };
+    el.appendChild(d);
+  });
+}
+
+function buildNpcPalette(){
+  const el=document.getElementById('npc-palette');
+  el.innerHTML='';
+  NPC_TYPES.forEach(n=>{
+    const d=document.createElement('div');
+    d.className='mpick'+(ed.npcType===n.type&&ed.mode==='npc'?' on':'');
+    d.innerHTML=`<span class="em">${n.emoji}</span><span>${n.name}</span>`;
+    d.onclick=()=>{ ed.mode='npc'; ed.npcType=n.type; buildNpcPalette(); updateModeLabel();
+      document.getElementById('npc-speaker').value = n.name;
+    };
+    el.appendChild(d);
+  });
+}
+
+function updateModeLabel(){
+  const labels={tile:'地板',monster:'怪物',npc:'NPC',erase:'擦除'};
+  document.getElementById('mode-label').textContent = '模式: '+(labels[ed.mode]||ed.mode);
+}
+
+// ── Floor List ───────────────────────────────────────────────────────────────
+function buildFloorList(){
+  const el=document.getElementById('floor-list');
+  el.innerHTML='';
+  ed.floors.forEach((f,i)=>{
+    const d=document.createElement('div');
+    d.className='fitem'+(i===ed.floor?' on':'');
+    d.textContent=`Floor ${i+1}`;
+    d.onclick=()=>{ ed.floor=i; buildFloorList(); renderGrid(); updateFloorLabel(); };
+    el.appendChild(d);
+  });
+}
+
+function updateFloorLabel(){
+  document.getElementById('floor-label').textContent=`Floor ${ed.floor+1} / ${ed.floors.length}`;
+}
+
+// ── Canvas Rendering ─────────────────────────────────────────────────────────
+function renderGrid(){
+  if(!ed.floors.length) return;
+  const f=ed.floors[ed.floor];
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      const tid = f.tiles[y][x];
+      const ti  = TILE_MAP[tid] || TILE_MAP[0];
+      const px  = x*TILE_SIZE, py = y*TILE_SIZE;
+
+      // Background
+      ctx.fillStyle = ti.bg;
+      ctx.fillRect(px,py,TILE_SIZE,TILE_SIZE);
+
+      // Grid line
+      ctx.strokeStyle = '#00000044';
+      ctx.strokeRect(px+.5,py+.5,TILE_SIZE-1,TILE_SIZE-1);
+
+      // Icon / label
+      if(ti.ico){
+        ctx.fillStyle = ti.fg;
+        ctx.font = tid===0 ? '10px Arial' : '18px Arial';
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(ti.ico, px+TILE_SIZE/2, py+TILE_SIZE/2);
+      }
+    }
+  }
+
+  // Monsters
+  f.monsters.forEach(m=>{
+    const def = MONSTER_DEFS[m.defId];
+    if(!def) return;
+    const px=m.x*TILE_SIZE, py=m.y*TILE_SIZE;
+    ctx.fillStyle='#000a';
+    ctx.fillRect(px,py,TILE_SIZE,TILE_SIZE);
+    ctx.font='22px Arial';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(def.emoji||'👾', px+TILE_SIZE/2, py+TILE_SIZE/2-2);
+    ctx.fillStyle='#fff';
+    ctx.font='8px Arial';
+    ctx.fillText(def.name.slice(0,3), px+TILE_SIZE/2, py+TILE_SIZE-5);
+  });
+
+  // NPCs
+  const floorKey = ed.floor+1;
+  Object.entries(ed.npcEvents).forEach(([key,npc])=>{
+    const parts=key.split('_');
+    if(parseInt(parts[0])!==floorKey) return;
+    const nx=parseInt(parts[1]), ny=parseInt(parts[2]);
+    const px=nx*TILE_SIZE, py=ny*TILE_SIZE;
+    const nt = NPC_TYPES.find(n=>n.type===npc.type)||NPC_TYPES[0];
+    ctx.fillStyle=nt.color+'aa';
+    ctx.fillRect(px,py,TILE_SIZE,TILE_SIZE);
+    ctx.font='20px Arial';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(nt.emoji, px+TILE_SIZE/2, py+TILE_SIZE/2-2);
+    ctx.fillStyle='#fff';
+    ctx.font='8px Arial';
+    ctx.fillText(nt.name.slice(0,3), px+TILE_SIZE/2, py+TILE_SIZE-5);
+  });
+
+  // Player start
+  if(f.playerStart){
+    const px=f.playerStart.x*TILE_SIZE, py=f.playerStart.y*TILE_SIZE;
+    ctx.strokeStyle='#00FF00';
+    ctx.lineWidth=2;
+    ctx.strokeRect(px+2,py+2,TILE_SIZE-4,TILE_SIZE-4);
+    ctx.font='9px Arial';
+    ctx.fillStyle='#0F0';
+    ctx.textAlign='center';
+    ctx.textBaseline='top';
+    ctx.fillText('起点', px+TILE_SIZE/2, py+2);
+    ctx.lineWidth=1;
+  }
+}
+
+// ── Mouse Handling ────────────────────────────────────────────────────────────
+function cellAt(e){
+  const r=canvas.getBoundingClientRect();
+  return { x:Math.floor((e.clientX-r.left)/TILE_SIZE), y:Math.floor((e.clientY-r.top)/TILE_SIZE) };
+}
+
+function applyAt(x,y){
+  if(x<0||x>=COLS||y<0||y>=ROWS) return;
+  const f=ed.floors[ed.floor];
+  const floorKey=ed.floor+1;
+  const npcKey=`${floorKey}_${x}_${y}`;
+
+  if(ed.mode==='erase'){
+    // Remove monster at x,y
+    f.monsters=f.monsters.filter(m=>!(m.x===x&&m.y===y));
+    // Remove NPC
+    delete ed.npcEvents[npcKey];
+    // Reset tile to floor
+    f.tiles[y][x]=0;
+  } else if(ed.mode==='tile'){
+    // Remove monster/NPC if placing solid tile
+    if(ed.tile!==0 && ed.tile!==16) {
+      f.monsters=f.monsters.filter(m=>!(m.x===x&&m.y===y));
+      delete ed.npcEvents[npcKey];
+    }
+    f.tiles[y][x]=ed.tile;
+  } else if(ed.mode==='monster'){
+    // Remove existing monster
+    f.monsters=f.monsters.filter(m=>!(m.x===x&&m.y===y));
+    // Don't place on walls/doors etc
+    f.tiles[y][x]=0;
+    delete ed.npcEvents[npcKey];
+    f.monsters.push({defId:ed.monster, x, y});
+  } else if(ed.mode==='npc'){
+    f.monsters=f.monsters.filter(m=>!(m.x===x&&m.y===y));
+    f.tiles[y][x]=16; // EVENT
+    const speaker=document.getElementById('npc-speaker').value||'NPC';
+    const text=document.getElementById('npc-text').value||'……';
+    ed.npcEvents[npcKey]={type:ed.npcType, speaker, text, floor:floorKey, x, y};
+  }
+  renderGrid();
+}
+
+canvas.addEventListener('mousedown',e=>{
+  e.preventDefault();
+  if(e.button===2){
+    ed.tmpMode=ed.mode; ed.mode='erase';
+  } else {
+    // Check if clicking existing NPC to open shop editor
+    const {x,y}=cellAt(e);
+    const npcKey=`${ed.floor+1}_${x}_${y}`;
+    if(ed.npcEvents[npcKey]?.type==='shop' && ed.mode==='npc'){
+      openShopModal(npcKey); return;
+    }
+  }
+  ed.painting=true;
+  const {x,y}=cellAt(e);
+  applyAt(x,y);
+  showCellInfo(cellAt(e));
+});
+canvas.addEventListener('mousemove',e=>{
+  const {x,y}=cellAt(e);
+  document.getElementById('coord-bar').textContent=`x: ${x}  y: ${y}`;
+  if(ed.painting) { applyAt(x,y); showCellInfo({x,y}); }
+});
+canvas.addEventListener('mouseup',e=>{
+  ed.painting=false;
+  if(ed.tmpMode){ ed.mode=ed.tmpMode; delete ed.tmpMode; }
+});
+canvas.addEventListener('mouseleave',()=>{ ed.painting=false; if(ed.tmpMode){ ed.mode=ed.tmpMode; delete ed.tmpMode; } });
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+
+// Right-click on existing NPC in NPC mode → open shop editor
+canvas.addEventListener('click',e=>{
+  if(e.button!==0) return;
+  const {x,y}=cellAt(e);
+  const npcKey=`${ed.floor+1}_${x}_${y}`;
+  const npc=ed.npcEvents[npcKey];
+  if(npc?.type==='shop' && ed.mode==='tile'){
+    openShopModal(npcKey);
+  }
+});
+
+function showCellInfo({x,y}){
+  if(x<0||x>=COLS||y<0||y>=ROWS){ document.getElementById('cell-info').innerHTML='—'; return; }
+  const f=ed.floors[ed.floor];
+  const tid=f.tiles[y][x];
+  const ti=TILE_MAP[tid]||TILE_MAP[0];
+  const mon=f.monsters.find(m=>m.x===x&&m.y===y);
+  const npc=ed.npcEvents[`${ed.floor+1}_${x}_${y}`];
+  let html=`<b>(${x}, ${y})</b><br>地砖: ${ti.name}`;
+  if(mon){ const d=MONSTER_DEFS[mon.defId]; html+=`<br>怪物: ${d?.name||mon.defId}`; }
+  if(npc){ html+=`<br>NPC: ${npc.speaker}<br><small>${npc.text.slice(0,40)}…</small>`; }
+  if(npc?.shopCards?.length){ html+=`<br>商品: ${npc.shopCards.length}种 <a href="#" onclick="openShopModal('${ed.floor+1}_${x}_${y}');return false" style="color:#58a6ff">编辑</a>`; }
+  document.getElementById('cell-info').innerHTML=html;
+}
+
+// ── Floor Nav ────────────────────────────────────────────────────────────────
+window.navFloor=function(d){
+  const n=ed.floor+d;
+  if(n<0||n>=ed.floors.length) return;
+  ed.floor=n;
+  buildFloorList();
+  renderGrid();
+  updateFloorLabel();
+};
+window.addFloor=function(){
+  ed.floors.push(blankFloor(ed.floors.length+1));
+  ed.floor=ed.floors.length-1;
+  buildFloorList();
+  renderGrid();
+  updateFloorLabel();
+};
+window.removeFloor=function(){
+  if(ed.floors.length<=1){ alert('至少保留一层！'); return; }
+  if(!confirm(`删除 Floor ${ed.floor+1}？`)) return;
+  // Remove NPC events for this floor
+  const floorKey=ed.floor+1;
+  Object.keys(ed.npcEvents).forEach(k=>{ if(parseInt(k.split('_')[0])===floorKey) delete ed.npcEvents[k]; });
+  ed.floors.splice(ed.floor,1);
+  ed.floor=Math.max(0,ed.floor-1);
+  // Re-index NPC events for floors after removed
+  // (For simplicity, leave floor numbers as is; they may shift — acceptable for editor)
+  buildFloorList();
+  renderGrid();
+  updateFloorLabel();
+};
+window.fillFloor=function(tid){
+  const f=ed.floors[ed.floor];
+  for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++) f.tiles[y][x]=tid;
+  renderGrid();
+};
+
+// ── Tab Switch ───────────────────────────────────────────────────────────────
+window.switchTab=function(tab,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('pane-'+tab).classList.add('on');
+  if(tab!=='erase') { ed.mode=tab; updateModeLabel(); }
+  if(tab==='tile') buildTilePalette();
+  if(tab==='monster') buildMonsterPalette();
+  if(tab==='npc') buildNpcPalette();
+};
+window.setErase=function(){ ed.mode='erase'; updateModeLabel(); };
+
+// ── Shop Modal ───────────────────────────────────────────────────────────────
+window.openShopModal=function(key){
+  ed.shopKey=key;
+  const npc=ed.npcEvents[key]||{};
+  ed.shopItems=deepCopy(npc.shopCards||[]);
+
+  // Build card pool (all hero cards)
+  const pool=document.getElementById('shop-card-pool');
+  pool.innerHTML='';
+  HERO_CARD_POOL.forEach(c=>{
+    const already=ed.shopItems.find(s=>s.cardId===c.id);
+    const d=document.createElement('div');
+    d.className='cpick'+(already?' on':'');
+    d.textContent=`${c.name} (${c.cost}费)`;
+    d.title=c.desc||'';
+    d.onclick=()=>{ if(!ed.shopItems.find(s=>s.cardId===c.id)){ ed.shopItems.push({cardId:c.id,price:50}); refreshShopItems(); d.classList.add('on'); } };
+    pool.appendChild(d);
+  });
+  refreshShopItems();
+  document.getElementById('shop-modal').classList.remove('hide');
+};
+function refreshShopItems(){
+  const el=document.getElementById('shop-items-list');
+  el.innerHTML='';
+  if(!ed.shopItems.length){ el.innerHTML='<div style="color:#8b949e;font-size:12px;padding:6px">暂无商品，从上方卡池点击添加</div>'; return; }
+  ed.shopItems.forEach((item,i)=>{
+    const card=HERO_CARD_POOL.find(c=>c.id===item.cardId);
+    const row=document.createElement('div');
+    row.className='shop-row';
+    row.innerHTML=`<span>${card?.name||item.cardId}</span><input type="number" min="0" step="10" value="${item.price}" onchange="ed.shopItems[${i}].price=+this.value"> 金<span class="rm" onclick="removeShopItem(${i})">✕</span>`;
+    el.appendChild(row);
+  });
+}
+window.removeShopItem=function(i){
+  ed.shopItems.splice(i,1);
+  refreshShopItems();
+};
+window.closeShopModal=function(){ document.getElementById('shop-modal').classList.add('hide'); ed.shopKey=null; };
+window.saveShopModal=function(){
+  if(ed.shopKey && ed.npcEvents[ed.shopKey]){
+    ed.npcEvents[ed.shopKey].shopCards=deepCopy(ed.shopItems);
+  }
+  closeShopModal();
+  showCellInfo({x:parseInt(ed.shopKey?.split('_')[1]||0), y:parseInt(ed.shopKey?.split('_')[2]||0)});
+};
+
+// ── Export / Import ───────────────────────────────────────────────────────────
+window.exportJSON=function(){
+  const data={ floors: ed.floors, npcEvents: ed.npcEvents };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='card-dungeon-custom.json';
+  a.click();
+};
+window.importJSON=function(){ document.getElementById('file-input').click(); };
+window.handleFileImport=function(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try {
+      const d=JSON.parse(ev.target.result);
+      if(!d.floors) throw new Error('缺少 floors 字段');
+      ed.floors=d.floors;
+      ed.npcEvents=d.npcEvents||{};
+      ed.floor=0;
+      refreshAll();
+      alert(`✅ 导入成功！共 ${ed.floors.length} 层`);
+    } catch(err){ alert('❌ JSON格式错误: '+err.message); }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+};
+window.loadStandard=function(){
+  if(!confirm('加载标准版数据？当前未保存的修改将丢失。')) return;
+  initFromStd();
+  alert(`✅ 已加载标准版，共 ${ed.floors.length} 层`);
+};
+window.loadInGame=function(){
+  const data={ floors: ed.floors, npcEvents: ed.npcEvents };
+  localStorage.setItem('cardDungeon_customData', JSON.stringify(data));
+  window.open('game.html', '_blank');
+};
+
+function refreshAll(){
+  ed.floor=0;
+  buildTilePalette();
+  buildMonsterPalette();
+  buildNpcPalette();
+  buildFloorList();
+  updateFloorLabel();
+  renderGrid();
+  updateModeLabel();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+// Start with blank single floor (designer starts fresh)
+ed.floors=[blankFloor(1)];
+ed.npcEvents={};
+refreshAll();
+
+// Expose ed to window for inline handlers
+window.ed=ed;
+</script>
+</body>
+</html>
