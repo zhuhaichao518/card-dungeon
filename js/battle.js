@@ -26,7 +26,7 @@ import {
   discardHand, shuffle, loadFloor,
 } from './state.js';
 import { HERO_CARD_POOL, REWARD_CARD_POOL } from './data.js';
-import { playBattleBgm, playFloorBgm } from './audio.js';
+import { playBattleBgm, playFloorBgm, playSfx } from './audio.js';
 import { renderMap } from './renderer.js';
 import {
   updateBattleUI, updateExploreUI,
@@ -206,6 +206,7 @@ function executeHeroCard(card) {
   const eff     = player.effects;
 
   if (card.type === 'attack') {
+    playSfx('attack');
     let dmg = card.value;
     // 攻防差额（魔塔核心机制）
     const atkBonus = Math.max(0, (player.atk || 0) - (monster.def || 0));

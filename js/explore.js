@@ -9,7 +9,7 @@ import { updateExploreUI, showVictoryScreen } from './ui.js';
 import { startBattle } from './battle.js';
 import { findPath, findPathToMonster } from './pathfinding.js';
 import { runStorySequence, AMBUSH_STORY, PRISON_ESCAPE_STORY } from './story.js';
-import { playFloorBgm } from './audio.js';
+import { playFloorBgm, playSfx } from './audio.js';
 
 // ─── 单步移动 ─────────────────────────────────────────────────────────────────
 // 返回 'moved' | 'battle' | 'blocked' | 'dead'
@@ -45,6 +45,7 @@ export function tryMove(dx, dy) {
       state.inventory.keyYellow++;
       state.tiles[ny][nx] = TILE.FLOOR;
       move(nx, ny, dx, dy);
+      playSfx('item');
       addMessage('🔑 拾取黄钥匙');
       break;
 
@@ -52,6 +53,7 @@ export function tryMove(dx, dy) {
       state.inventory.keyBlue++;
       state.tiles[ny][nx] = TILE.FLOOR;
       move(nx, ny, dx, dy);
+      playSfx('item');
       addMessage('🔵 拾取蓝钥匙');
       break;
 
@@ -59,6 +61,7 @@ export function tryMove(dx, dy) {
       state.inventory.keyRed++;
       state.tiles[ny][nx] = TILE.FLOOR;
       move(nx, ny, dx, dy);
+      playSfx('item');
       addMessage('🔴 拾取红钥匙');
       break;
 
@@ -67,6 +70,7 @@ export function tryMove(dx, dy) {
         state.inventory.keyYellow--;
         state.tiles[ny][nx] = TILE.FLOOR;
         move(nx, ny, dx, dy);
+        playSfx('door');
         addMessage('🚪 黄门已打开');
       } else {
         addMessage('❌ 需要黄钥匙');
@@ -79,6 +83,7 @@ export function tryMove(dx, dy) {
         state.inventory.keyBlue--;
         state.tiles[ny][nx] = TILE.FLOOR;
         move(nx, ny, dx, dy);
+        playSfx('door');
         addMessage('🚪 蓝门已打开');
       } else {
         addMessage('❌ 需要蓝钥匙');
@@ -91,6 +96,7 @@ export function tryMove(dx, dy) {
         state.inventory.keyRed--;
         state.tiles[ny][nx] = TILE.FLOOR;
         move(nx, ny, dx, dy);
+        playSfx('door');
         addMessage('🚪 红门已打开');
       } else {
         addMessage('❌ 需要红钥匙');
@@ -102,6 +108,7 @@ export function tryMove(dx, dy) {
       state.tiles[ny][nx] = TILE.FLOOR;
       move(nx, ny, dx, dy);
       healPlayer(30);
+      playSfx('recovery');
       addMessage('💊 小血瓶：+30 HP');
       break;
 
@@ -109,6 +116,7 @@ export function tryMove(dx, dy) {
       state.tiles[ny][nx] = TILE.FLOOR;
       move(nx, ny, dx, dy);
       healPlayer(60);
+      playSfx('recovery');
       addMessage('💉 大血瓶：+60 HP');
       break;
 
@@ -116,6 +124,7 @@ export function tryMove(dx, dy) {
       move(nx, ny, dx, dy);
       state.tiles[ny][nx] = TILE.FLOOR;
       state.player.atk += 1;
+      playSfx('gem');
       addMessage(`💎 红宝石！攻击力 ${state.player.atk - 1} → ${state.player.atk}`);
       break;
 
@@ -123,6 +132,7 @@ export function tryMove(dx, dy) {
       move(nx, ny, dx, dy);
       state.tiles[ny][nx] = TILE.FLOOR;
       state.player.def += 1;
+      playSfx('gem');
       addMessage(`💙 蓝宝石！防御力 ${state.player.def - 1} → ${state.player.def}`);
       break;
 
@@ -508,6 +518,7 @@ function advanceFloor() {
   }
   renderMap();
   updateExploreUI();
+  playSfx('floor');
   playFloorBgm(state.floor);
 }
 

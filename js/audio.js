@@ -94,3 +94,27 @@ function _stopCurrent() {
     _audio = null;
   }
 }
+
+// ── 音效 SFX ──────────────────────────────────────────────────────────────────
+const SFX_DIR = 'assets/sounds/';
+const SFX_CACHE = {};
+
+/**
+ * 播放一次音效
+ * @param {'attack'|'door'|'gem'|'item'|'recovery'|'floor'|'confirm'|'cursor'} name
+ */
+export function playSfx(name) {
+  if (!_enabled) return;
+  try {
+    let audio = SFX_CACHE[name];
+    if (!audio) {
+      audio = new Audio(SFX_DIR + name + '.mp3');
+      audio.volume = _volume * 1.2;
+      SFX_CACHE[name] = audio;
+    }
+    // 克隆节点实现多重播放
+    const clone = audio.cloneNode();
+    clone.volume = Math.min(1, _volume * 1.2);
+    clone.play().catch(() => {});
+  } catch (e) {}
+}
