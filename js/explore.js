@@ -487,7 +487,7 @@ function showNpcShop(ev, onDone) {
 function checkCoordEvent(x, y) {
   // 3楼（state.floor=2，0-indexed）走廊中央 (x=5, y=4)：将军埋伏！
   // 对应原版 10楼陷阱逻辑：player.floor===10 && player.x===6 && player.y===6
-  if (state.floor === 3 && x === 5 && y === 4 && !state.storyFlags['ambush_3']) {
+  if (state.floor === 3 && x === 4 && y === 8 && !state.storyFlags['ambush_3']) {
     state.storyFlags['ambush_3'] = true;
     state.phase = 'story';
     renderMap();
