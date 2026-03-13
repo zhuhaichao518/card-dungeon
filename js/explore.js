@@ -408,15 +408,7 @@ function move(nx, ny, dx, dy) {
 }
 
 function triggerStoryEvent(floor, x, y) {
-  if (floor === 3) {
-    // 第3层伏击
-    state.phase = 'story';
-    renderMap(); updateExploreUI();
-    runStorySequence(AMBUSH_STORY, () => {
-      state.phase = 'explore';
-      renderMap(); updateExploreUI();
-    });
-  }
+  // 其余楼层的 EVENT 格触发（占位，按需扩展）
 }
 
 // ── NPC 对话 / 商店事件 ───────────────────────────────────────────────────────
@@ -482,6 +474,23 @@ function advanceFloor() {
   }
   renderMap();
   updateExploreUI();
+  checkFloorEntryStory(nextFloor);
+}
+
+/** 进入某楼层时的一次性触发事件 */
+function checkFloorEntryStory(floor) {
+  const flagKey = `floor_entry_${floor}`;
+  if (state.storyFlags[flagKey]) return;
+
+  if (floor === 3) {
+    state.storyFlags[flagKey] = true;
+    state.phase = 'story';
+    renderMap();
+    runStorySequence(AMBUSH_STORY, () => {
+      state.phase = 'explore';
+      renderMap(); updateExploreUI();
+    });
+  }
 }
 
 function showGameOver() {
