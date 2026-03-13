@@ -274,7 +274,7 @@ export const MONSTER_DEFS = {
 
 export const FLOORS = [
   { // Floor 1
-    playerStart:{x:5,y:9},
+    playerStart:{x:5,y:10},
     tiles:[
       [10,0,0,0,0,0,0,0,0,0,0],
       [1,1,1,1,1,1,1,1,1,1,0],
@@ -285,27 +285,27 @@ export const FLOORS = [
       [0,0,0,1,0,1,1,1,1,1,0],
       [1,2,1,1,0,0,0,0,0,0,0],
       [0,0,0,1,1,2,1,1,1,2,1],
-      [12,0,5,1,5,0,0,1,0,0,0],
-      [12,0,5,1,0,0,0,1,0,13,0]
+      [12,0,5,1,5,0,16,1,0,0,0],
+      [12,0,5,1,0,0,0,1,0,13,0],
     ],
     monsters:[{defId:'slime_green',x:2,y:0},{defId:'slime_red',x:3,y:0},{defId:'slime_green',x:4,y:0},{defId:'skeleton',x:1,y:3},{defId:'bat',x:6,y:5},{defId:'lich',x:7,y:5},{defId:'bat',x:8,y:5},{defId:'skeleton',x:1,y:6},{defId:'bat',x:9,y:9},{defId:'slime_green',x:8,y:10},{defId:'slime_green',x:10,y:10}]
   },
   { // Floor 2
     playerStart:{x:0,y:0},
     tiles:[
-      [0,0,3,0,0,0,0,0,0,0,0],
+      [11,0,3,0,0,0,0,0,0,0,0],
       [0,0,1,1,0,0,0,0,0,1,1],
       [0,1,1,1,1,1,0,1,1,1,1],
-      [0,1,5,5,1,0,0,0,1,0,0],
-      [0,1,5,0,1,0,0,0,1,0,0],
+      [0,1,5,5,1,0,0,0,1,0,16],
+      [0,1,5,0,2,0,0,0,2,0,0],
       [0,1,1,1,1,0,0,0,1,1,1],
-      [0,1,18,18,1,0,0,0,1,0,0],
-      [0,1,17,17,1,0,0,0,1,0,0],
+      [0,1,18,18,1,0,0,0,1,0,16],
+      [0,1,17,17,2,0,0,0,2,0,0],
       [0,1,1,1,1,0,0,0,1,1,1],
-      [0,1,13,13,1,0,0,0,1,0,0],
-      [10,1,13,0,1,0,0,0,1,0,0]
+      [0,1,13,13,1,0,0,0,1,0,16],
+      [10,1,13,0,2,0,0,0,2,0,0],
     ],
-    monsters:[{defId:'gargoyle',x:5,y:1},{defId:'gargoyle',x:7,y:1}]
+    monsters:[{defId:'demon_knight',x:5,y:1},{defId:'demon_knight',x:7,y:1}]
   },
   { // Floor 3
     playerStart:{x:0,y:10},
@@ -313,21 +313,21 @@ export const FLOORS = [
       [5,18,1,5,13,5,1,0,1,0,12],
       [0,12,1,13,5,13,1,0,2,0,0],
       [0,0,1,5,6,5,1,0,1,1,1],
-      [2,1,1,1,0,1,1,0,1,0,0],
+      [2,1,1,1,0,1,1,0,1,0,16],
       [0,0,0,0,0,0,0,0,0,0,0],
       [2,1,1,0,0,0,1,0,1,1,1],
       [0,0,1,1,0,1,1,0,1,0,12],
       [0,5,1,0,0,0,1,0,2,0,5],
       [12,17,1,0,0,0,1,0,1,1,1],
       [1,1,1,1,0,1,1,0,1,0,0],
-      [0,0,0,0,0,0,1,0,2,0,10]
+      [11,0,0,0,0,0,1,0,2,0,10],
     ],
     monsters:[{defId:'bat',x:9,y:1},{defId:'lich',x:0,y:2},{defId:'bat',x:2,y:4},{defId:'slime_green',x:6,y:4},{defId:'skeleton',x:0,y:6},{defId:'lich',x:9,y:7},{defId:'slime_red',x:7,y:9}]
   },
   { // Floor 4
     playerStart:{x:10,y:10},
     tiles:[
-      [0,6,0,1,0,0,0,1,0,0,0],
+      [0,6,0,1,0,16,0,1,0,16,0],
       [12,0,5,1,0,0,0,1,5,0,13],
       [0,0,0,1,0,0,0,1,0,0,0],
       [1,2,1,1,1,3,1,1,1,2,1],
@@ -337,7 +337,7 @@ export const FLOORS = [
       [2,1,1,2,1,1,1,2,1,1,2],
       [0,1,0,0,0,1,0,0,0,1,0],
       [0,1,0,0,5,1,17,0,12,1,0],
-      [10,1,5,0,5,1,0,0,0,1,0]
+      [10,1,5,0,5,1,0,0,0,1,11],
     ],
     monsters:[{defId:'skeleton',x:9,y:2},{defId:'lich',x:1,y:4},{defId:'skeleton',x:8,y:4},{defId:'slime_red',x:0,y:6},{defId:'slime_green',x:2,y:6},{defId:'bat',x:3,y:8},{defId:'lich',x:7,y:8},{defId:'slime_green',x:2,y:9},{defId:'slime_green',x:3,y:10},{defId:'slime_green',x:7,y:10}]
   },
@@ -354,31 +354,31 @@ export const FLOORS = [
       [0,0,0,0,1,0,1,0,0,0,0],
       [18,5,12,0,1,0,1,2,1,1,1],
       [1,1,1,1,1,0,1,0,1,0,0],
-      [0,0,0,0,0,0,1,0,0,0,0]
+      [11,0,0,0,0,0,1,0,0,0,0],
     ],
     monsters:[{defId:'slime_red',x:3,y:0},{defId:'slime_green',x:7,y:1},{defId:'slime_green',x:8,y:1},{defId:'slime_red',x:10,y:1},{defId:'bat',x:2,y:2},{defId:'bat',x:5,y:3},{defId:'lich',x:2,y:4},{defId:'bat',x:3,y:5},{defId:'slime_green',x:6,y:5},{defId:'skeleton',x:1,y:6},{defId:'slime_red',x:10,y:6},{defId:'slime_green',x:5,y:7}]
   },
   { // Floor 6
     playerStart:{x:0,y:0},
     tiles:[
-      [0,1,5,5,1,0,0,0,5,0,0],
+      [11,1,5,5,1,0,0,0,5,0,0],
       [0,1,5,5,1,0,1,1,1,1,2],
       [0,1,0,0,1,0,1,12,0,0,0],
-      [0,2,2,0,2,0,1,0,0,0,0],
+      [0,2,2,0,2,0,1,16,0,0,0],
       [0,1,1,1,1,0,1,1,1,1,1],
       [0,0,0,0,0,5,0,0,0,0,0],
       [1,1,1,1,1,0,1,1,1,1,0],
-      [0,0,0,0,1,0,2,2,0,2,0],
+      [0,0,0,16,1,0,2,2,0,2,0],
       [0,0,0,18,1,0,1,1,0,1,0],
       [2,1,1,1,1,0,1,0,0,1,0],
-      [0,0,0,0,0,0,1,12,12,1,10]
+      [0,0,0,0,0,0,1,12,12,1,10],
     ],
     monsters:[{defId:'lich',x:6,y:0},{defId:'slime_green',x:9,y:0},{defId:'slime_red',x:3,y:2},{defId:'skeleton',x:9,y:2},{defId:'bat',x:10,y:3},{defId:'slime_red',x:2,y:5},{defId:'lich',x:3,y:5},{defId:'skeleton',x:7,y:5},{defId:'skeleton',x:8,y:5},{defId:'lich',x:0,y:7},{defId:'bat',x:1,y:8},{defId:'slime_red',x:8,y:8},{defId:'slime_red',x:10,y:8},{defId:'slime_green',x:1,y:10},{defId:'skeleton',x:4,y:10}]
   },
   { // Floor 7
     playerStart:{x:10,y:10},
     tiles:[
-      [10,1,17,1,0,0,0,1,5,1,0],
+      [10,1,17,1,16,0,16,1,5,1,0],
       [0,1,12,1,0,0,0,1,5,1,0],
       [0,1,0,1,0,1,0,1,12,1,0],
       [0,1,0,1,0,1,0,1,0,1,0],
@@ -388,14 +388,14 @@ export const FLOORS = [
       [0,1,0,1,0,1,0,1,0,1,0],
       [0,1,0,1,0,1,0,1,13,1,0],
       [0,1,0,1,5,1,0,1,5,1,0],
-      [0,0,0,1,5,1,13,1,5,1,0]
+      [0,0,0,1,5,1,13,1,5,1,11],
     ],
     monsters:[{defId:'slime_green',x:10,y:0},{defId:'slime_green',x:10,y:1},{defId:'bat',x:2,y:2},{defId:'slime_red',x:4,y:2},{defId:'skeleton',x:6,y:2},{defId:'slime_red',x:10,y:2},{defId:'skeleton',x:8,y:4},{defId:'skeleton',x:1,y:5},{defId:'lich',x:3,y:5},{defId:'skeleton',x:8,y:6},{defId:'bat',x:4,y:8},{defId:'slime_red',x:6,y:8},{defId:'slime_green',x:0,y:9},{defId:'slime_green',x:2,y:9},{defId:'lich',x:6,y:9},{defId:'slime_red',x:1,y:10}]
   },
   { // Floor 8
     playerStart:{x:0,y:0},
     tiles:[
-      [0,0,2,2,0,10,0,1,5,0,5],
+      [11,0,2,2,0,10,0,1,5,0,5],
       [0,0,1,1,0,0,0,1,0,7,0],
       [2,1,1,1,1,2,1,1,13,0,12],
       [0,1,5,5,5,0,0,1,1,0,1],
@@ -405,24 +405,24 @@ export const FLOORS = [
       [0,0,0,0,0,0,0,0,0,0,0],
       [2,1,1,1,1,1,1,1,1,1,2],
       [0,0,1,17,5,1,6,12,1,0,0],
-      [0,0,3,5,18,1,5,0,2,0,0]
+      [0,0,3,5,18,1,5,0,2,0,0],
     ],
-    monsters:[{defId:'slime_green',x:6,y:1},{defId:'lich',x:6,y:4},{defId:'gargoyle',x:8,y:4},{defId:'gargoyle',x:10,y:4},{defId:'slime_red',x:1,y:5},{defId:'slime_green',x:2,y:5},{defId:'slime_red',x:3,y:5},{defId:'bat',x:6,y:6},{defId:'bat',x:3,y:7},{defId:'skeleton',x:5,y:7},{defId:'lich',x:7,y:7},{defId:'slime_green',x:0,y:9},{defId:'skeleton',x:10,y:9},{defId:'bat',x:1,y:10},{defId:'skeleton',x:9,y:10}]
+    monsters:[{defId:'slime_green',x:6,y:1},{defId:'lich',x:6,y:4},{defId:'skeleton',x:8,y:4},{defId:'skeleton',x:10,y:4},{defId:'slime_red',x:1,y:5},{defId:'slime_green',x:2,y:5},{defId:'slime_red',x:3,y:5},{defId:'bat',x:6,y:6},{defId:'bat',x:3,y:7},{defId:'skeleton',x:5,y:7},{defId:'lich',x:7,y:7},{defId:'slime_green',x:0,y:9},{defId:'skeleton',x:10,y:9},{defId:'bat',x:1,y:10},{defId:'skeleton',x:9,y:10}]
   },
   { // Floor 9
     playerStart:{x:5,y:0},
     tiles:[
-      [0,0,0,2,0,0,0,2,0,0,12],
+      [0,0,0,2,0,11,0,2,0,0,12],
       [0,5,0,1,0,0,0,1,0,0,0],
       [0,1,1,1,1,3,1,1,1,1,0],
-      [0,5,0,1,5,0,5,2,2,0,0],
+      [0,5,0,1,5,0,5,2,2,0,16],
       [18,0,0,2,0,17,0,1,1,0,1],
       [1,1,1,1,1,1,0,1,0,0,0],
       [5,0,2,0,5,1,0,1,0,1,0],
       [0,0,1,0,0,1,0,1,1,1,2],
       [2,1,1,1,2,1,0,1,5,0,0],
       [0,12,1,0,0,1,0,1,0,0,0],
-      [10,0,3,0,0,2,0,2,0,0,12]
+      [10,0,3,0,0,2,0,2,0,0,12],
     ],
     monsters:[{defId:'skeleton',x:2,y:0},{defId:'slime_green',x:8,y:0},{defId:'slime_green',x:9,y:1},{defId:'skeleton',x:0,y:2},{defId:'bat',x:2,y:4},{defId:'slime_red',x:6,y:5},{defId:'skeleton',x:10,y:5},{defId:'skeleton',x:3,y:6},{defId:'skeleton',x:0,y:7},{defId:'lich',x:10,y:8},{defId:'skeleton',x:4,y:9},{defId:'bat',x:6,y:9},{defId:'skeleton',x:9,y:9},{defId:'lich',x:8,y:10}]
   },
@@ -439,9 +439,9 @@ export const FLOORS = [
       [0,0,0,1,1,0,1,1,0,0,0],
       [2,1,2,1,1,4,1,1,2,1,2],
       [0,1,0,1,0,0,0,1,0,1,0],
-      [0,1,0,0,0,0,0,0,0,1,13]
+      [11,1,0,0,0,0,0,0,0,1,13],
     ],
-    monsters:[{defId:'skeleton',x:0,y:2},{defId:'skeleton',x:1,y:2},{defId:'skeleton',x:2,y:2},{defId:'skeleton',x:8,y:2},{defId:'skeleton',x:9,y:2},{defId:'skeleton',x:10,y:2},{defId:'skeleton',x:1,y:3},{defId:'skeleton_king',x:5,y:3},{defId:'skeleton',x:9,y:3},{defId:'skeleton',x:0,y:5},{defId:'skeleton',x:2,y:5},{defId:'skeleton',x:8,y:5},{defId:'skeleton',x:10,y:5},{defId:'skeleton',x:1,y:6},{defId:'skeleton',x:9,y:6},{defId:'lich',x:3,y:10},{defId:'lich',x:7,y:10}]
+    monsters:[{defId:'skeleton',x:0,y:2},{defId:'skeleton',x:1,y:2},{defId:'skeleton',x:2,y:2},{defId:'skeleton',x:8,y:2},{defId:'skeleton',x:9,y:2},{defId:'skeleton',x:10,y:2},{defId:'skeleton',x:1,y:3},{defId:'slime_green',x:5,y:3},{defId:'skeleton',x:9,y:3},{defId:'skeleton',x:0,y:5},{defId:'skeleton',x:2,y:5},{defId:'skeleton',x:8,y:5},{defId:'skeleton',x:10,y:5},{defId:'skeleton',x:1,y:6},{defId:'skeleton',x:9,y:6},{defId:'lich',x:3,y:10},{defId:'lich',x:7,y:10}]
   },
   { // Floor 11
     playerStart:{x:5,y:10},
@@ -454,16 +454,16 @@ export const FLOORS = [
       [0,0,0,1,1,1,1,0,12,1,0],
       [13,0,0,0,0,0,2,0,0,1,0],
       [1,3,1,1,1,1,1,1,1,1,0],
-      [0,0,0,0,2,0,0,0,0,0,0],
+      [0,0,0,0,2,0,16,0,0,0,0],
       [5,0,0,0,1,0,1,1,2,1,0],
-      [5,5,5,5,1,0,1,13,0,1,10]
+      [5,5,5,5,1,11,1,13,0,1,10],
     ],
-    monsters:[{defId:'bat',x:5,y:1},{defId:'goblin',x:7,y:1},{defId:'bat',x:5,y:3},{defId:'slime_king',x:10,y:3},{defId:'lich',x:0,y:4},{defId:'lich',x:2,y:4},{defId:'goblin',x:4,y:4},{defId:'lich',x:7,y:4},{defId:'bat',x:3,y:6},{defId:'slime_king',x:7,y:6},{defId:'bat',x:10,y:7},{defId:'bat',x:1,y:8},{defId:'slime_king',x:3,y:8},{defId:'bat',x:9,y:8},{defId:'bat',x:8,y:10}]
+    monsters:[{defId:'bat',x:5,y:1},{defId:'goblin',x:7,y:1},{defId:'bat',x:5,y:3},{defId:'slime_king',x:10,y:3},{defId:'archmage',x:0,y:4},{defId:'archmage',x:2,y:4},{defId:'goblin',x:4,y:4},{defId:'archmage',x:7,y:4},{defId:'bat',x:3,y:6},{defId:'slime_king',x:7,y:6},{defId:'bat',x:10,y:7},{defId:'bat',x:1,y:8},{defId:'slime_king',x:3,y:8},{defId:'bat',x:9,y:8},{defId:'bat',x:8,y:10}]
   },
   { // Floor 12
     playerStart:{x:10,y:10},
     tiles:[
-      [0,0,0,1,5,17,5,1,0,0,0],
+      [16,0,0,1,5,17,5,1,0,0,16],
       [1,1,0,1,0,1,0,1,0,1,1],
       [0,0,0,1,0,0,0,1,0,0,0],
       [2,1,1,1,1,2,1,1,1,1,0],
@@ -471,11 +471,11 @@ export const FLOORS = [
       [1,1,1,1,0,0,0,2,0,18,0],
       [5,5,0,1,0,13,0,1,5,0,0],
       [5,6,0,1,1,1,1,1,3,1,2],
-      [0,0,0,1,0,0,0,1,0,0,0],
+      [0,0,0,1,0,16,0,1,0,0,0],
       [1,1,2,1,12,0,12,1,1,0,1],
-      [10,0,0,0,0,0,0,0,0,0,0]
+      [10,0,0,0,0,0,0,0,0,0,11],
     ],
-    monsters:[{defId:'bat',x:2,y:1},{defId:'lich',x:4,y:2},{defId:'lich',x:6,y:2},{defId:'goblin',x:9,y:2},{defId:'lich',x:1,y:4},{defId:'goblin',x:5,y:4},{defId:'bat',x:10,y:4},{defId:'lich',x:6,y:5},{defId:'slime_king',x:10,y:6},{defId:'goblin',x:2,y:8},{defId:'slime_king',x:8,y:8},{defId:'goblin',x:10,y:8},{defId:'bat',x:3,y:10},{defId:'bat',x:7,y:10}]
+    monsters:[{defId:'bat',x:2,y:1},{defId:'archmage',x:4,y:2},{defId:'archmage',x:6,y:2},{defId:'goblin',x:9,y:2},{defId:'archmage',x:1,y:4},{defId:'goblin',x:5,y:4},{defId:'bat',x:10,y:4},{defId:'archmage',x:6,y:5},{defId:'slime_king',x:10,y:6},{defId:'goblin',x:2,y:8},{defId:'slime_king',x:8,y:8},{defId:'goblin',x:10,y:8},{defId:'bat',x:3,y:10},{defId:'bat',x:7,y:10}]
   },
   { // Floor 13
     playerStart:{x:0,y:10},
@@ -490,7 +490,7 @@ export const FLOORS = [
       [15,15,15,15,15,15,15,15,15,15,15],
       [15,15,15,15,15,15,15,15,15,15,15],
       [1,1,1,1,1,2,1,1,1,1,1],
-      [0,0,0,0,0,0,0,0,0,0,10]
+      [11,0,0,0,0,0,0,0,0,0,10],
     ],
     monsters:[]
   },
@@ -507,31 +507,31 @@ export const FLOORS = [
       [0,1,0,0,0,2,0,0,0,0,0],
       [0,1,0,1,1,0,1,1,2,1,1],
       [0,1,0,1,12,0,0,1,0,0,0],
-      [6,1,0,2,0,10,0,1,0,0,0]
+      [6,1,0,2,0,10,0,1,0,0,11],
     ],
-    monsters:[{defId:'goblin',x:0,y:0},{defId:'goblin',x:2,y:0},{defId:'goblin',x:1,y:1},{defId:'slime_king',x:4,y:1},{defId:'goblin',x:6,y:1},{defId:'goblin',x:9,y:3},{defId:'bat',x:3,y:4},{defId:'gargoyle',x:5,y:4},{defId:'bat',x:7,y:4},{defId:'slime_king',x:1,y:5},{defId:'goblin',x:10,y:5},{defId:'goblin',x:3,y:7},{defId:'slime_king',x:7,y:7},{defId:'slime_king',x:9,y:7},{defId:'lich',x:0,y:8},{defId:'lich',x:2,y:8}]
+    monsters:[{defId:'gargoyle',x:0,y:0},{defId:'gargoyle',x:2,y:0},{defId:'gargoyle',x:1,y:1},{defId:'slime_king',x:4,y:1},{defId:'gargoyle',x:6,y:1},{defId:'gargoyle',x:9,y:3},{defId:'bat',x:3,y:4},{defId:'gargoyle',x:5,y:4},{defId:'bat',x:7,y:4},{defId:'slime_king',x:1,y:5},{defId:'goblin',x:10,y:5},{defId:'goblin',x:3,y:7},{defId:'slime_king',x:7,y:7},{defId:'slime_king',x:9,y:7},{defId:'archmage',x:0,y:8},{defId:'archmage',x:2,y:8}]
   },
   { // Floor 15
     playerStart:{x:5,y:10},
     tiles:[
-      [18,0,0,2,0,10,0,0,0,0,0],
+      [18,0,0,2,0,10,0,0,16,0,0],
       [0,0,0,1,0,0,0,1,0,0,0],
       [0,0,0,1,1,0,1,1,1,1,2],
       [2,1,1,1,0,0,0,1,0,0,0],
-      [0,1,5,1,0,0,0,1,0,0,0],
+      [0,1,5,1,0,16,0,1,0,0,0],
       [0,1,6,1,0,0,0,1,2,1,0],
       [0,1,5,1,0,0,0,1,0,1,0],
       [0,1,0,1,0,0,0,1,0,1,13],
       [0,2,0,1,1,0,1,1,2,1,1],
       [0,1,0,1,0,0,0,1,0,0,0],
-      [0,0,0,1,0,0,0,2,0,0,0]
+      [0,0,0,1,0,11,0,2,0,0,16],
     ],
-    monsters:[{defId:'goblin',x:1,y:0},{defId:'goblin',x:0,y:1},{defId:'slime_king',x:10,y:1},{defId:'slime_king',x:2,y:2},{defId:'bat',x:8,y:3},{defId:'bat',x:9,y:4},{defId:'lich',x:10,y:5},{defId:'slime_king',x:0,y:6},{defId:'bat',x:0,y:9},{defId:'bat',x:2,y:9},{defId:'bat',x:9,y:9},{defId:'lich',x:1,y:10},{defId:'bat',x:8,y:10}]
+    monsters:[{defId:'gargoyle',x:1,y:0},{defId:'goblin',x:0,y:1},{defId:'slime_king',x:10,y:1},{defId:'slime_king',x:2,y:2},{defId:'bat',x:8,y:3},{defId:'bat',x:9,y:4},{defId:'archmage',x:10,y:5},{defId:'slime_king',x:0,y:6},{defId:'bat',x:0,y:9},{defId:'bat',x:2,y:9},{defId:'bat',x:9,y:9},{defId:'archmage',x:1,y:10},{defId:'bat',x:8,y:10}]
   },
   { // Floor 16
     playerStart:{x:5,y:0},
     tiles:[
-      [5,0,0,1,0,0,0,1,0,0,0],
+      [5,0,0,1,0,11,0,1,0,0,0],
       [5,0,0,2,0,0,0,2,0,0,0],
       [5,0,0,1,0,0,5,1,0,0,12],
       [1,1,1,1,1,3,1,1,1,2,1],
@@ -541,9 +541,9 @@ export const FLOORS = [
       [1,0,1,1,1,2,1,1,1,2,1],
       [0,0,0,1,0,0,0,1,0,0,0],
       [0,0,0,2,0,0,0,2,0,1,1],
-      [0,0,0,1,0,10,0,1,0,0,13]
+      [16,0,0,1,0,10,0,1,0,0,0],
     ],
-    monsters:[{defId:'bat',x:1,y:0},{defId:'bat',x:10,y:0},{defId:'lich',x:1,y:1},{defId:'slime_king',x:8,y:1},{defId:'bat',x:1,y:2},{defId:'goblin',x:4,y:2},{defId:'goblin',x:9,y:4},{defId:'gargoyle',x:2,y:5},{defId:'goblin',x:5,y:5},{defId:'bat',x:8,y:6},{defId:'slime_king',x:1,y:8},{defId:'bat',x:4,y:8},{defId:'bat',x:6,y:8},{defId:'lich',x:9,y:8},{defId:'lich',x:8,y:10}]
+    monsters:[{defId:'bat',x:1,y:0},{defId:'bat',x:10,y:0},{defId:'archmage',x:1,y:1},{defId:'slime_king',x:8,y:1},{defId:'bat',x:1,y:2},{defId:'goblin',x:4,y:2},{defId:'goblin',x:9,y:4},{defId:'gargoyle',x:2,y:5},{defId:'gargoyle',x:5,y:5},{defId:'bat',x:8,y:6},{defId:'slime_king',x:1,y:8},{defId:'bat',x:4,y:8},{defId:'bat',x:6,y:8},{defId:'archmage',x:9,y:8},{defId:'demon_knight',x:8,y:10}]
   },
   { // Floor 17
     playerStart:{x:5,y:10},
@@ -558,15 +558,15 @@ export const FLOORS = [
       [0,0,0,1,0,0,0,1,0,0,0],
       [0,0,0,1,1,0,1,1,0,0,0],
       [1,2,1,1,0,0,0,1,1,2,1],
-      [12,0,0,0,0,0,0,0,0,0,12]
+      [12,0,0,0,0,11,0,0,0,0,12],
     ],
-    monsters:[{defId:'goblin',x:4,y:2},{defId:'bat',x:6,y:2},{defId:'gargoyle',x:0,y:4},{defId:'gargoyle',x:2,y:4},{defId:'goblin',x:8,y:4},{defId:'goblin',x:10,y:4},{defId:'goblin',x:4,y:6},{defId:'slime_king',x:6,y:6},{defId:'gargoyle',x:0,y:7},{defId:'gargoyle',x:2,y:7},{defId:'goblin',x:8,y:7},{defId:'goblin',x:10,y:7},{defId:'lich',x:5,y:8},{defId:'bat',x:3,y:10},{defId:'bat',x:7,y:10}]
+    monsters:[{defId:'gargoyle',x:4,y:2},{defId:'bat',x:6,y:2},{defId:'skeleton',x:0,y:4},{defId:'skeleton',x:2,y:4},{defId:'gargoyle',x:8,y:4},{defId:'gargoyle',x:10,y:4},{defId:'goblin',x:4,y:6},{defId:'slime_king',x:6,y:6},{defId:'skeleton',x:0,y:7},{defId:'skeleton',x:2,y:7},{defId:'goblin',x:8,y:7},{defId:'goblin',x:10,y:7},{defId:'archmage',x:5,y:8},{defId:'bat',x:3,y:10},{defId:'bat',x:7,y:10}]
   },
   { // Floor 18
     playerStart:{x:5,y:0},
     tiles:[
-      [10,0,0,3,0,0,0,2,0,0,5],
-      [0,0,0,1,0,0,0,1,0,0,5],
+      [10,0,0,3,0,11,0,2,0,0,5],
+      [0,0,16,1,0,0,0,1,0,0,5],
       [2,1,1,1,1,0,1,1,0,0,6],
       [0,12,0,2,0,0,0,2,0,0,5],
       [0,0,0,1,0,0,0,1,0,0,5],
@@ -575,14 +575,14 @@ export const FLOORS = [
       [2,1,1,2,1,1,1,2,1,1,2],
       [0,0,1,0,0,1,0,0,1,0,0],
       [0,5,1,0,0,1,0,0,1,5,0],
-      [12,17,1,0,5,1,5,0,1,18,12]
+      [12,17,1,0,5,1,5,0,1,18,12],
     ],
-    monsters:[{defId:'lich',x:8,y:0},{defId:'slime_king',x:9,y:1},{defId:'goblin',x:4,y:3},{defId:'goblin',x:6,y:3},{defId:'goblin',x:8,y:3},{defId:'gargoyle',x:0,y:4},{defId:'gargoyle',x:2,y:4},{defId:'bat',x:9,y:4},{defId:'goblin',x:1,y:6},{defId:'gargoyle',x:9,y:6},{defId:'lich',x:0,y:8},{defId:'bat',x:3,y:8},{defId:'bat',x:4,y:8},{defId:'slime_king',x:6,y:8},{defId:'slime_king',x:7,y:8},{defId:'lich',x:10,y:8},{defId:'bat',x:3,y:9},{defId:'bat',x:4,y:9},{defId:'slime_king',x:6,y:9},{defId:'slime_king',x:7,y:9}]
+    monsters:[{defId:'archmage',x:8,y:0},{defId:'slime_king',x:9,y:1},{defId:'gargoyle',x:4,y:3},{defId:'gargoyle',x:6,y:3},{defId:'goblin',x:8,y:3},{defId:'gargoyle',x:0,y:4},{defId:'gargoyle',x:2,y:4},{defId:'bat',x:9,y:4},{defId:'goblin',x:1,y:6},{defId:'gargoyle',x:9,y:6},{defId:'archmage',x:0,y:8},{defId:'bat',x:3,y:8},{defId:'bat',x:4,y:8},{defId:'slime_king',x:6,y:8},{defId:'slime_king',x:7,y:8},{defId:'archmage',x:10,y:8},{defId:'bat',x:3,y:9},{defId:'bat',x:4,y:9},{defId:'slime_king',x:6,y:9},{defId:'slime_king',x:7,y:9}]
   },
   { // Floor 19
     playerStart:{x:0,y:0},
     tiles:[
-      [0,0,1,12,0,0,0,6,1,5,17],
+      [11,0,1,12,0,0,0,6,1,5,17],
       [0,0,1,0,0,1,0,0,1,0,0],
       [2,1,1,0,1,0,1,0,1,2,1],
       [0,0,1,0,0,0,0,0,1,0,0],
@@ -592,9 +592,9 @@ export const FLOORS = [
       [0,0,0,0,0,0,0,0,0,0,0],
       [2,1,1,1,1,0,1,1,12,5,0],
       [0,1,0,2,5,0,5,1,1,1,0],
-      [0,0,0,1,0,10,0,2,0,0,0]
+      [0,0,0,1,0,10,0,2,0,0,0],
     ],
-    monsters:[{defId:'lich',x:5,y:0},{defId:'bat',x:9,y:1},{defId:'goblin',x:3,y:2},{defId:'goblin',x:7,y:2},{defId:'bat',x:0,y:3},{defId:'slime_king',x:9,y:4},{defId:'slime_king',x:10,y:4},{defId:'gargoyle',x:4,y:5},{defId:'gargoyle',x:6,y:5},{defId:'bat',x:0,y:6},{defId:'slime_king',x:2,y:7},{defId:'goblin',x:7,y:7},{defId:'goblin',x:10,y:7},{defId:'goblin',x:5,y:8},{defId:'bat',x:10,y:9},{defId:'slime_king',x:0,y:10},{defId:'bat',x:2,y:10},{defId:'bat',x:9,y:10}]
+    monsters:[{defId:'archmage',x:5,y:0},{defId:'bat',x:9,y:1},{defId:'gargoyle',x:3,y:2},{defId:'gargoyle',x:7,y:2},{defId:'bat',x:0,y:3},{defId:'slime_king',x:9,y:4},{defId:'slime_king',x:10,y:4},{defId:'gargoyle',x:4,y:5},{defId:'gargoyle',x:6,y:5},{defId:'bat',x:0,y:6},{defId:'slime_king',x:2,y:7},{defId:'gargoyle',x:7,y:7},{defId:'goblin',x:10,y:7},{defId:'gargoyle',x:5,y:8},{defId:'bat',x:10,y:9},{defId:'slime_king',x:0,y:10},{defId:'bat',x:2,y:10},{defId:'bat',x:9,y:10}]
   },
   { // Floor 20
     playerStart:{x:5,y:10},
@@ -609,24 +609,24 @@ export const FLOORS = [
       [0,0,1,0,0,0,0,0,1,0,0],
       [2,1,1,1,1,4,1,1,1,1,2],
       [0,0,0,1,0,0,0,1,0,0,0],
-      [12,0,0,0,0,0,0,0,0,0,12]
+      [12,0,0,0,0,11,0,0,0,0,12],
     ],
-    monsters:[{defId:'bat',x:4,y:4},{defId:'bat',x:5,y:4},{defId:'bat',x:6,y:4},{defId:'bat',x:4,y:5},{defId:'bat',x:6,y:5},{defId:'bat',x:0,y:6},{defId:'bat',x:4,y:6},{defId:'bat',x:5,y:6},{defId:'bat',x:6,y:6},{defId:'bat',x:10,y:6},{defId:'bat',x:1,y:7},{defId:'bat',x:9,y:7},{defId:'gargoyle',x:1,y:9},{defId:'gargoyle',x:9,y:9},{defId:'lich',x:3,y:10},{defId:'lich',x:7,y:10}]
+    monsters:[{defId:'bat',x:4,y:4},{defId:'bat',x:5,y:4},{defId:'bat',x:6,y:4},{defId:'bat',x:4,y:5},{defId:'bat',x:6,y:5},{defId:'bat',x:0,y:6},{defId:'bat',x:4,y:6},{defId:'bat',x:5,y:6},{defId:'bat',x:6,y:6},{defId:'bat',x:10,y:6},{defId:'bat',x:1,y:7},{defId:'bat',x:9,y:7},{defId:'gargoyle',x:1,y:9},{defId:'gargoyle',x:9,y:9},{defId:'archmage',x:3,y:10},{defId:'archmage',x:7,y:10}]
   },
   { // Floor 21
     playerStart:{x:5,y:0},
     tiles:[
-      [0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,1,1,0,0,0,1,1,0,0],
-      [0,0,1,1,0,0,0,1,1,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,11,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
       [0,0,1,1,0,0,0,1,1,0,0],
       [0,0,1,1,0,0,0,1,1,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,10,0,0,0,0,0]
+      [0,0,0,0,0,16,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,1,1,0,0,0,1,1,0,0],
+      [0,0,1,1,0,0,0,1,1,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,10,0,0,0,0,0],
     ],
     monsters:[]
   },
@@ -643,7 +643,7 @@ export const FLOORS = [
       [1,1,1,1,1,0,1,1,1,1,1],
       [1,1,1,1,1,0,1,1,1,1,1],
       [1,1,1,1,0,0,0,1,1,1,1],
-      [1,1,1,1,0,0,0,1,1,1,1]
+      [1,1,1,1,0,11,0,1,1,1,1],
     ],
     monsters:[]
   },
@@ -655,12 +655,12 @@ export const FLOORS = [
       [0,1,1,1,1,0,1,0,0,0,1],
       [0,0,0,0,1,0,0,0,1,0,1],
       [1,1,1,0,1,1,1,1,1,0,1],
-      [1,1,1,0,1,0,1,1,1,0,1],
+      [1,1,1,0,1,11,1,1,1,0,1],
       [1,1,1,0,1,0,1,1,1,0,1],
       [1,1,0,0,1,0,0,0,1,0,1],
       [1,0,0,1,1,1,1,0,1,0,1],
       [1,0,1,1,1,1,1,0,0,0,1],
-      [10,0,1,1,1,1,1,1,1,1,1]
+      [10,0,1,1,1,1,1,1,1,1,1],
     ],
     monsters:[]
   },
@@ -676,8 +676,8 @@ export const FLOORS = [
       [0,1,1,1,0,0,0,1,1,1,0],
       [0,1,1,1,1,4,1,1,1,1,0],
       [0,0,1,1,1,0,1,1,1,0,0],
-      [0,10,0,1,1,0,1,1,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0]
+      [0,10,0,1,1,16,1,1,0,0,0],
+      [11,0,0,0,0,0,0,0,0,0,0],
     ],
     monsters:[]
   },
@@ -693,8 +693,8 @@ export const FLOORS = [
       [0,1,0,0,1,0,1,0,0,1,0],
       [0,1,1,0,0,0,0,0,1,1,0],
       [0,0,1,1,0,0,0,1,1,0,0],
-      [0,0,0,1,1,4,1,1,0,0,0],
-      [10,0,0,0,0,0,0,0,0,0,0]
+      [0,11,0,1,1,4,1,1,0,0,0],
+      [10,0,0,0,0,0,0,0,0,0,0],
     ],
     monsters:[{defId:'archmage',x:5,y:5}]
   },
@@ -706,20 +706,20 @@ export const FLOORS = [
       [0,0,1,1,1,1,1,1,1,0,0],
       [0,1,1,1,15,15,15,1,1,1,0],
       [0,1,1,15,15,15,15,15,1,1,0],
-      [0,1,1,15,15,0,15,15,1,1,0],
+      [0,1,1,15,15,16,15,15,1,1,0],
       [0,1,1,15,15,15,15,15,1,1,0],
       [0,1,1,1,15,4,15,1,1,1,0],
       [0,0,1,1,1,4,1,1,1,0,0],
       [0,10,0,1,1,4,1,1,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0]
+      [11,0,0,0,0,0,0,0,0,0,0],
     ],
     monsters:[]
   },
   { // Floor 27
     playerStart:{x:1,y:9},
     tiles:[
+      [1,1,1,1,0,16,0,1,1,1,1],
       [1,1,1,1,0,0,0,1,1,1,1],
-      [1,1,1,1,0,0,0,1,1,1,1],
       [1,1,1,1,1,0,1,1,1,1,1],
       [1,1,1,1,1,0,1,1,1,1,1],
       [1,1,1,1,1,0,1,1,1,1,1],
@@ -727,8 +727,8 @@ export const FLOORS = [
       [1,1,1,1,1,0,1,1,1,1,1],
       [1,1,1,1,1,0,1,1,1,1,1],
       [1,1,1,1,1,0,1,1,1,1,1],
-      [0,0,1,1,1,0,1,1,1,0,0],
-      [0,0,0,0,0,0,0,0,0,0,10]
+      [0,11,1,1,1,0,1,1,1,0,0],
+      [0,0,0,0,0,0,0,0,0,0,10],
     ],
     monsters:[]
   },
@@ -738,14 +738,14 @@ export const FLOORS = [
       [0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,1,1,1,1,1,0],
       [0,0,0,0,0,1,0,0,0,1,0],
-      [0,0,0,0,0,1,0,0,0,1,0],
+      [0,0,0,0,0,1,0,16,0,1,0],
       [0,0,0,0,0,1,0,0,0,1,0],
       [0,0,0,0,0,1,1,0,1,1,0],
       [0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
-      [10,0,0,0,0,0,0,0,0,0,0]
+      [10,0,0,0,0,0,0,0,0,0,11],
     ],
     monsters:[]
   },
@@ -753,7 +753,7 @@ export const FLOORS = [
     playerStart:{x:0,y:10},
     tiles:[
       [0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,1,1,0,0,0,1,1,0,0],
+      [0,0,1,1,0,16,0,1,1,0,0],
       [0,1,1,1,1,0,1,1,1,1,0],
       [0,1,1,1,1,0,1,1,1,1,0],
       [0,1,1,1,1,0,1,1,1,1,0],
@@ -762,12 +762,12 @@ export const FLOORS = [
       [0,1,1,1,1,0,1,1,1,1,0],
       [0,1,1,1,1,0,1,1,1,1,0],
       [0,0,1,1,0,0,0,1,1,0,0],
-      [0,0,1,1,0,10,0,1,1,0,0]
+      [11,0,1,1,0,10,0,1,1,0,16],
     ],
     monsters:[]
   },
   { // Floor 30
-    playerStart:{x:5,y:9},
+    playerStart:{x:4,y:0},
     tiles:[
       [1,1,1,1,0,10,0,1,1,1,1],
       [1,1,1,1,0,0,0,1,1,1,1],
@@ -779,14 +779,14 @@ export const FLOORS = [
       [1,1,1,1,1,0,1,1,1,1,1],
       [1,1,1,1,0,0,0,1,1,1,1],
       [1,1,1,1,0,0,0,1,1,1,1],
-      [1,1,1,1,0,10,0,1,1,1,1]
+      [1,1,1,1,0,10,0,1,1,1,1],
     ],
     monsters:[{defId:'slime_king',x:2,y:4},{defId:'slime_red',x:3,y:4},{defId:'slime_green',x:4,y:4},{defId:'slime_green',x:6,y:4},{defId:'slime_red',x:7,y:4},{defId:'slime_king',x:8,y:4}]
   },
   { // Floor 31
     playerStart:{x:5,y:0},
     tiles:[
-      [0,0,5,5,1,0,1,0,0,12,0],
+      [0,0,5,5,1,11,1,0,0,12,16],
       [0,0,5,5,1,0,1,0,0,0,0],
       [0,0,1,1,1,0,1,2,1,0,0],
       [0,0,2,6,1,0,1,17,1,0,0],
@@ -796,9 +796,9 @@ export const FLOORS = [
       [0,0,1,18,1,0,1,13,2,0,0],
       [0,0,1,2,1,0,1,1,1,0,0],
       [0,0,0,0,1,0,1,5,5,0,0],
-      [0,12,0,0,1,10,1,5,5,0,0]
+      [16,12,0,0,1,10,1,5,5,0,0],
     ],
-    monsters:[{defId:'demon_knight',x:0,y:1},{defId:'demon_knight',x:7,y:1},{defId:'demon_knight',x:1,y:2},{defId:'goblin',x:9,y:2},{defId:'goblin',x:10,y:2},{defId:'goblin',x:1,y:5},{defId:'goblin',x:9,y:5},{defId:'goblin',x:5,y:7},{defId:'goblin',x:0,y:8},{defId:'goblin',x:1,y:8},{defId:'goblin',x:5,y:8},{defId:'lich',x:9,y:8},{defId:'demon_knight',x:3,y:9},{defId:'lich',x:10,y:9}]
+    monsters:[{defId:'dragon',x:0,y:1},{defId:'demon_knight',x:7,y:1},{defId:'demon_knight',x:1,y:2},{defId:'demon_knight',x:9,y:2},{defId:'demon_knight',x:10,y:2},{defId:'demon_knight',x:1,y:5},{defId:'demon_knight',x:9,y:5},{defId:'gargoyle',x:5,y:7},{defId:'demon_knight',x:0,y:8},{defId:'demon_knight',x:1,y:8},{defId:'gargoyle',x:5,y:8},{defId:'demon_knight',x:9,y:8},{defId:'dragon',x:3,y:9},{defId:'demon_knight',x:10,y:9}]
   },
   { // Floor 32
     playerStart:{x:4,y:10},
@@ -812,17 +812,17 @@ export const FLOORS = [
       [5,5,5,5,1,0,1,0,1,5,6],
       [0,0,0,6,1,0,1,0,2,0,5],
       [1,0,1,1,1,0,1,1,1,1,1],
-      [0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,1,0,0,0,0]
+      [0,0,0,0,0,0,0,0,0,16,0],
+      [0,0,0,0,11,0,1,0,0,0,0],
     ],
-    monsters:[{defId:'demon_knight',x:0,y:3},{defId:'lich',x:2,y:3},{defId:'goblin',x:7,y:3},{defId:'lich',x:3,y:4},{defId:'demon_knight',x:7,y:6},{defId:'gargoyle',x:0,y:9},{defId:'gargoyle',x:2,y:9},{defId:'goblin',x:7,y:10}]
+    monsters:[{defId:'demon_knight',x:0,y:3},{defId:'demon_knight',x:2,y:3},{defId:'demon_knight',x:7,y:3},{defId:'demon_knight',x:3,y:4},{defId:'dragon',x:7,y:6},{defId:'demon_knight',x:0,y:9},{defId:'demon_knight',x:2,y:9},{defId:'demon_knight',x:7,y:10}]
   },
   { // Floor 33
     playerStart:{x:10,y:0},
     tiles:[
-      [10,0,2,0,0,0,2,0,0,0,0],
+      [10,0,2,0,0,0,2,0,0,0,11],
       [0,0,1,0,12,0,1,2,1,1,1],
-      [3,1,1,0,0,5,1,0,0,0,13],
+      [3,1,1,16,0,5,1,0,0,0,13],
       [0,12,1,1,2,1,1,1,1,0,1],
       [0,0,1,0,0,0,0,1,0,0,0],
       [0,0,1,0,1,1,2,1,0,0,0],
@@ -830,14 +830,14 @@ export const FLOORS = [
       [2,1,1,1,1,1,1,1,1,0,1],
       [0,0,0,1,0,0,0,1,0,0,0],
       [0,1,0,1,5,1,0,0,0,0,0],
-      [5,0,0,3,0,2,0,1,0,0,0]
+      [5,0,0,3,0,2,0,1,0,0,0],
     ],
-    monsters:[{defId:'goblin',x:3,y:0},{defId:'lich',x:5,y:0},{defId:'lich',x:0,y:4},{defId:'goblin',x:5,y:4},{defId:'goblin',x:8,y:4},{defId:'goblin',x:10,y:4},{defId:'demon_knight',x:3,y:5},{defId:'lich',x:1,y:6},{defId:'goblin',x:5,y:6},{defId:'demon_knight',x:8,y:6},{defId:'demon_knight',x:10,y:6},{defId:'goblin',x:2,y:8},{defId:'demon_knight',x:5,y:8},{defId:'demon_knight',x:0,y:9},{defId:'lich',x:6,y:9},{defId:'demon_knight',x:1,y:10}]
+    monsters:[{defId:'gargoyle',x:3,y:0},{defId:'demon_knight',x:5,y:0},{defId:'demon_knight',x:0,y:4},{defId:'gargoyle',x:5,y:4},{defId:'demon_knight',x:8,y:4},{defId:'demon_knight',x:10,y:4},{defId:'dragon',x:3,y:5},{defId:'demon_knight',x:1,y:6},{defId:'demon_knight',x:5,y:6},{defId:'demon_knight',x:8,y:6},{defId:'demon_knight',x:10,y:6},{defId:'gargoyle',x:2,y:8},{defId:'demon_knight',x:5,y:8},{defId:'dragon',x:0,y:9},{defId:'demon_knight',x:6,y:9},{defId:'demon_knight',x:1,y:10}]
   },
   { // Floor 34
     playerStart:{x:0,y:0},
     tiles:[
-      [0,0,12,1,0,5,0,1,5,5,18],
+      [11,0,12,1,0,5,0,1,5,5,18],
       [0,0,0,2,0,0,0,2,0,5,12],
       [0,0,0,1,1,1,1,1,1,1,1],
       [1,2,1,1,0,1,0,1,0,1,0],
@@ -847,9 +847,9 @@ export const FLOORS = [
       [1,2,1,1,0,1,0,1,0,1,0],
       [0,0,0,1,1,1,1,1,1,1,1],
       [0,1,0,2,0,0,0,2,0,0,12],
-      [13,0,0,1,0,10,0,1,0,5,17]
+      [13,0,0,1,0,10,0,1,0,5,17],
     ],
-    monsters:[{defId:'lich',x:4,y:1},{defId:'demon_knight',x:6,y:1},{defId:'lich',x:1,y:2},{defId:'slime_green',x:4,y:3},{defId:'demon_knight',x:6,y:3},{defId:'slime_king',x:8,y:3},{defId:'demon_knight',x:10,y:3},{defId:'goblin',x:4,y:7},{defId:'slime_red',x:6,y:7},{defId:'demon_knight',x:8,y:7},{defId:'bat',x:10,y:7},{defId:'goblin',x:2,y:8},{defId:'demon_knight',x:0,y:9},{defId:'demon_knight',x:8,y:9},{defId:'demon_knight',x:1,y:10}]
+    monsters:[{defId:'demon_knight',x:4,y:1},{defId:'dragon',x:6,y:1},{defId:'demon_knight',x:1,y:2},{defId:'slime_green',x:4,y:3},{defId:'dragon',x:6,y:3},{defId:'slime_king',x:8,y:3},{defId:'demon_knight',x:10,y:3},{defId:'demon_knight',x:4,y:7},{defId:'slime_red',x:6,y:7},{defId:'dragon',x:8,y:7},{defId:'bat',x:10,y:7},{defId:'demon_knight',x:2,y:8},{defId:'dragon',x:0,y:9},{defId:'demon_knight',x:8,y:9},{defId:'demon_knight',x:1,y:10}]
   },
   { // Floor 35
     playerStart:{x:5,y:10},
@@ -859,19 +859,19 @@ export const FLOORS = [
       [0,1,1,1,1,0,1,1,1,1,1],
       [0,1,1,1,0,0,0,1,1,1,1],
       [0,1,1,1,0,0,0,1,1,1,1],
-      [0,1,1,1,0,0,0,1,1,1,1],
+      [0,1,1,1,0,16,0,1,1,1,1],
       [0,1,1,1,0,0,0,1,1,1,1],
       [0,1,1,1,0,0,0,1,1,1,1],
       [0,1,1,1,0,0,0,1,1,1,1],
       [0,0,0,1,0,0,0,1,1,1,1],
-      [1,1,1,1,0,0,0,1,1,1,1]
+      [1,1,1,1,0,11,0,1,1,1,1],
     ],
     monsters:[]
   },
   { // Floor 36
     playerStart:{x:10,y:0},
     tiles:[
-      [0,0,0,0,0,0,0,0,0,0,0],
+      [16,0,0,0,0,0,0,0,0,0,11],
       [0,0,1,1,1,2,1,1,1,0,0],
       [0,1,1,1,1,0,1,1,1,1,0],
       [0,1,1,1,1,0,1,1,1,1,0],
@@ -881,9 +881,9 @@ export const FLOORS = [
       [0,1,1,1,1,0,1,1,1,1,0],
       [0,1,1,1,1,0,1,1,1,1,0],
       [0,0,1,1,1,2,1,1,1,0,0],
-      [13,0,0,0,5,0,0,0,0,0,10]
+      [13,0,0,0,5,0,0,0,0,0,10],
     ],
-    monsters:[{defId:'demon_knight',x:2,y:0},{defId:'goblin',x:6,y:0},{defId:'demon_knight',x:8,y:0},{defId:'lich',x:0,y:2},{defId:'lich',x:10,y:2},{defId:'demon_knight',x:0,y:4},{defId:'goblin',x:5,y:4},{defId:'demon_knight',x:10,y:4},{defId:'lich',x:4,y:5},{defId:'lich',x:6,y:5},{defId:'demon_knight',x:5,y:6},{defId:'demon_knight',x:10,y:6},{defId:'demon_knight',x:0,y:8},{defId:'demon_knight',x:2,y:10},{defId:'goblin',x:6,y:10},{defId:'demon_knight',x:8,y:10}]
+    monsters:[{defId:'demon_knight',x:2,y:0},{defId:'gargoyle',x:6,y:0},{defId:'dragon',x:8,y:0},{defId:'demon_knight',x:0,y:2},{defId:'demon_knight',x:10,y:2},{defId:'dragon',x:0,y:4},{defId:'demon_knight',x:5,y:4},{defId:'dragon',x:10,y:4},{defId:'demon_knight',x:4,y:5},{defId:'demon_knight',x:6,y:5},{defId:'dragon',x:5,y:6},{defId:'dragon',x:10,y:6},{defId:'dragon',x:0,y:8},{defId:'demon_knight',x:2,y:10},{defId:'gargoyle',x:6,y:10},{defId:'dragon',x:8,y:10}]
   },
   { // Floor 37
     playerStart:{x:10,y:10},
@@ -898,15 +898,15 @@ export const FLOORS = [
       [0,1,5,5,5,1,18,18,18,1,0],
       [0,1,1,6,6,1,13,5,1,1,0],
       [0,0,1,1,1,1,1,1,1,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0]
+      [16,0,0,0,0,0,0,0,0,0,11],
     ],
-    monsters:[{defId:'demon_knight',x:8,y:0},{defId:'demon_knight',x:10,y:2},{defId:'demon_knight',x:10,y:5},{defId:'demon_knight',x:0,y:8},{defId:'demon_knight',x:10,y:8},{defId:'goblin',x:2,y:10},{defId:'goblin',x:8,y:10}]
+    monsters:[{defId:'demon_knight',x:8,y:0},{defId:'dragon',x:10,y:2},{defId:'dragon',x:10,y:5},{defId:'demon_knight',x:0,y:8},{defId:'dragon',x:10,y:8},{defId:'demon_knight',x:2,y:10},{defId:'demon_knight',x:8,y:10}]
   },
   { // Floor 38
     playerStart:{x:0,y:0},
     tiles:[
-      [0,0,4,0,0,0,0,0,2,0,10],
-      [0,0,1,0,5,0,0,0,1,0,0],
+      [11,0,4,0,0,0,0,0,2,0,10],
+      [0,0,1,16,5,16,0,0,1,0,0],
       [0,1,1,1,1,1,2,1,1,1,2],
       [0,0,0,0,0,1,0,1,5,1,0],
       [1,1,1,1,3,1,0,1,5,1,0],
@@ -915,15 +915,15 @@ export const FLOORS = [
       [0,0,0,1,18,12,0,1,1,1,2],
       [1,0,1,1,1,1,1,1,5,0,0],
       [0,0,0,1,0,0,0,1,0,0,0],
-      [0,0,0,2,0,0,0,2,0,0,13]
+      [0,0,0,2,0,0,0,2,0,0,13],
     ],
-    monsters:[{defId:'lich',x:3,y:0},{defId:'lich',x:7,y:0},{defId:'goblin',x:0,y:2},{defId:'demon_knight',x:2,y:3},{defId:'demon_knight',x:3,y:3},{defId:'goblin',x:6,y:5},{defId:'goblin',x:10,y:5},{defId:'demon_knight',x:6,y:6},{defId:'demon_knight',x:9,y:6},{defId:'goblin',x:10,y:8},{defId:'gargoyle',x:0,y:9},{defId:'gargoyle',x:2,y:9},{defId:'demon_knight',x:9,y:9},{defId:'demon_knight',x:4,y:10},{defId:'goblin',x:6,y:10},{defId:'demon_knight',x:8,y:10}]
+    monsters:[{defId:'demon_knight',x:3,y:0},{defId:'demon_knight',x:7,y:0},{defId:'demon_knight',x:0,y:2},{defId:'demon_knight',x:2,y:3},{defId:'demon_knight',x:3,y:3},{defId:'demon_knight',x:6,y:5},{defId:'demon_knight',x:10,y:5},{defId:'dragon',x:6,y:6},{defId:'dragon',x:9,y:6},{defId:'demon_knight',x:10,y:8},{defId:'demon_knight',x:0,y:9},{defId:'demon_knight',x:2,y:9},{defId:'dragon',x:9,y:9},{defId:'dragon',x:4,y:10},{defId:'gargoyle',x:6,y:10},{defId:'demon_knight',x:8,y:10}]
   },
   { // Floor 39
     playerStart:{x:10,y:0},
     tiles:[
-      [0,0,0,0,0,0,0,1,0,0,0],
-      [0,2,0,2,0,2,0,1,0,0,0],
+      [0,0,0,0,0,0,0,1,0,0,11],
+      [0,2,0,2,0,2,0,1,16,0,0],
       [0,0,0,0,0,0,0,1,0,0,5],
       [0,2,0,2,0,2,0,1,1,2,1],
       [0,0,0,0,0,0,0,1,0,0,0],
@@ -932,9 +932,9 @@ export const FLOORS = [
       [1,3,1,1,1,1,1,1,1,2,1],
       [0,0,0,1,0,18,0,1,0,0,0],
       [1,0,0,2,0,1,0,2,0,0,0],
-      [0,0,5,1,0,0,0,1,12,0,10]
+      [16,0,5,1,0,0,0,1,12,0,10],
     ],
-    monsters:[{defId:'demon_knight',x:10,y:4},{defId:'lich',x:8,y:5},{defId:'goblin',x:10,y:6},{defId:'goblin',x:2,y:8},{defId:'demon_knight',x:4,y:8},{defId:'demon_knight',x:6,y:8},{defId:'demon_knight',x:9,y:8},{defId:'goblin',x:1,y:9},{defId:'lich',x:5,y:10}]
+    monsters:[{defId:'demon_knight',x:10,y:4},{defId:'demon_knight',x:8,y:5},{defId:'demon_knight',x:10,y:6},{defId:'demon_knight',x:2,y:8},{defId:'dragon',x:4,y:8},{defId:'dragon',x:6,y:8},{defId:'dragon',x:9,y:8},{defId:'demon_knight',x:1,y:9},{defId:'demon_knight',x:5,y:10}]
   },
   { // Floor 40
     playerStart:{x:10,y:10},
@@ -949,26 +949,26 @@ export const FLOORS = [
       [1,1,1,1,1,4,1,1,1,1,1],
       [18,5,0,1,0,0,0,1,12,0,0],
       [13,0,0,1,0,0,0,1,0,0,0],
-      [17,0,0,3,0,0,0,2,0,0,0]
+      [17,0,0,3,0,0,0,2,0,0,11],
     ],
-    monsters:[{defId:'demon_knight',x:5,y:0},{defId:'demon_knight',x:1,y:1},{defId:'demon_knight',x:2,y:1},{defId:'demon_knight',x:3,y:1},{defId:'demon_knight',x:7,y:1},{defId:'demon_knight',x:8,y:1},{defId:'demon_knight',x:9,y:1},{defId:'goblin',x:2,y:3},{defId:'goblin',x:3,y:3},{defId:'goblin',x:4,y:3},{defId:'demon_knight',x:6,y:3},{defId:'demon_knight',x:7,y:3},{defId:'demon_knight',x:8,y:3},{defId:'lich',x:4,y:8},{defId:'lich',x:6,y:8},{defId:'demon_knight',x:9,y:8},{defId:'demon_knight',x:8,y:9},{defId:'demon_knight',x:2,y:10}]
+    monsters:[{defId:'dragon',x:5,y:0},{defId:'dragon',x:1,y:1},{defId:'dragon',x:2,y:1},{defId:'dragon',x:3,y:1},{defId:'dragon',x:7,y:1},{defId:'dragon',x:8,y:1},{defId:'dragon',x:9,y:1},{defId:'demon_knight',x:2,y:3},{defId:'demon_knight',x:3,y:3},{defId:'demon_knight',x:4,y:3},{defId:'demon_knight',x:6,y:3},{defId:'demon_knight',x:7,y:3},{defId:'demon_knight',x:8,y:3},{defId:'demon_knight',x:4,y:8},{defId:'demon_knight',x:6,y:8},{defId:'dragon',x:9,y:8},{defId:'demon_knight',x:8,y:9},{defId:'dragon',x:2,y:10}]
   },
   { // Floor 41
     playerStart:{x:5,y:0},
     tiles:[
-      [12,1,0,6,1,0,1,6,0,1,12],
+      [12,1,0,6,1,11,1,6,0,1,12],
       [2,0,0,0,1,0,1,0,0,1,2],
       [2,1,0,1,1,0,1,1,0,1,2],
       [2,1,2,1,0,0,0,1,2,1,2],
       [0,0,0,1,1,0,1,1,0,0,0],
-      [0,0,0,0,3,0,3,0,0,0,0],
+      [0,0,0,0,3,16,3,0,0,0,0],
       [0,0,0,0,1,2,1,0,0,0,0],
       [2,1,1,2,1,2,1,2,1,1,2],
       [2,1,12,0,1,2,1,0,12,1,2],
       [2,1,5,5,1,0,1,5,5,1,2],
-      [13,1,5,17,1,10,1,18,5,1,13]
+      [13,1,5,17,1,10,1,18,5,1,13],
     ],
-    monsters:[{defId:'archmage',x:1,y:1},{defId:'demon_knight',x:4,y:3},{defId:'demon_knight',x:6,y:3},{defId:'archmage',x:2,y:4},{defId:'archmage',x:8,y:4},{defId:'lich',x:0,y:5},{defId:'lich',x:10,y:5},{defId:'lich',x:1,y:6},{defId:'slime_king',x:3,y:6},{defId:'slime_king',x:7,y:6},{defId:'lich',x:9,y:6}]
+    monsters:[{defId:'archmage',x:1,y:1},{defId:'archmage',x:4,y:3},{defId:'archmage',x:6,y:3},{defId:'lich',x:2,y:4},{defId:'lich',x:8,y:4},{defId:'lich',x:0,y:5},{defId:'lich',x:10,y:5},{defId:'lich',x:1,y:6},{defId:'slime_king',x:3,y:6},{defId:'slime_king',x:7,y:6},{defId:'lich',x:9,y:6}]
   },
   { // Floor 42
     playerStart:{x:5,y:10},
@@ -976,21 +976,21 @@ export const FLOORS = [
       [10,0,0,1,0,0,7,1,5,6,5],
       [0,0,0,1,0,0,0,1,5,5,5],
       [1,1,2,1,0,0,0,1,1,0,1],
-      [0,0,0,1,1,0,1,1,0,0,0],
+      [16,0,0,1,1,0,1,1,0,0,0],
       [0,0,0,2,0,0,0,2,0,0,0],
       [2,1,1,1,1,0,1,1,0,0,0],
       [0,0,0,1,0,0,0,1,1,0,1],
       [1,1,0,1,0,0,0,1,0,0,0],
       [13,5,5,1,1,0,1,1,1,0,1],
       [0,1,1,1,0,0,0,1,5,5,5],
-      [5,5,18,1,0,0,0,1,5,6,5]
+      [5,5,18,1,0,11,0,1,5,6,5],
     ],
-    monsters:[{defId:'slime_king',x:2,y:1},{defId:'demon_knight',x:5,y:3},{defId:'archmage',x:8,y:3},{defId:'archmage',x:10,y:3},{defId:'slime_king',x:2,y:4},{defId:'archmage',x:10,y:5},{defId:'lich',x:2,y:7},{defId:'demon_knight',x:8,y:7},{defId:'demon_knight',x:10,y:7},{defId:'lich',x:0,y:9},{defId:'demon_knight',x:5,y:9}]
+    monsters:[{defId:'slime_king',x:2,y:1},{defId:'dragon_god',x:5,y:3},{defId:'lich',x:8,y:3},{defId:'archmage',x:10,y:3},{defId:'slime_king',x:2,y:4},{defId:'lich',x:10,y:5},{defId:'lich',x:2,y:7},{defId:'archmage',x:8,y:7},{defId:'archmage',x:10,y:7},{defId:'lich',x:0,y:9},{defId:'dragon',x:5,y:9}]
   },
   { // Floor 43
     playerStart:{x:0,y:0},
     tiles:[
-      [0,0,2,0,0,0,2,2,0,0,0],
+      [11,0,2,0,0,0,2,2,0,0,0],
       [0,0,1,1,1,0,1,1,0,1,0],
       [0,0,2,0,1,0,1,0,0,1,0],
       [3,1,1,0,1,0,0,1,0,1,0],
@@ -1000,12 +1000,12 @@ export const FLOORS = [
       [2,1,1,1,1,1,1,1,0,5,0],
       [0,0,1,13,0,0,0,1,1,1,2],
       [0,0,1,13,1,1,0,2,0,0,0],
-      [10,0,1,13,0,3,0,1,0,0,6]
+      [10,0,1,13,0,3,0,1,0,0,6],
     ],
-    monsters:[{defId:'slime_king',x:4,y:0},{defId:'demon_knight',x:8,y:0},{defId:'demon_knight',x:5,y:2},{defId:'demon_knight',x:7,y:2},{defId:'archmage',x:3,y:3},{defId:'demon_knight',x:6,y:3},{defId:'slime_king',x:1,y:4},{defId:'slime_king',x:4,y:6},{defId:'archmage',x:8,y:6},{defId:'lich',x:1,y:8},{defId:'demon_knight',x:5,y:8},{defId:'lich',x:9,y:9}]
+    monsters:[{defId:'slime_king',x:4,y:0},{defId:'archmage',x:8,y:0},{defId:'dragon_god',x:5,y:2},{defId:'dragon_god',x:7,y:2},{defId:'archmage',x:3,y:3},{defId:'dragon_god',x:6,y:3},{defId:'slime_king',x:1,y:4},{defId:'slime_king',x:4,y:6},{defId:'lich',x:8,y:6},{defId:'lich',x:1,y:8},{defId:'dragon_god',x:5,y:8},{defId:'lich',x:9,y:9}]
   },
   { // Floor 44
-    playerStart:{x:5,y:9},
+    playerStart:{x:1,y:0},
     tiles:[
       [10,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
@@ -1017,31 +1017,31 @@ export const FLOORS = [
       [0,0,0,0,1,0,1,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0]
+      [0,0,0,0,0,0,0,0,0,0,0],
     ],
-    monsters:[{defId:'demon_knight',x:4,y:8},{defId:'demon_knight',x:6,y:8}]
+    monsters:[{defId:'dragon',x:4,y:8},{defId:'dragon',x:6,y:8}]
   },
   { // Floor 45
     playerStart:{x:0,y:0},
     tiles:[
-      [0,0,0,0,0,0,0,0,0,0,10],
+      [11,0,0,0,0,0,0,0,0,0,10],
       [1,1,1,1,1,2,1,1,1,1,1],
-      [17,17,0,1,0,0,0,1,0,0,0],
+      [17,17,0,1,0,0,0,1,16,0,0],
       [3,1,0,1,0,0,0,1,0,0,0],
       [18,18,0,1,0,0,0,1,1,1,2],
-      [3,1,0,1,1,2,1,1,0,1,0],
+      [3,1,0,1,1,2,1,1,16,1,0],
       [0,0,0,2,0,0,0,0,0,0,5],
       [1,4,1,1,1,1,1,1,1,0,0],
       [0,0,0,1,0,0,1,0,1,1,2],
       [0,0,0,0,0,0,0,0,2,0,0],
-      [0,0,0,1,0,0,1,0,1,0,13]
+      [0,0,0,1,0,0,1,0,1,0,13],
     ],
-    monsters:[{defId:'archmage',x:4,y:2},{defId:'archmage',x:6,y:2},{defId:'demon_knight',x:2,y:3},{defId:'slime_king',x:10,y:3},{defId:'archmage',x:4,y:4},{defId:'archmage',x:6,y:4},{defId:'demon_knight',x:2,y:5},{defId:'lich',x:6,y:6},{defId:'archmage',x:9,y:7},{defId:'demon_knight',x:4,y:8},{defId:'demon_knight',x:7,y:8},{defId:'demon_knight',x:4,y:10},{defId:'demon_knight',x:7,y:10}]
+    monsters:[{defId:'lich',x:4,y:2},{defId:'archmage',x:6,y:2},{defId:'dragon_god',x:2,y:3},{defId:'slime_king',x:10,y:3},{defId:'archmage',x:4,y:4},{defId:'lich',x:6,y:4},{defId:'dragon_god',x:2,y:5},{defId:'lich',x:6,y:6},{defId:'archmage',x:9,y:7},{defId:'dragon_god',x:4,y:8},{defId:'archmage',x:7,y:8},{defId:'dragon_god',x:4,y:10},{defId:'archmage',x:7,y:10}]
   },
   { // Floor 46
     playerStart:{x:10,y:0},
     tiles:[
-      [0,0,2,0,0,0,0,0,3,0,0],
+      [0,0,2,0,0,16,0,0,3,0,11],
       [12,0,1,0,0,0,0,0,1,0,0],
       [17,0,1,1,1,1,1,1,1,1,2],
       [0,0,2,0,0,0,0,0,0,0,0],
@@ -1049,17 +1049,17 @@ export const FLOORS = [
       [0,0,0,0,0,1,12,0,2,0,0],
       [0,1,1,1,0,1,0,0,1,0,0],
       [0,1,0,1,0,1,2,1,1,1,2],
-      [0,1,0,0,0,1,0,0,1,0,0],
+      [0,1,0,0,0,1,0,16,1,0,0],
       [0,1,1,1,1,1,0,0,1,0,0],
-      [0,0,0,0,0,3,0,0,2,0,10]
+      [0,0,0,0,0,3,0,0,2,0,10],
     ],
-    monsters:[{defId:'archmage',x:1,y:0},{defId:'archmage',x:1,y:3},{defId:'lich',x:8,y:3},{defId:'demon_knight',x:0,y:5},{defId:'demon_knight',x:2,y:5},{defId:'demon_knight',x:4,y:5},{defId:'slime_king',x:9,y:5},{defId:'archmage',x:7,y:6},{defId:'goblin',x:0,y:7},{defId:'slime_king',x:4,y:7},{defId:'archmage',x:3,y:8},{defId:'archmage',x:9,y:8},{defId:'bat',x:0,y:9},{defId:'skeleton',x:1,y:10},{defId:'slime_red',x:3,y:10}]
+    monsters:[{defId:'archmage',x:1,y:0},{defId:'lich',x:1,y:3},{defId:'lich',x:8,y:3},{defId:'demon_knight',x:0,y:5},{defId:'dragon',x:2,y:5},{defId:'dragon',x:4,y:5},{defId:'slime_king',x:9,y:5},{defId:'archmage',x:7,y:6},{defId:'goblin',x:0,y:7},{defId:'slime_king',x:4,y:7},{defId:'lich',x:3,y:8},{defId:'lich',x:9,y:8},{defId:'bat',x:0,y:9},{defId:'skeleton',x:1,y:10},{defId:'slime_red',x:3,y:10}]
   },
   { // Floor 47
     playerStart:{x:10,y:10},
     tiles:[
       [10,0,3,0,0,0,2,0,0,0,5],
-      [0,0,1,0,0,0,1,0,1,1,18],
+      [0,0,1,0,16,0,1,0,1,1,18],
       [0,1,1,1,1,1,1,0,0,0,5],
       [0,1,0,2,0,0,1,2,1,1,1],
       [0,1,0,1,0,0,1,0,0,0,0],
@@ -1067,16 +1067,16 @@ export const FLOORS = [
       [0,1,0,1,6,5,1,1,1,1,2],
       [0,1,0,3,17,18,1,0,0,0,0],
       [0,1,1,1,1,1,1,0,1,1,1],
-      [0,0,1,12,0,17,1,0,1,0,0],
-      [0,0,2,0,0,0,2,0,0,0,0]
+      [0,0,1,12,0,17,1,16,1,0,0],
+      [0,0,2,0,0,0,2,0,0,0,11],
     ],
-    monsters:[{defId:'archmage',x:7,y:1},{defId:'slime_king',x:8,y:2},{defId:'archmage',x:4,y:3},{defId:'lich',x:2,y:4},{defId:'archmage',x:5,y:4},{defId:'archmage',x:8,y:4},{defId:'lich',x:10,y:5},{defId:'archmage',x:0,y:8},{defId:'slime_king',x:7,y:8},{defId:'archmage',x:4,y:10}]
+    monsters:[{defId:'archmage',x:7,y:1},{defId:'slime_king',x:8,y:2},{defId:'archmage',x:4,y:3},{defId:'lich',x:2,y:4},{defId:'lich',x:5,y:4},{defId:'lich',x:8,y:4},{defId:'lich',x:10,y:5},{defId:'archmage',x:0,y:8},{defId:'slime_king',x:7,y:8},{defId:'lich',x:4,y:10}]
   },
   { // Floor 48
     playerStart:{x:10,y:10},
     tiles:[
       [0,13,0,1,0,0,12,12,12,0,0],
-      [0,0,0,1,3,1,1,1,1,1,3],
+      [0,0,16,1,3,1,1,1,1,1,3],
       [0,0,0,1,0,1,0,1,0,1,0],
       [1,3,1,1,0,0,0,0,0,0,0],
       [0,0,0,0,0,1,0,1,0,1,0],
@@ -1085,9 +1085,9 @@ export const FLOORS = [
       [0,1,17,0,12,1,1,0,1,1,0],
       [0,1,1,2,1,1,0,0,0,1,0],
       [0,1,0,0,0,1,0,0,0,1,0],
-      [10,1,18,0,13,1,0,0,0,1,0]
+      [10,1,18,0,13,1,0,0,0,1,11],
     ],
-    monsters:[{defId:'archmage',x:1,y:2},{defId:'demon_knight',x:6,y:2},{defId:'demon_knight',x:8,y:2},{defId:'slime_king',x:2,y:4},{defId:'demon_knight',x:6,y:4},{defId:'demon_knight',x:8,y:4},{defId:'lich',x:0,y:6},{defId:'archmage',x:3,y:6},{defId:'archmage',x:9,y:6},{defId:'archmage',x:0,y:8},{defId:'demon_knight',x:3,y:9}]
+    monsters:[{defId:'archmage',x:1,y:2},{defId:'archmage',x:6,y:2},{defId:'archmage',x:8,y:2},{defId:'slime_king',x:2,y:4},{defId:'archmage',x:6,y:4},{defId:'archmage',x:8,y:4},{defId:'lich',x:0,y:6},{defId:'lich',x:3,y:6},{defId:'lich',x:9,y:6},{defId:'lich',x:0,y:8},{defId:'dragon_god',x:3,y:9}]
   },
   { // Floor 49
     playerStart:{x:0,y:10},
@@ -1102,27 +1102,79 @@ export const FLOORS = [
       [0,1,0,1,0,0,0,1,0,1,0],
       [0,0,0,1,1,0,1,1,0,0,0],
       [1,1,1,1,0,0,0,1,1,1,1],
-      [0,0,4,0,0,0,0,0,0,0,0]
+      [11,0,4,0,0,0,0,0,0,0,0],
     ],
-    monsters:[{defId:'demon_knight',x:4,y:7},{defId:'demon_knight',x:6,y:7},{defId:'archmage',x:4,y:9},{defId:'archmage',x:6,y:9}]
+    monsters:[{defId:'dragon_god',x:4,y:7},{defId:'dragon_god',x:6,y:7},{defId:'archmage',x:4,y:9},{defId:'archmage',x:6,y:9}]
   },
   { // Floor 50
-    playerStart:{x:5,y:9},
+    playerStart:{x:0,y:0},
     tiles:[
-      [1,1,1,1,1,1,1,1,1,1,1],
-      [1,1,1,1,1,1,1,1,1,1,1],
-      [1,1,1,1,1,1,1,1,1,1,1],
-      [1,1,1,1,1,1,1,1,1,1,1],
-      [1,1,1,1,0,0,0,1,1,1,1],
-      [1,1,1,1,0,0,0,1,1,1,1],
-      [1,1,1,1,0,0,0,1,1,1,1],
-      [1,1,1,1,1,1,1,1,1,1,1],
-      [1,1,1,1,1,1,1,1,1,1,1],
-      [1,1,1,1,1,1,1,1,1,1,1],
-      [1,1,1,1,1,1,1,1,1,1,1]
+      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,1,1,1,1,1,0,0,0],
+      [0,0,0,1,0,0,0,1,0,0,0],
+      [0,0,0,1,0,0,0,1,0,0,0],
+      [0,0,0,1,0,0,0,1,0,0,0],
+      [0,0,0,1,1,1,1,1,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0],
     ],
     monsters:[{defId:'dragon_god',x:5,y:5}]
   },
 ];
+
+// ── NPC事件数据（对应原版50层魔塔） ────────────────────────────────────────────
+export const NPC_EVENTS = {
+  '1_6_9': { type:'wiser', speaker:'智慧老人', text:"勇士，我怎么会在这看到您？我也不知道怎么来到此处，也不知道该怎么出去。我只知道铁剑在5楼，铁盾在9楼，你最好先取到它们。", floor:1, x:6, y:9 },
+  '2_10_3': { type:'wiser', speaker:'智慧老人', text:"谢谢你救了我！为感谢你的帮助，我将把你的攻击力和防御力各加10%。", floor:2, x:10, y:3 },
+  '2_10_6': { type:'shop', speaker:'商人', text:"谢谢你救了我，为感谢你的帮助，我送给你1000金币。", floor:2, x:10, y:6 },
+  '2_10_9': { type:'wiser', speaker:'智慧老人', text:"勇士，我们又见面了！谢谢你救了我。我可以帮你在魔龙前打开一条暗道，我现在就去35楼。", floor:2, x:10, y:9 },
+  '3_10_3': { type:'wiser', speaker:'智慧老人', text:"送你一本怪物书，它能预测出当前楼层各类怪物对你的伤害。", floor:3, x:10, y:3 },
+  '4_5_0': { type:'npc', speaker:'特殊NPC', text:"……", floor:4, x:5, y:0 },
+  '4_9_0': { type:'wiser', speaker:'智慧老人', text:"有些门不能用钥匙打开，只有当你打败它的守卫后才会自动打开。", floor:4, x:9, y:0 },
+  '6_7_3': { type:'shop', speaker:'商人', text:"我有1把蓝钥匙，你出50个金币就卖给你。", floor:6, x:7, y:3 },
+  '6_3_7': { type:'wiser', speaker:'智慧老人', text:"魔塔一共50层，每10层为一个区域。如果不打败此区域的头目就不能到更高的地方。", floor:6, x:3, y:7 },
+  '7_4_0': { type:'shop', speaker:'商人', text:"我有5把黄钥匙，你出50个金币就卖给你。", floor:7, x:4, y:0 },
+  '7_6_0': { type:'wiser', speaker:'智慧老人', text:"在商店里你最好选择提升防御，只有在攻击力低于敌人的防御力时才提升攻击力。", floor:7, x:6, y:0 },
+  '9_10_3': { type:'wiser', speaker:'智慧老人', text:"你是否注意到 5,9,14,16,18 楼有的墙与众不同？", floor:9, x:10, y:3 },
+  '11_6_8': { type:'wiser', speaker:'智慧老人', text:"勇士，我探访得知银盾在11楼，银剑在17楼，这消息不知道对你是否有用。", floor:11, x:6, y:8 },
+  '12_0_0': { type:'shop', speaker:'商人', text:"我有1把红钥匙，你出800个金币就卖给你。", floor:12, x:0, y:0 },
+  '12_10_0': { type:'wiser', speaker:'智慧老人', text:"如果你持有十字架，面对兽人和吸血鬼时你的攻击力加倍。十字架被藏在高于15楼的墙内。", floor:12, x:10, y:0 },
+  '12_5_8': { type:'npc', speaker:'特殊NPC', text:"……", floor:12, x:5, y:8 },
+  '15_8_0': { type:'wiser', speaker:'智慧老人', text:"勇士，这大乌贼挡住了我前进的道路，现在暗道终于完工了，你现在最好也躲开它。", floor:15, x:8, y:0 },
+  '15_5_4': { type:'shop', speaker:'商人2', text:"我有1把蓝钥匙，你出200个金币就卖给你。", floor:15, x:5, y:4 },
+  '15_10_10': { type:'shop', speaker:'商人', text:"我有1把蓝钥匙，你出200个金币就卖给你。", floor:15, x:10, y:10 },
+  '16_0_10': { type:'wiser', speaker:'智慧老人', text:"我听说在塔内有2把隐藏的红钥匙。", floor:16, x:0, y:10 },
+  '18_2_1': { type:'wiser', speaker:'智慧老人', text:"在这区域不多次提升攻击力，就不能打败石头人。切记前人教训！", floor:18, x:2, y:1 },
+  '21_5_5': { type:'wiser', speaker:'智慧老人', text:"大法师住在25楼，他是魔塔的主人。以你现在的状态去攻击他简直就是自杀。", floor:21, x:5, y:5 },
+  '24_5_9': { type:'wiser', speaker:'智慧老人', text:"你不能直接到50楼，据说魔塔50层与24层有关联。", floor:24, x:5, y:9 },
+  '26_5_5': { type:'princess', speaker:'公主', text:"公主：谢谢你来救我！我一直在等着英雄的到来……", floor:26, x:5, y:5 },
+  '27_5_0': { type:'wiser', speaker:'智慧老人', text:"如果你到27楼时状态为：生命1500，攻击80，防御98，拥有1蓝钥匙，5黄钥匙。那么祝贺你，你前期是比较成功的。", floor:27, x:5, y:0 },
+  '28_7_3': { type:'shop', speaker:'商人', text:"我按100个金币1把的价格回收黄钥匙，你愿意出售吗？", floor:28, x:7, y:3 },
+  '29_5_1': { type:'wiser', speaker:'智慧老人', text:"勇士，我刚完成暗道。每次你都及时赶到，你真行！", floor:29, x:5, y:1 },
+  '29_10_10': { type:'shop', speaker:'商人', text:"我有1把蓝钥匙，你出200个金币就卖给你。", floor:29, x:10, y:10 },
+  '31_10_0': { type:'wiser', speaker:'智慧老人', text:"双手剑士的攻击力太高了，你最好到能对他一击必杀时再与他战斗。", floor:31, x:10, y:0 },
+  '31_0_10': { type:'shop', speaker:'商人', text:"我有5把黄钥匙，你出1000个金币就卖给你。", floor:31, x:0, y:10 },
+  '32_9_9': { type:'npc', speaker:'特殊NPC', text:"……", floor:32, x:9, y:9 },
+  '33_3_2': { type:'wiser', speaker:'智慧老人', text:"别匆忙，放慢速度。", floor:33, x:3, y:2 },
+  '35_5_5': { type:'dragon', speaker:'魔龙', text:"魔龙：哼！你敢来到这里？！", floor:35, x:5, y:5 },
+  '36_0_0': { type:'wiser', speaker:'智慧老人', text:"（智慧老人沉默地注视着你。）", floor:36, x:0, y:0 },
+  '37_0_10': { type:'wiser', speaker:'智慧老人', text:"你需要用地震卷轴取出37楼仓库内的所有宝物。", floor:37, x:0, y:10 },
+  '38_3_1': { type:'wiser', speaker:'智慧老人', text:"存放圣剑的房间的门坏了，你必须用铁锹破墙而入。", floor:38, x:3, y:1 },
+  '38_5_1': { type:'shop', speaker:'商人', text:"我有3把黄钥匙，你出200个金币就卖给你。", floor:38, x:5, y:1 },
+  '39_8_1': { type:'shop', speaker:'商人', text:"我有3把蓝钥匙，你出2000个金币就卖给你。", floor:39, x:8, y:1 },
+  '39_0_10': { type:'wiser', speaker:'智慧老人', text:"谜题：在3点，密宝就会出现。", floor:39, x:0, y:10 },
+  '41_5_5': { type:'wiser', speaker:'智慧老人', text:"（智慧老人沉默地注视着你。）", floor:41, x:5, y:5 },
+  '42_0_3': { type:'wiser', speaker:'智慧老人', text:"44楼被藏在异空间，你只能用密宝才能飞达。", floor:42, x:0, y:3 },
+  '45_8_2': { type:'shop', speaker:'商人', text:"给我1000个金币，我就提升你生命2000点。", floor:45, x:8, y:2 },
+  '45_8_5': { type:'wiser', speaker:'智慧老人', text:"不破除49楼假魔王的封印魔法，你就绝对不可能打败它。", floor:45, x:8, y:5 },
+  '46_5_0': { type:'npc', speaker:'特殊NPC', text:"……", floor:46, x:5, y:0 },
+  '46_7_8': { type:'wiser', speaker:'智慧老人', text:"（智慧老人沉默地注视着你。）", floor:46, x:7, y:8 },
+  '47_4_1': { type:'shop', speaker:'商人', text:"我有地震卷轴，你出3000个金币就卖给你。", floor:47, x:4, y:1 },
+  '47_7_9': { type:'wiser', speaker:'智慧老人', text:"（智慧老人沉默地注视着你。）", floor:47, x:7, y:9 },
+  '48_2_1': { type:'wiser', speaker:'智慧老人', text:"（智慧老人沉默地注视着你。）", floor:48, x:2, y:1 },
+};
 
 // DATA_COMPLETE

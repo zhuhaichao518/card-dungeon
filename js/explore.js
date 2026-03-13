@@ -3,7 +3,7 @@
  */
 
 import { state, addMessage, healPlayer, damagePlayer, loadFloor, retreatFloor } from './state.js';
-import { TILE } from './data.js';
+import { TILE, NPC_EVENTS } from './data.js';
 import { renderMap } from './renderer.js';
 import { updateExploreUI, showVictoryScreen } from './ui.js';
 import { startBattle } from './battle.js';
@@ -131,7 +131,14 @@ export function tryMove(dx, dy) {
 
     case TILE.EVENT: {
       move(nx, ny, dx, dy);
-      // 将该格子替换为普通地板（防止重复触发）
+      // 先检查是否是 NPC 事件（NPC 保留格子，可以重复对话）
+      const npcKey = `${state.floor + 1}_${nx}_${ny}`;
+      const npcEv  = NPC_EVENTS[npcKey];
+      if (npcEv) {
+        triggerNpcEvent(npcEv);
+        return 'story';
+      }
+      // 否则按剧情事件处理（消耗格子）
       state.tiles[ny][nx] = TILE.FLOOR;
       const evKey = `floor${state.floor}_${nx}_${ny}`;
       if (!state.storyFlags[evKey]) {
@@ -410,6 +417,60 @@ function triggerStoryEvent(floor, x, y) {
       renderMap(); updateExploreUI();
     });
   }
+}
+
+// ── NPC 对话 / 商店事件 ───────────────────────────────────────────────────────
+
+function triggerNpcEvent(ev) {
+  state.phase = 'story';
+  renderMap(); updateExploreUI();
+
+  switch (ev.type) {
+    case 'wiser':
+    case 'npc':
+    case 'princess':
+      // 普通对话：复用 story overlay
+      runStorySequence([
+        { type:'text', portrait: npcPortrait(ev.type), speaker: ev.speaker, text: ev.text }
+      ], () => {
+        state.phase = 'explore';
+        renderMap(); updateExploreUI();
+      });
+      break;
+
+    case 'shop':
+      showNpcShop(ev);
+      break;
+
+    case 'dragon':
+      runStorySequence([
+        { type:'text', portrait:'🐉', speaker:'魔龙', text: ev.text },
+        { type:'text', portrait:'🐉', speaker:'魔龙', text:'你休想通过这里！与我战斗，或者从暗道绕行！' }
+      ], () => {
+        state.phase = 'explore';
+        renderMap(); updateExploreUI();
+      });
+      break;
+
+    default:
+      state.phase = 'explore';
+      renderMap(); updateExploreUI();
+  }
+}
+
+function npcPortrait(type) {
+  return { wiser:'🧙', shop:'💰', princess:'👸', dragon:'🐉', npc:'👤' }[type] || '👤';
+}
+
+function showNpcShop(ev) {
+  // 简单商店 UI：复用 story overlay 展示商品信息
+  runStorySequence([
+    { type:'text', portrait:'💰', speaker:ev.speaker, text: ev.text },
+    { type:'text', portrait:'💰', speaker:ev.speaker, text:'（商店功能即将上线……目前只提供情报。）' }
+  ], () => {
+    state.phase = 'explore';
+    renderMap(); updateExploreUI();
+  });
 }
 
 function advanceFloor() {
