@@ -135,6 +135,17 @@ function _nextStep() {
       break;
     }
 
+    case 'setStats': {
+      // 重置英雄属性（如被夺走装备）
+      if (step.hp    !== undefined) state.player.hp    = Math.max(1, step.hp);
+      if (step.maxHp !== undefined) state.player.maxHp = step.maxHp;
+      if (step.atk   !== undefined) state.player.atk   = step.atk;
+      if (step.def   !== undefined) state.player.def   = step.def;
+      updateExploreUI();
+      _nextStep();
+      break;
+    }
+
     case 'wait': {
       setTimeout(_nextStep, step.ms || 500);
       break;
@@ -171,18 +182,18 @@ function hideStoryOverlay() {
 
 /** 第3层伏击事件 */
 export const AMBUSH_STORY = [
-  { type:'text', portrait:'📜', speaker:'', text:'你小心翼翼地踏上第三层，突然……脚步声从四面八方涌来。' },
+  { type:'text', portrait:'📜', speaker:'', text:'你小心翼翼地踏上第三层。身着神圣铠甲，手握神圣之剑，背负神圣盾牌——没有人可以挡住你的去路。' },
   { type:'text', portrait:'🔴', speaker:'赤甲将军', text:'哈哈哈！就是你了，胆敢进入魔王之塔的傻瓜。我们等候多时了！' },
   { type:'text', portrait:'🔵', speaker:'蓝衣将军', text:'魔王有令，活捉此人，带回塔底地牢。当然……不必保持太完整。' },
-  { type:'text', portrait:'🟡', speaker:'金甲将军', text:'动手！' },
-  { type:'text', portrait:'📜', speaker:'', text:'四名将军同时出手——你根本来不及反应……' },
+  { type:'text', portrait:'🟡', speaker:'金甲将军', text:'四对一——就算你再强，也逃不过天罗地网！动手！' },
+  { type:'text', portrait:'📜', speaker:'', text:'四名将军同时出手，毫无章法可言，以多欺少。你根本来不及应对……' },
   { type:'battle', defId:'general_red', scripted:true },
-  // 剧情战斗结束后，onScriptedBattleEnd 会推进到这里继续
   { type:'text', portrait:'📜', speaker:'', text:'……你被击倒了。' },
-  { type:'text', portrait:'🔴', speaker:'赤甲将军', text:'把他扔进地牢，省得他再到处乱跑。待魔王见他再说。' },
+  { type:'text', portrait:'🔴', speaker:'赤甲将军', text:'搜他身上所有东西！神圣剑、神圣盾……都归魔王所有。' },
+  { type:'text', portrait:'🔵', speaker:'蓝衣将军', text:'这小子，赤手空拳关进地牢里，让他慢慢受苦。' },
   { type:'text', portrait:'📜', speaker:'', text:'当你再次睁开眼睛时，周围是冰冷的石壁，还有远处渐渐消失的脚步声……' },
-  { type:'text', portrait:'📜', speaker:'', text:'你身处地牢第一层。身上的伤还没全好，但求生的意志让你缓缓站起来。' },
-  { type:'setHp', hp: 20 },
+  { type:'text', portrait:'📜', speaker:'', text:'你身处地牢第一层。神圣剑、神圣盾都不见了。只有求生的意志，让你缓缓站起来。' },
+  { type:'setStats', hp:30, maxHp:500, atk:10, def:10 },
   { type:'goto', floor:4, x:2, y:8 },
 ];
 

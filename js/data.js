@@ -10,8 +10,8 @@ export const TILE = {
 };
 
 export const PLAYER_INIT = {
-  hp: 80, maxHp: 80, shield: 0,
-  atk: 5, def: 3,
+  hp: 1000, maxHp: 1000, shield: 0,
+  atk: 100, def: 100,   // 装备神圣剑+神圣盾的满配英雄，第3层被夺走
   maxAp: 3, handSize: 4,
 };
 
