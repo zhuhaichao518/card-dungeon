@@ -38,7 +38,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 export function startBattle(monster) {
   state.phase = 'battle';
-  playBattleBgm();
+  // playBattleBgm(); // 进出战斗不切换 BGM
   const { battle, player, deck } = state;
 
   battle.monster = monster;
@@ -355,7 +355,7 @@ function endBattle(playerWon) {
   if (idx !== -1) state.monsters.splice(idx, 1);
 
   state.phase = 'explore';
-  playFloorBgm(state.floor);
+  // playFloorBgm(state.floor); // 进出战斗不切换 BGM
   discardHand();
   state.battle.monster      = null;
   state.battle.enemy.intent = [];
